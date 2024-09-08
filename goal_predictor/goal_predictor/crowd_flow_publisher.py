@@ -72,7 +72,7 @@ class CrowdFlowPublisher(Node):
         msg = Float32MultiArray()
         msg.data = tuple(self.mapData)
         self.publisher_.publish(msg)
-        self.get_logger().info('Publishing: "%s"' % msg.data)
+        # self.get_logger().info('Publishing: "%s"' % msg.data)
         self.crowd_flow()
 
     def create_circle(self, x, y, radius, color):
