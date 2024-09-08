@@ -68,10 +68,7 @@ class CrowdFlowPublisher(Node):
     def timer_callback(self):
         for j in range(self.num_agents):
             self.mapData[2*j+2:2*j+4] = self.paths[j][-1] 
-            print(self.paths[j][-1] )
-
-        #print(self.mapData)
-        print(self.paths[0][-1] )
+        self.mapData[2+2*self.num_agents:] = self.goals.flatten()
         msg = Float32MultiArray()
         msg.data = tuple(self.mapData)
         self.publisher_.publish(msg)
