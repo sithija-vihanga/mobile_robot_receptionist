@@ -1,0 +1,4 @@
+#Ignore zip files
+*.zip
+
+/gazebo_plugins
