@@ -25,7 +25,8 @@ class GoalPredictor(Node):
         self.pedestrian_vel = []
         self.path_buffer = 5
 
-        self.D = np.array([[10, 1], [10, 8], [20, 20] ,[20, 8],[7, 3],[15, 8],[1, 8],[17, 3],[20, 1], [10, 5]])  # Example destinations (x, y)
+        #self.D = np.array([[10, 1], [10, 8], [20, 20] ,[20, 8],[7, 3],[15, 8],[1, 8],[17, 3],[20, 1], [10, 5]])  # Example destinations (x, y)
+        #self.D = []
 
         # Gaussian distribution parameters
         self.sigma_phi = 0.1
@@ -42,8 +43,15 @@ class GoalPredictor(Node):
         self.positions       = msg.data[2:2*self.num_agents+2]
         self.goals           = msg.data[2*self.num_agents+2:]
 
+        self.update_goals()
         self.update_pedestrian_path()
         self.visualize()
+
+    def update_goals(self):
+        #print("goals: ",self.goals)
+        self.D = np.zeros([self.num_agents,2 ] ,dtype='float')
+        for i in range(self.num_agents):
+            self.D[i] = tuple(self.goals[2*i:2*i+2])
     
     def update_pedestrian_path(self):
         if (len(self.pedestrian_pos) == 0):
@@ -161,8 +169,8 @@ class GoalPredictor(Node):
         print("pred", pred_dest)
         plt.scatter(pred_dest[0][0], pred_dest[0][1], c='green', label='Predicted Destination', marker='X')
         
-        plt.xlim(0, 25)
-        plt.ylim(0, 20)
+        #plt.xlim(0, 25)
+        #plt.ylim(0, 20)
         plt.legend()
         
         plt.draw()  # Draw the updated plot
