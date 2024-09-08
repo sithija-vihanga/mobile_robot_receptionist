@@ -25,7 +25,7 @@ class GoalPredictor(Node):
         self.pedestrian_vel = []
         self.path_buffer = 5
 
-        self.D = np.array([[10, 1], [10, 8], [20, 20]])  # Example destinations (x, y)
+        self.D = np.array([[10, 1], [10, 8], [20, 20] ,[20, 8],[7, 3],[15, 8],[1, 8],[17, 3],[20, 1], [10, 5]])  # Example destinations (x, y)
 
         # Gaussian distribution parameters
         self.sigma_phi = 0.1
@@ -66,14 +66,13 @@ class GoalPredictor(Node):
         # Simulated pedestrian movement: moving in a sinusoidal pattern
         #pos = np.array([t, t + np.sin(t)])  # Position
         #vel = np.array([1, np.cos(t)])      # Velocity
-        print("position: ",self.pedestrian_pos)
-        print("velocity: ",self.pedestrian_vel)
+        # print("position: ",self.pedestrian_pos)
+        # print("velocity: ",self.pedestrian_vel)
         # print(self.pedestrian_pos[pd][2*self.path_buffer-2*timeStep-2:2*self.path_buffer-2*timeStep])
         # print(self.pedestrian_pos[pd][-2*timeStep-3:-2*timeStep])
         pos = tuple(self.pedestrian_pos[pd][2*self.path_buffer-2*timeStep-2:2*self.path_buffer-2*timeStep])
-        vel = tuple(self.pedestrian_pos[pd][2*self.path_buffer-2*timeStep-2:2*self.path_buffer-2*timeStep])
-        print("pos: ",pos)
-        print("vel: ",vel)
+        vel = tuple(self.pedestrian_vel[pd][2*self.path_buffer-2*timeStep-2:2*self.path_buffer-2*timeStep])
+        
         return pos, vel
 
     # Function to compute the angle between velocity and the vector to the destination
@@ -115,7 +114,6 @@ class GoalPredictor(Node):
         recent_states = []
         
         for i in range(w):
-            print("i is :",i)
             pos, vel = self.pedestrian_state(i)
             recent_states.append((pos, vel))
         
@@ -128,30 +126,48 @@ class GoalPredictor(Node):
             
             destination_probs.append(joint_prob)
         
-
-
         # Normalize probabilities
         destination_probs = np.array(destination_probs) / np.sum(destination_probs)
         
         # Return the most likely destination
-
         return D[np.argmax(destination_probs)], destination_probs
 
-    def visualize(self):
-        pos, vel = self.pedestrian_state(timeStep= 0)
+    # def visualize(self):
+    #     pos, vel = self.pedestrian_state(timeStep= 0)
         
-        plt.figure()
+    #     plt.figure()
+    #     plt.quiver(pos[0], pos[1], vel[0], vel[1], color='r', scale=10)  # Pedestrian velocity
+    #     plt.scatter(self.D[:, 0], self.D[:, 1], c='blue', label='Destinations')
+        
+    #     pred_dest = self.predict_destination(self.D)
+    #     print("pred", pred_dest)
+    #     #plt.scatter(pred_dest[0], pred_dest[1], c='green', label='Predicted Destination', marker='X')
+        
+    #     plt.xlim(0, 25)
+    #     plt.ylim(0, 20)
+    #     plt.legend()
+    #     plt.draw()
+    #     plt.pause(0.1)
+
+    def visualize(self):
+        pos, vel = self.pedestrian_state(timeStep=0)
+        print("pos: ",pos)
+        print("vel: ",vel)
+        plt.clf()  # Clear the current figure instead of creating a new one
         plt.quiver(pos[0], pos[1], vel[0], vel[1], color='r', scale=10)  # Pedestrian velocity
-        #plt.scatter(self.D[:, 0], self.D[:, 1], c='blue', label='Destinations')
+        plt.scatter(self.D[:, 0], self.D[:, 1], c='blue', label='Destinations')
         
         pred_dest = self.predict_destination(self.D)
         print("pred", pred_dest)
-        #plt.scatter(pred_dest[0], pred_dest[1], c='green', label='Predicted Destination', marker='X')
+        plt.scatter(pred_dest[0][0], pred_dest[0][1], c='green', label='Predicted Destination', marker='X')
         
         plt.xlim(0, 25)
         plt.ylim(0, 20)
         plt.legend()
-        plt.show()
+        
+        plt.draw()  # Draw the updated plot
+        plt.pause(0.01)  # Short pause to update the plot
+
 
 
 def main(args=None):
