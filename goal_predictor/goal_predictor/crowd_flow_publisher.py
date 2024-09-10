@@ -22,7 +22,7 @@ class CrowdFlowPublisher(Node):
         self.obstacle_radius    = 0.4
         self.avoidance_strength = 0.9 
 
-        np.random.seed(11)
+        np.random.seed(33) #20
         self.positions  = np.random.rand(self.num_agents, 2) * 10
         self.goals      = np.random.rand(self.num_agents, 2) * 10
         self.obstacles  = np.random.rand(self.num_obstacles, 2) * 10

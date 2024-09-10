@@ -25,19 +25,9 @@ class GoalPredictor(Node):
         self.pedestrian_vel = []
         self.path_buffer = 5
 
-        #self.D = np.array([[10, 1], [10, 8], [20, 20] ,[20, 8],[7, 3],[15, 8],[1, 8],[17, 3],[20, 1], [10, 5]])  # Example destinations (x, y)
-        #self.D = []
-
-        # Gaussian distribution parameters
         self.sigma_phi = 0.1
 
-        #self.timer          = self.create_timer(1, self.visualize)
-        
     def listener_callback(self, msg):
-        # self.get_logger().info('no. agents : %f'%msg.data[0])
-        # self.get_logger().info('no. obstacles : %f'%msg.data[1])
-        #t_max = 50
-        #self.dynamic_visualization(t_max, self.D)
         self.num_agents      = int(msg.data[0])
         self.num_obstacles   = int(msg.data[1])
         self.positions       = msg.data[2:2*self.num_agents+2]
@@ -48,7 +38,6 @@ class GoalPredictor(Node):
         self.visualize()
 
     def update_goals(self):
-        #print("goals: ",self.goals)
         self.D = np.zeros([self.num_agents,2 ] ,dtype='float')
         for i in range(self.num_agents):
             self.D[i] = tuple(self.goals[2*i:2*i+2])
@@ -57,41 +46,21 @@ class GoalPredictor(Node):
         if (len(self.pedestrian_pos) == 0):
             self.pedestrian_pos = np.zeros([self.num_agents, self.path_buffer*2], dtype='float')
             self.pedestrian_vel = np.zeros_like(self.pedestrian_pos)
-            #print('path : ',self.pedestrian_pos)
         else:
             for i in range(self.num_agents):
                 self.pedestrian_pos[i][:2*self.path_buffer-2] = self.pedestrian_pos[i][2:2*self.path_buffer]
                 self.pedestrian_pos[i][2*self.path_buffer-2:] = self.positions[2*i:2*i+2]  
-            #print('updated path : ', self.pedestrian_pos)
                 
             for j in range(self.num_agents):
                 self.pedestrian_vel[j][:2*self.path_buffer-2] = self.pedestrian_vel[j][2:2*self.path_buffer]
                 self.pedestrian_vel[j][2*self.path_buffer-2:] = [(self.pedestrian_pos[j][-2] - self.pedestrian_pos[j][-4])/0.2,
                                                                  (self.pedestrian_pos[j][-1] - self.pedestrian_pos[j][-3])/0.2 ] 
 
-        #print("vel :", self.pedestrian_vel)
     def pedestrian_state(self, timeStep , pd = 0):
-        # Simulated pedestrian movement: moving in a sinusoidal pattern
-        #pos = np.array([t, t + np.sin(t)])  # Position
-        #vel = np.array([1, np.cos(t)])      # Velocity
-        # print("position: ",self.pedestrian_pos)
-        # print("velocity: ",self.pedestrian_vel)
-        # print(self.pedestrian_pos[pd][2*self.path_buffer-2*timeStep-2:2*self.path_buffer-2*timeStep])
-        # print(self.pedestrian_pos[pd][-2*timeStep-3:-2*timeStep])
         pos = tuple(self.pedestrian_pos[pd][2*self.path_buffer-2*timeStep-2:2*self.path_buffer-2*timeStep])
         vel = tuple(self.pedestrian_vel[pd][2*self.path_buffer-2*timeStep-2:2*self.path_buffer-2*timeStep])
         
         return pos, vel
-
-    # Function to compute the angle between velocity and the vector to the destination
-    # def compute_angle(self, pos, vel, dest):
-    #     direction_to_dest = dest - pos
-    #     try:
-    #         angle = np.arccos(np.dot(vel, direction_to_dest) / (np.linalg.norm(vel) * np.linalg.norm(direction_to_dest)))
-    #     except:
-    #         print("Initializing")
-    #         return 0
-    #     return angle
 
     def compute_angle(self, pos, vel, dest):
         direction_to_dest = dest - pos
@@ -105,7 +74,7 @@ class GoalPredictor(Node):
         
         # Clamp the value to avoid invalid input for arccos
         cos_theta = np.dot(vel, direction_to_dest) / (norm_vel * norm_dir)
-        cos_theta = np.clip(cos_theta, -1.0, 1.0)  # Ensure the value is between -1 and 1
+        cos_theta = np.clip(cos_theta, -1.0, 1.0)  
 
         angle = np.arccos(cos_theta)
         return angle
@@ -140,23 +109,6 @@ class GoalPredictor(Node):
         # Return the most likely destination
         return D[np.argmax(destination_probs)], destination_probs
 
-    # def visualize(self):
-    #     pos, vel = self.pedestrian_state(timeStep= 0)
-        
-    #     plt.figure()
-    #     plt.quiver(pos[0], pos[1], vel[0], vel[1], color='r', scale=10)  # Pedestrian velocity
-    #     plt.scatter(self.D[:, 0], self.D[:, 1], c='blue', label='Destinations')
-        
-    #     pred_dest = self.predict_destination(self.D)
-    #     print("pred", pred_dest)
-    #     #plt.scatter(pred_dest[0], pred_dest[1], c='green', label='Predicted Destination', marker='X')
-        
-    #     plt.xlim(0, 25)
-    #     plt.ylim(0, 20)
-    #     plt.legend()
-    #     plt.draw()
-    #     plt.pause(0.1)
-
     def visualize(self):
         pos, vel = self.pedestrian_state(timeStep=0)
         print("pos: ",pos)
@@ -169,8 +121,6 @@ class GoalPredictor(Node):
         print("pred", pred_dest)
         plt.scatter(pred_dest[0][0], pred_dest[0][1], c='green', label='Predicted Destination', marker='X')
         
-        #plt.xlim(0, 25)
-        #plt.ylim(0, 20)
         plt.legend()
         
         plt.draw()  # Draw the updated plot
