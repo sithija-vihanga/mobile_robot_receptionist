@@ -1,79 +1,86 @@
 import rclpy
-import numpy as np
-import matplotlib.pyplot as plt
-from scipy.stats import norm
-from rclpy.node import Node
-
-from std_msgs.msg import Float32MultiArray
+import numpy                as np
+import matplotlib.pyplot    as plt
+from scipy.stats    import norm
+from rclpy.node     import Node
+from std_msgs.msg   import Float32MultiArray
 
 
 class GoalPredictor(Node):
-
     def __init__(self):
         super().__init__('goal_predictor')
         self.subscription = self.create_subscription(
             Float32MultiArray,
             'map_data',
-            self.listener_callback,
+            self.predictor_callback,
             10)
         self.subscription  
 
+        # Extracted from float32multi array
         self.positions = []
         self.goals     = []
 
-        self.pedestrian_pos = []
+        self.pedestrian_pos = [] 
         self.pedestrian_vel = []
-        self.path_buffer = 5
+        self.path_buffer    = 5  # Number of past readings kept for each agent
+        self.dt             = 0.2
+        self.sigma_phi      = 0.1
 
-        self.sigma_phi = 0.1
-
-    def listener_callback(self, msg):
-        self.num_agents      = int(msg.data[0])
+    def predictor_callback(self, msg):
+        # Data extraction from the encoded data
+        self.num_agents      = int(msg.data[0])                    
         self.num_obstacles   = int(msg.data[1])
         self.positions       = msg.data[2:2*self.num_agents+2]
         self.goals           = msg.data[2*self.num_agents+2:]
+
+        #############################################   Encoding system for data transfer ####################################################
+        #     [number of agents, number of obstacles, agent-01 X pos, agent-01 Y pos, ..., obstacle-01 X pos, obstacle-02 Y pos, ...]
+        #
+        ######################################################################################################################################
 
         self.update_goals()
         self.update_pedestrian_path()
         self.visualize()
 
-    def update_goals(self):
-        self.D = np.zeros([self.num_agents,2 ] ,dtype='float')
+    def update_goals(self): 
+        # Convert sequence of goal positions to (x, y) coordinates
+        self.destinations = np.zeros([self.num_agents,2 ] ,dtype='float') 
         for i in range(self.num_agents):
-            self.D[i] = tuple(self.goals[2*i:2*i+2])
+            self.destinations[i] = tuple(self.goals[2*i:2*i+2])
     
     def update_pedestrian_path(self):
         if (len(self.pedestrian_pos) == 0):
-            self.pedestrian_pos = np.zeros([self.num_agents, self.path_buffer*2], dtype='float')
-            self.pedestrian_vel = np.zeros_like(self.pedestrian_pos)
+            self.pedestrian_pos = np.zeros([self.num_agents, self.path_buffer*2], dtype='float') # Creating buffer for each agent's position
+            self.pedestrian_vel = np.zeros_like(self.pedestrian_pos)                             # Creating buffer for each agent's velocity
         else:
             for i in range(self.num_agents):
-                self.pedestrian_pos[i][:2*self.path_buffer-2] = self.pedestrian_pos[i][2:2*self.path_buffer]
-                self.pedestrian_pos[i][2*self.path_buffer-2:] = self.positions[2*i:2*i+2]  
+                self.pedestrian_pos[i][:2*self.path_buffer-2] = self.pedestrian_pos[i][2:2*self.path_buffer] # Shift the buffer values to left (2 positions)
+                self.pedestrian_pos[i][2*self.path_buffer-2:] = self.positions[2*i:2*i+2]                    # Include latest positions as the last element of the buffer
                 
             for j in range(self.num_agents):
-                self.pedestrian_vel[j][:2*self.path_buffer-2] = self.pedestrian_vel[j][2:2*self.path_buffer]
-                self.pedestrian_vel[j][2*self.path_buffer-2:] = [(self.pedestrian_pos[j][-2] - self.pedestrian_pos[j][-4])/0.2,
-                                                                 (self.pedestrian_pos[j][-1] - self.pedestrian_pos[j][-3])/0.2 ] 
+                self.pedestrian_vel[j][:2*self.path_buffer-2] = self.pedestrian_vel[j][2:2*self.path_buffer] # Shifting velocity buffer
+                self.pedestrian_vel[j][2*self.path_buffer-2:] = [(self.pedestrian_pos[j][-2] - self.pedestrian_pos[j][-4])/self.dt,
+                                                                 (self.pedestrian_pos[j][-1] - self.pedestrian_pos[j][-3])/self.dt ]  # Velocity calculation
 
-    def pedestrian_state(self, timeStep , pd = 0):
+    def pedestrian_state(self, timeStep , pd = 0): # Set pedestrian to 0 for simulation purposes
+        # Reading pedestrian state from pos, vel buffers
         pos = tuple(self.pedestrian_pos[pd][2*self.path_buffer-2*timeStep-2:2*self.path_buffer-2*timeStep])
         vel = tuple(self.pedestrian_vel[pd][2*self.path_buffer-2*timeStep-2:2*self.path_buffer-2*timeStep])
         
         return pos, vel
 
     def compute_angle(self, pos, vel, dest):
-        direction_to_dest = dest - pos
+        direction_to_dest = dest - pos # Angle to goal
         norm_vel = np.linalg.norm(vel)
         norm_dir = np.linalg.norm(direction_to_dest)
         
         # Check if any of the vectors have zero magnitude
         if norm_vel == 0 or norm_dir == 0:
-            print("Initializing")
+            print("Waiting...")
             return 0
         
         # Clamp the value to avoid invalid input for arccos
-        cos_theta = np.dot(vel, direction_to_dest) / (norm_vel * norm_dir)
+        cos_theta = np.dot(vel, direction_to_dest) / (norm_vel * norm_dir) # Calculate angle between goal direction and moving direction
         cos_theta = np.clip(cos_theta, -1.0, 1.0)  
 
         angle = np.arccos(cos_theta)
@@ -111,21 +118,17 @@ class GoalPredictor(Node):
 
     def visualize(self):
         pos, vel = self.pedestrian_state(timeStep=0)
-        print("pos: ",pos)
-        print("vel: ",vel)
-        plt.clf()  # Clear the current figure instead of creating a new one
-        plt.quiver(pos[0], pos[1], vel[0], vel[1], color='r', scale=10)  # Pedestrian velocity
-        plt.scatter(self.D[:, 0], self.D[:, 1], c='blue', label='Destinations')
+        plt.clf()  
+        plt.quiver(pos[0], pos[1], vel[0], vel[1], color='r', scale=20)  # Pedestrian velocity
+        plt.scatter(self.destinations[:, 0], self.destinations[:, 1], c='blue', label='Destinations' , s= 50)
         
-        pred_dest = self.predict_destination(self.D)
+        pred_dest = self.predict_destination(self.destinations)
         print("pred", pred_dest)
-        plt.scatter(pred_dest[0][0], pred_dest[0][1], c='green', label='Predicted Destination', marker='X')
+        plt.scatter(pred_dest[0][0], pred_dest[0][1], c='green', label='Predicted Destination', marker='X' , s= 200)
         
         plt.legend()
-        
-        plt.draw()  # Draw the updated plot
-        plt.pause(0.01)  # Short pause to update the plot
-
+        plt.draw()  
+        plt.pause(0.01)  
 
 
 def main(args=None):
