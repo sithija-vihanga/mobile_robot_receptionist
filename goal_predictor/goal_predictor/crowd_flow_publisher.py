@@ -1,7 +1,7 @@
 import rclpy
 import numpy as np
 import matplotlib.pyplot    as plt
-import matplotlib.cm        as cm
+import matplotlib.cm        as cm # Color Map
 from rclpy.node     import Node
 from std_msgs.msg   import Float32MultiArray
 
@@ -13,9 +13,9 @@ class CrowdFlowPublisher(Node):
         timer_period        = 0.2  # seconds
         self.timer          = self.create_timer(timer_period, self.timer_callback)
 
-        self.num_agents         = 10
+        self.num_agents         = 10   
         self.goal_radius        = 0.5
-        self.time_step          = 0.05
+        self.time_step          = 0.05   # Simulation time
         self.agent_radius       = 0.4
         self.max_speed          = 1.0
         self.num_obstacles      = 20
@@ -27,7 +27,12 @@ class CrowdFlowPublisher(Node):
         self.goals      = np.random.rand(self.num_agents, 2) * 10
         self.obstacles  = np.random.rand(self.num_obstacles, 2) * 10
 
-        self.mapData    = np.zeros(2 + 4*self.num_agents)
+        #############################################   Encoding system for data transfer ####################################################
+        #     [number of agents, number of obstacles, agent-01 X pos, agent-01 Y pos, ..., obstacle-01 X pos, obstacle-02 Y pos, ...]
+        #
+        ######################################################################################################################################
+        #TODO: Change the input data stream to agents and goals. Remove obstacles data.
+        self.mapData    = np.zeros(2 + 4*self.num_agents)  # num_goals = num_agents (Only used for validation)
         self.mapData[0] = self.num_agents
         self.mapData[1] = self.num_obstacles
         
@@ -35,7 +40,7 @@ class CrowdFlowPublisher(Node):
         self.paths = [self.positions[i:i+1].tolist() for i in range(self.num_agents)]
 
         # Visualization setup
-        plt.ion()
+        plt.ion()  # Activate interactive mode
         fig, ax = plt.subplots()
         ax.set_xlim(0, 10)
         ax.set_ylim(0, 10)
@@ -67,13 +72,12 @@ class CrowdFlowPublisher(Node):
 
     def timer_callback(self):
         for j in range(self.num_agents):
-            self.mapData[2*j+2:2*j+4] = self.paths[j][-1] 
-        self.mapData[2+2*self.num_agents:] = self.goals.flatten()
+            self.mapData[2*j+2:2*j+4] = self.paths[j][-1]           # Add latest positions of human agents to mapData starting from 2nd position
+        self.mapData[2+2*self.num_agents:] = self.goals.flatten()   # Adding the goals to last part of mapData
         msg = Float32MultiArray()
         msg.data = tuple(self.mapData)
         self.publisher_.publish(msg)
-        # self.get_logger().info('Publishing: "%s"' % msg.data)
-        self.crowd_flow()
+        self.crowd_flow()    # For visualization
 
     def create_circle(self, x, y, radius, color):
         return plt.Circle((x, y), radius, color=color, fill=False, lw=2)
@@ -82,12 +86,11 @@ class CrowdFlowPublisher(Node):
         distance = np.linalg.norm(position - obstacle)
         return distance < obstacle_radius*2   # obstacle_radius + agent_radius
 
-    # Function to adjust the agent's direction to avoid obstacles
+    # Adjust the agent's direction to avoid obstacles
     def avoid_obstacles(self, position, direction, obstacles):
         avoidance_vector = np.zeros(2)
         for obstacle in obstacles:
             if self.check_obstacle_collision(position, obstacle, self.obstacle_radius):
-                # Compute the vector away from the obstacle
                 avoidance_dir = position - obstacle
                 avoidance_distance = np.linalg.norm(avoidance_dir)
                 if avoidance_distance > 0:
@@ -96,7 +99,7 @@ class CrowdFlowPublisher(Node):
                     avoidance_vector += avoidance_dir * (1 / avoidance_distance) * self.avoidance_strength
 
         # Modify the direction based on the avoidance vector
-        adjusted_direction = direction + avoidance_vector
+        adjusted_direction = direction + avoidance_vector # direction: direction to GOAL
         if np.linalg.norm(adjusted_direction) > 0:
             adjusted_direction /= np.linalg.norm(adjusted_direction)  # Normalize
         
@@ -122,32 +125,27 @@ class CrowdFlowPublisher(Node):
             for j in range(self.num_agents):
                 if i != j:
                     distance = np.linalg.norm(new_position - positions[j])
-                    if distance < self.agent_radius * 2:  # Simple collision detection
-                        # Simple collision avoidance: move away
+                    if distance < self.agent_radius * 2:  
                         avoidance_direction = new_position - positions[j]
                         avoidance_direction /= np.linalg.norm(avoidance_direction)
-                        new_position += avoidance_direction * (self.agent_radius * 2 - distance)
-            
-            # Update position
+                        new_position += avoidance_direction * (self.agent_radius * 2 - distance)  # To change the strength
+
             self.positions[i] = new_position
-            self.paths[i].append(new_position.tolist())  # Record the new position in the path
+            self.paths[i].append(new_position.tolist())  
     
     def crowd_flow(self):
         self.update_positions(self.positions, self.goals)
         
-        # Update agent positions in the plot
         for i in range(self.num_agents):
             self.agent_circles[i].center = self.positions[i]
             self.agent_labels[i].set_position(self.positions[i])
 
-            # Update the path using small dots
             path_positions = np.array(self.paths[i])
             num_path_dots = len(path_positions)
             fade = np.linspace(0, 1, num_path_dots)  # Gradual fade effect
             self.path_dots[i].set_offsets(path_positions)
             self.path_dots[i].set_alpha(fade)
 
-        # Redraw the plot
         plt.draw()
         plt.pause(0.01)
 
