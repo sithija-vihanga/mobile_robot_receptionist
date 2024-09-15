@@ -78,6 +78,16 @@ def generate_launch_description():
         )
     )
 
+    start_slam_toolbox = IncludeLaunchDescription(
+        PythonLaunchDescriptionSource(
+            os.path.join(get_package_share_directory("slam_toolbox"), "launch", "online_async_launch.py" )
+        ),
+        launch_arguments={
+            'slam_params_file':os.path.join(get_package_share_directory("smrr_controller"), "config", "mapper_params_online_async.yaml"),
+            'use_sim_time':'true'
+        }.items()
+    )
+
     return LaunchDescription([
         *env_use_nvidia_gpu,
         env_var,
@@ -87,5 +97,6 @@ def generate_launch_description():
         robot_state_publisher_node,
         spawn_robot,
         controllers,
-        joystick_control
+        joystick_control,
+        start_slam_toolbox
     ])

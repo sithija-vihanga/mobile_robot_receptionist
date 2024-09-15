@@ -57,12 +57,11 @@
                 </noise>
             </ray>
             <plugin name="rplidar_controller" filename="libgazebo_ros_ray_sensor.so">
-                <ros>
-                    <argument>--ros-args --remap ~/out:=scan</argument>
+                 <ros>
+                    <remapping>~/out:=/scan</remapping>
                 </ros>
                 <output_type>sensor_msgs/LaserScan</output_type>
-                <topicName>/scan</topicName>
-                <frameName>rplidar_link</frameName>
+                <frame_name>rplidar_link</frame_name>
             </plugin>
         </sensor>
     </gazebo>
