@@ -61,8 +61,11 @@
     </transmission>
 
     <gazebo reference="left_wheel">
-        <mu1>0.8</mu1>  <!--1000000000000000.0-->
-        <mu2>0.8</mu2>
+        <mu1>100.0</mu1>  <!--1000000000000000.0-->
+        <mu2>100.0</mu2>
+        <minDepth>0.001</minDepth>
+        <kp>1000000000000.0</kp>
+        <kd>10.0</kd>
         <!-- <kp>1000000000000.0</kp>
         <kd>10.0</kd>
         <minDepth>0.001</minDepth>
@@ -71,23 +74,28 @@
     </gazebo>
 
     <gazebo reference="right_wheel">
-        <mu1>0.8</mu1>  <!--1000000000000000.0-->
-        <mu2>0.8</mu2>
+        <mu1>100.0</mu1>  <!--1000000000000000.0-->
+        <mu2>100.0</mu2>
+        <minDepth>0.001</minDepth>
+        <kp>1000000000000.0</kp>
+        <kd>10.0</kd>
         <!-- <kp>1000000000000.0</kp>
         <kd>10.0</kd>
         <minDepth>0.001</minDepth>
         <maxVel>0.1</maxVel>
         <fdir1>1 0 0</fdir1> -->
     </gazebo>
-<!-- 
+
     <gazebo reference="front_caster">
         <mu1>0.1</mu1>  
         <mu2>0.1</mu2>
+        <minDepth>0.002</minDepth>
     </gazebo>
 
     <gazebo reference="back_caster">
         <mu1>0.1</mu1>  
         <mu2>0.1</mu2>
-    </gazebo> -->
+        <minDepth>0.002</minDepth>
+    </gazebo>
 
 </robot>

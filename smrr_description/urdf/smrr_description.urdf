@@ -18,7 +18,7 @@
         xyz="0.0201310485852864 0.000520829416461865 0.865026738420884"
         rpy="0 0 0" />
       <mass
-        value="28.2797481488828" />
+        value="8.2797481488828" /> <!-- 28.2797481488828 -->
       <!-- <mass
         value="48.2797481488828" /> -->
       <inertia
@@ -103,6 +103,9 @@
         <mesh
           filename="package://smrr_description/meshes/right_wheel.STL" />
       </geometry>
+      <!-- <geometry>
+        <cylinder radius="0.08" length="0.05"/>
+      </geometry> -->
     </collision>
   </link>
   <!-- <joint
@@ -170,6 +173,9 @@
         <mesh
           filename="package://smrr_description/meshes/left_wheel.STL" />
       </geometry>
+      <!-- <geometry>
+        <cylinder radius="0.05" length="0.03"/>
+      </geometry> -->
     </collision>
   </link>
   <!-- <joint
@@ -217,12 +223,15 @@
     </inertial>
     <visual>
       <origin
-        xyz="0 0 -0.0025"
+        xyz="0 0 0.03"
         rpy="0 0 0" />
-      <geometry>
+      <!-- <geometry>
         <mesh
           filename="package://smrr_description/meshes/front_caster.STL" />
-      </geometry>
+      </geometry> -->
+      <geometry>
+          <sphere radius="0.05"/>
+        </geometry>
       <material
         name="">
         <color
@@ -231,12 +240,15 @@
     </visual>
     <collision>
       <origin
-        xyz="0 0 -0.0025"
+        xyz="0 0 0.03"
         rpy="0 0 0" />
-      <geometry>
+      <!-- <geometry>
         <mesh
           filename="package://smrr_description/meshes/front_caster.STL" />
-      </geometry>
+      </geometry> -->
+      <geometry>
+          <sphere radius="0.05"/>
+        </geometry>
     </collision>
   </link>
   <!-- <joint
@@ -283,12 +295,15 @@
     </inertial>
     <visual>
       <origin
-        xyz="0 0 -0.0025"
-        rpy="0 0 0" />
-      <geometry>
+        xyz="0 0 0.03"     
+        rpy="0 0 0" /> <!-- -0.0025 -->
+      <!-- <geometry>
         <mesh
           filename="package://smrr_description/meshes/back_caster.STL" />
-      </geometry>
+      </geometry> -->
+       <geometry>
+          <sphere radius="0.05"/>
+        </geometry>
       <material
         name="">
         <color
@@ -297,12 +312,15 @@
     </visual>
     <collision>
       <origin
-        xyz="0 0 -0.0025"
+        xyz="0 0 0.03"
         rpy="0 0 0" />
-      <geometry>
+        <geometry>
+          <sphere radius="0.05"/>
+        </geometry>
+      <!-- <geometry>
         <mesh
           filename="package://smrr_description/meshes/back_caster.STL" />
-      </geometry>
+      </geometry> -->
     </collision>
   </link>
   <!-- <joint
