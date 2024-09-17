@@ -52,10 +52,19 @@ def generate_launch_description():
         ],
     )
 
+    robot_localization = Node(
+        package="robot_localization",
+        executable="ekf_node",
+        name="ekf_filter_node",
+        output="screen",
+        parameters=[os.path.join(get_package_share_directory("smrr_localization"), "config", "ekf.yaml")],
+    )
+
 
     return LaunchDescription([
         robot_state_publisher,
         joint_state_broadcaster_spawner,
         arm_controller_spawner,
-        diff_drive_controller
+        diff_drive_controller,
+        robot_localization
     ])

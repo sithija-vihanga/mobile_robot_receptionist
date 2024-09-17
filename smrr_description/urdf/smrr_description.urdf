@@ -9,6 +9,7 @@
   <xacro:include filename="$(find smrr_description)/urdf/transmission.urdf" />
   <xacro:include filename="$(find smrr_description)/urdf/gazebo_ros2_control.urdf" /> 
   <xacro:include filename="$(find smrr_description)/urdf/smrr_ros2_control.urdf" />
+  <xacro:include filename="$(find smrr_description)/urdf/imu.urdf" />
   
   <link name="base_footprint"/>
   <link
