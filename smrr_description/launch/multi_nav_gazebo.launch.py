@@ -61,9 +61,11 @@ def generate_launch_description():
     spawn_robot = Node(package="gazebo_ros", executable="spawn_entity.py",
                         arguments=["-entity", "smrr",
                                    "-topic", "robot_description",
-                                   "-x", "2.0", "-y", "0.6", "-z", "0.35",
+                                   "-x", "2.0", "-y", "0.6", "-z" ".35",
                                   ],
                         output="screen"
+                        #"-x", "2.0", "-y", "0.6", "-z" ".35",   # ground floor elevator
+                        #"-x", "2.0", "-y", "-0.6", "-z", "9.35" # floor 03
     )
 
     controllers = IncludeLaunchDescription(
@@ -98,5 +100,5 @@ def generate_launch_description():
         spawn_robot,
         controllers,
         joystick_control,
-        start_slam_toolbox
+        #start_slam_toolbox
     ])
