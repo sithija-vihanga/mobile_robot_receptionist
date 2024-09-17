@@ -44,11 +44,12 @@ def generate_launch_description():
     diff_drive_controller = Node(
         package="controller_manager",
         executable="spawner",
+        namespace='driver',
         arguments=[
             "diff_drive_controller",
             "--controller-manager",
             "/controller_manager"
-        ]
+        ],
     )
 
 
