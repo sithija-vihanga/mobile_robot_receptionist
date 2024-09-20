@@ -59,7 +59,7 @@ diff_drive_controller:
 
     position_feedback: false
     open_loop: true
-    enable_odom_tf: false
+    enable_odom_tf: true
 
     cmd_vel_timeout: 1.2 # seconds
     publish_limited_velocity: true
