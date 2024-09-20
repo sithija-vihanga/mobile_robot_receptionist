@@ -52,6 +52,7 @@ def generate_launch_description():
         ],
     )
 
+    # Node fails in multi-floor navigation
     robot_localization = Node(
         package="robot_localization",
         executable="ekf_node",
@@ -66,5 +67,5 @@ def generate_launch_description():
         joint_state_broadcaster_spawner,
         arm_controller_spawner,
         diff_drive_controller,
-        robot_localization
+        #robot_localization
     ])
