@@ -26,7 +26,17 @@ class GoalPredictor(Node):
         self.dt             = 0.2       # Position publisher rate
         self.sigma_phi      = 0.1
 
-        self.destinations = np.array([[5.0, 8.0], [2.3, 1.4]])
+        self.destinations = np.array([[5.0, 8.0], 
+           [2.3, 1.4], 
+           [3.2, 7.6], 
+           [1.5, 4.8], 
+           [6.1, 2.9], 
+           [0.4, 9.3], 
+           [8.0, 3.7], 
+           [5.6, 1.1], 
+           [9.5, 2.2], 
+           [4.0, 0.8]])
+
 
         self.agents = Entities()
         self.vel    = Entities()
@@ -97,9 +107,8 @@ class GoalPredictor(Node):
     # Bayesian classifier for destination prediction
     def predict_destination(self, D, w=5):
         # Store recent pedestrian states
-        recent_states = []
-        
         for k in range(self.agents.count):
+            recent_states = []
             for i in range(w):
                 pos, vel = self.pedestrian_state(i , pd= k)
                 recent_states.append((pos, vel))
@@ -123,10 +132,10 @@ class GoalPredictor(Node):
         #return D[np.argmax(destination_probs)], destination_probs
 
     def predict_goals(self):
-        agent_num = 3 # For visualization
+        agent_num = 5 # For visualization
         pos, vel = self.pedestrian_state(timeStep=0, pd = agent_num )
         plt.clf()  
-        plt.quiver(pos[0], pos[1], vel[0], vel[1], color='r', scale=20)  # Pedestrian velocity
+        plt.quiver(pos[0], pos[1], vel[0], vel[1], color='r', scale=8)  # Pedestrian velocity
         plt.scatter(self.destinations[:, 0], self.destinations[:, 1], c='blue', label='Destinations' , s= 50)
         
         pred_dest = self.predict_destination(self.destinations)

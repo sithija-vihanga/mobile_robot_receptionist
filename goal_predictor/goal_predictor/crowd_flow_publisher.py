@@ -25,8 +25,19 @@ class CrowdFlowPublisher(Node):
 
         np.random.seed(58)
         self.positions  = np.random.rand(self.num_agents, 2) * 10
-        self.goals      = np.random.rand(self.num_agents, 2) * 10
+        #self.goals      = np.random.rand(self.num_agents, 2) * 10
         self.obstacles  = np.random.rand(self.num_obstacles, 2) * 10
+        self.goals = np.array([[5.0, 8.0], 
+           [2.3, 1.4], 
+           [3.2, 7.6], 
+           [1.5, 4.8], 
+           [6.1, 2.9], 
+           [0.4, 9.3], 
+           [8.0, 3.7], 
+           [5.6, 1.1], 
+           [9.5, 2.2], 
+           [4.0, 0.8]])
+
 
         # self.mapData = np.zeros(2 + 4 * self.num_agents)  
         # self.mapData[0] = self.num_agents
