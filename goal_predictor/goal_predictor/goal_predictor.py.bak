@@ -40,7 +40,7 @@ class GoalPredictor(Node):
 
         self.update_goals()
         self.update_pedestrian_path()
-        self.visualize()
+        self.predict_goals()
 
     def update_goals(self): 
         # Convert sequence of goal positions to (x, y) coordinates
@@ -116,7 +116,7 @@ class GoalPredictor(Node):
         # Return the most likely destination
         return D[np.argmax(destination_probs)], destination_probs
 
-    def visualize(self):
+    def predict_goals(self):
         pos, vel = self.pedestrian_state(timeStep=0)
         plt.clf()  
         plt.quiver(pos[0], pos[1], vel[0], vel[1], color='r', scale=20)  # Pedestrian velocity

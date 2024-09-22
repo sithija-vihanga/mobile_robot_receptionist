@@ -3,22 +3,22 @@ import numpy                as np
 import matplotlib.pyplot    as plt
 from scipy.stats    import norm
 from rclpy.node     import Node
-from std_msgs.msg   import Float32MultiArray
+from smrr_interfaces.msg import Entities
 
 
 class GoalPredictor(Node):
     def __init__(self):
         super().__init__('goal_predictor')
-        self.subscription = self.create_subscription(
-            Float32MultiArray,
+        self.pos_subscription = self.create_subscription(
+            Entities,
             'map_data',
             self.predictor_callback,
             10)
-        self.subscription  
+        
+        self.vel_publisher  = self.create_publisher(Entities,'/vel', 10)
+        self.goal_publisher = self.create_publisher(Entities,'/goal', 10)
 
-        # Extracted from float32multi array
-        self.positions = []
-        self.goals     = []
+        self.pos_subscription  
 
         self.pedestrian_pos = [] 
         self.pedestrian_vel = []
@@ -26,41 +26,43 @@ class GoalPredictor(Node):
         self.dt             = 0.2       # Position publisher rate
         self.sigma_phi      = 0.1
 
+        self.destinations = np.array([[5.0, 8.0], [2.3, 1.4]])
+
+        self.agents = Entities()
+        self.vel    = Entities()
+        self.goals  = Entities()
+
     def predictor_callback(self, msg):
-        # Data extraction from the encoded data
-        self.num_agents      = int(msg.data[0])                    
-        self.num_obstacles   = int(msg.data[1])
-        self.positions       = msg.data[2:2*self.num_agents+2]
-        self.goals           = msg.data[2*self.num_agents+2:]
+        self.agents          = msg   
+        
+        self.vel.count       = self.agents.count
+        self.vel.x           = [0.0]*self.vel.count  
+        self.vel.y           = [0.0]*self.vel.count 
+        
+        self.goals.x           = [0.0]*self.vel.count  
+        self.goals.y           = [0.0]*self.vel.count 
 
-        #############################################   Encoding system for data transfer ####################################################
-        #     [number of agents, number of obstacles, agent-01 X pos, agent-01 Y pos, ..., obstacle-01 X pos, obstacle-02 Y pos, ...]
-        #
-        ######################################################################################################################################
+        self.update_path()
+        self.vel_publisher.publish(self.vel)
+        self.predict_goals()
+        self.goal_publisher.publish(self.goals)
 
-        self.update_goals()
-        self.update_pedestrian_path()
-        self.visualize()
-
-    def update_goals(self): 
-        # Convert sequence of goal positions to (x, y) coordinates
-        self.destinations = np.zeros([self.num_agents,2 ] ,dtype='float') 
-        for i in range(self.num_agents):
-            self.destinations[i] = tuple(self.goals[2*i:2*i+2])
-    
-    def update_pedestrian_path(self):
+    def update_path(self):
         if (len(self.pedestrian_pos) == 0):
-            self.pedestrian_pos = np.zeros([self.num_agents, self.path_buffer*2], dtype='float') # Creating buffer for each agent's position
+            self.pedestrian_pos = np.zeros([self.agents.count, self.path_buffer*2], dtype='float') # Creating buffer for each agent's position
             self.pedestrian_vel = np.zeros_like(self.pedestrian_pos)                             # Creating buffer for each agent's velocity
         else:
-            for i in range(self.num_agents):
+            for i in range(self.agents.count):
                 self.pedestrian_pos[i][:2*self.path_buffer-2] = self.pedestrian_pos[i][2:2*self.path_buffer] # Shift the buffer values to left (2 positions)
-                self.pedestrian_pos[i][2*self.path_buffer-2:] = self.positions[2*i:2*i+2]                    # Include latest positions as the last element of the buffer
+                self.pedestrian_pos[i][2*self.path_buffer-2:] = self.agents.x[i],self.agents.y[i]                    # Include latest positions as the last element of the buffer
                 
-            for j in range(self.num_agents):
+            for j in range(self.agents.count):
                 self.pedestrian_vel[j][:2*self.path_buffer-2] = self.pedestrian_vel[j][2:2*self.path_buffer] # Shifting velocity buffer
-                self.pedestrian_vel[j][2*self.path_buffer-2:] = [(self.pedestrian_pos[j][-2] - self.pedestrian_pos[j][-4])/self.dt,
-                                                                 (self.pedestrian_pos[j][-1] - self.pedestrian_pos[j][-3])/self.dt ]  # Velocity calculation
+                
+                self.vel.x[j] = (self.pedestrian_pos[j][-2] - self.pedestrian_pos[j][-4])/self.dt
+                self.vel.y[j] = (self.pedestrian_pos[j][-1] - self.pedestrian_pos[j][-3])/self.dt  # Velocity calculation
+                
+                self.pedestrian_vel[j][2*self.path_buffer-2:] = [self.vel.x[j], self.vel.y[j]]
 
     def pedestrian_state(self, timeStep , pd = 0): # Set pedestrian to 0 for simulation purposes
         # Reading pedestrian state from pos, vel buffers
@@ -97,34 +99,38 @@ class GoalPredictor(Node):
         # Store recent pedestrian states
         recent_states = []
         
-        for i in range(w):
-            pos, vel = self.pedestrian_state(i)
-            recent_states.append((pos, vel))
-        
-        destination_probs = []
-        for dest in D:
-            # Compute joint probability for each destination
-            joint_prob = 1
-            for pos, vel in recent_states:
-                joint_prob *= self.compute_probability(pos, vel, dest, self.sigma_phi)
+        for k in range(self.agents.count):
+            for i in range(w):
+                pos, vel = self.pedestrian_state(i , pd= k)
+                recent_states.append((pos, vel))
             
-            destination_probs.append(joint_prob)
-        
-        # Normalize probabilities
-        destination_probs = np.array(destination_probs) / np.sum(destination_probs)
-        
-        # Return the most likely destination
-        return D[np.argmax(destination_probs)], destination_probs
+            destination_probs = []
+            for dest in D:
+                # Compute joint probability for each destination
+                joint_prob = 1
+                for pos, vel in recent_states:
+                    joint_prob *= self.compute_probability(pos, vel, dest, self.sigma_phi)
+                
+                destination_probs.append(joint_prob)
+            
+            # Normalize probabilities
+            destination_probs = np.array(destination_probs) / np.sum(destination_probs)
 
-    def visualize(self):
+            self.goals.x[k] = D[np.argmax(destination_probs)][0]
+            self.goals.y[k] = D[np.argmax(destination_probs)][1]
+
+        return self.goals
+        #return D[np.argmax(destination_probs)], destination_probs
+
+    def predict_goals(self):
         pos, vel = self.pedestrian_state(timeStep=0)
         plt.clf()  
         plt.quiver(pos[0], pos[1], vel[0], vel[1], color='r', scale=20)  # Pedestrian velocity
         plt.scatter(self.destinations[:, 0], self.destinations[:, 1], c='blue', label='Destinations' , s= 50)
         
         pred_dest = self.predict_destination(self.destinations)
-        print("pred", pred_dest)
-        plt.scatter(pred_dest[0][0], pred_dest[0][1], c='green', label='Predicted Destination', marker='X' , s= 200)
+        #print("pred", pred_dest)
+        plt.scatter(pred_dest.x[0], pred_dest.y[1], c='green', label='Predicted Destination', marker='X' , s= 200)
         
         plt.legend()
         plt.draw()  
