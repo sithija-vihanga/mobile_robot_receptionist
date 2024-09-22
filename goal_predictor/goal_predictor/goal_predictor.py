@@ -16,7 +16,7 @@ class GoalPredictor(Node):
             10)
         
         self.vel_publisher  = self.create_publisher(Entities,'/vel', 10)
-        self.goal_publisher = self.create_publisher(Entities,'/goal', 10)
+        self.goal_publisher = self.create_publisher(Entities,'/goals', 10)
 
         self.pos_subscription  
 
@@ -39,6 +39,7 @@ class GoalPredictor(Node):
         self.vel.x           = [0.0]*self.vel.count  
         self.vel.y           = [0.0]*self.vel.count 
         
+        self.goals.count       = self.agents.count
         self.goals.x           = [0.0]*self.vel.count  
         self.goals.y           = [0.0]*self.vel.count 
 
@@ -78,7 +79,6 @@ class GoalPredictor(Node):
         
         # Check if any of the vectors have zero magnitude
         if norm_vel == 0 or norm_dir == 0:
-            print("Waiting...")
             return 0
         
         # Clamp the value to avoid invalid input for arccos
@@ -123,14 +123,14 @@ class GoalPredictor(Node):
         #return D[np.argmax(destination_probs)], destination_probs
 
     def predict_goals(self):
-        pos, vel = self.pedestrian_state(timeStep=0)
+        agent_num = 3 # For visualization
+        pos, vel = self.pedestrian_state(timeStep=0, pd = agent_num )
         plt.clf()  
         plt.quiver(pos[0], pos[1], vel[0], vel[1], color='r', scale=20)  # Pedestrian velocity
         plt.scatter(self.destinations[:, 0], self.destinations[:, 1], c='blue', label='Destinations' , s= 50)
         
         pred_dest = self.predict_destination(self.destinations)
-        #print("pred", pred_dest)
-        plt.scatter(pred_dest.x[0], pred_dest.y[1], c='green', label='Predicted Destination', marker='X' , s= 200)
+        plt.scatter(pred_dest.x[agent_num], pred_dest.y[agent_num], c='green', label='Predicted Destination', marker='X' , s= 200)
         
         plt.legend()
         plt.draw()  
