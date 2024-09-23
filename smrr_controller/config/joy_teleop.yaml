@@ -4,7 +4,7 @@ joy_teleop:
     # move:
     #   type: topic
     #   interface_type: geometry_msgs/msg/TwistStamped
-    #   topic_name: diff_drive_controller/cmd_vel
+    #   topic_name: cmd/vel_joy  #diff_drive_controller/cmd_vel
     #   deadman_buttons: [5]
     #   axis_mappings:
     #     twist-linear-x:

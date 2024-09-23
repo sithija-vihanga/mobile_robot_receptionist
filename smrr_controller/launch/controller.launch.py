@@ -56,7 +56,14 @@ def generate_launch_description():
        package="twist_mux",
        executable="twist_mux",
        parameters=[os.path.join(get_package_share_directory("smrr_controller"),"config","twist_mux.yaml")],
-       remappings=[('/cmd_vel_out', '/diff_drive_controller/cmd_vel')]
+       remappings=[('/cmd_vel_out', '/cmd_vel_out_unstamped')]
+    )
+
+    twist_stamper = Node(
+        package="twist_stamper",
+        executable="twist_stamper",
+        remappings=[('/cmd_vel_in', '/cmd_vel_out_unstamped'),
+                    ('/cmd_vel_out', '/diff_drive_controller/cmd_vel')]
     )
 
     # Node fails in multi-floor navigation
@@ -74,6 +81,7 @@ def generate_launch_description():
         joint_state_broadcaster_spawner,
         arm_controller_spawner,
         diff_drive_controller,
-        twist_mux
+        twist_mux,
+        twist_stamper
         #robot_localization
     ])
