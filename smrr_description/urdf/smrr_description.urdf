@@ -84,11 +84,14 @@
     </inertial>
     <visual>
       <origin
-        xyz="0 0 0"
+        xyz="0 0 -0.025"
         rpy="0 0 0" />
-      <geometry>
+      <!-- <geometry>
         <mesh
           filename="package://smrr_description/meshes/right_wheel.STL" />
+      </geometry> -->
+       <geometry>
+        <cylinder radius="0.08" length="0.05"/>
       </geometry>
       <material
         name="">
@@ -98,15 +101,15 @@
     </visual>
     <collision>
       <origin
-        xyz="0 0 0"
+        xyz="0 0 -0.025"
         rpy="0 0 0" />
-      <geometry>
+      <!-- <geometry>
         <mesh
           filename="package://smrr_description/meshes/right_wheel.STL" />
-      </geometry>
-      <!-- <geometry>
-        <cylinder radius="0.08" length="0.05"/>
       </geometry> -->
+       <geometry>
+        <cylinder radius="0.08" length="0.05"/>
+      </geometry>
     </collision>
   </link>
   <!-- <joint
@@ -153,12 +156,18 @@
         izz="0.0028869008381509" />
     </inertial>
     <visual>
-      <origin
+      <!-- <origin
         xyz="0 0 0"
         rpy="0 0 0" />
       <geometry>
         <mesh
           filename="package://smrr_description/meshes/left_wheel.STL" />
+      </geometry> -->
+      <origin
+        xyz="0 0 0.025"
+        rpy="0 0 0" />
+       <geometry>
+        <cylinder radius="0.08" length="0.05"/>
       </geometry>
       <material
         name="">
@@ -168,11 +177,10 @@
     </visual>
     <collision>
       <origin
-        xyz="0 0 0"
+        xyz="0 0 0.025"
         rpy="0 0 0" />
-      <geometry>
-        <mesh
-          filename="package://smrr_description/meshes/left_wheel.STL" />
+       <geometry>
+        <cylinder radius="0.08" length="0.05"/>
       </geometry>
       <!-- <geometry>
         <cylinder radius="0.05" length="0.03"/>
