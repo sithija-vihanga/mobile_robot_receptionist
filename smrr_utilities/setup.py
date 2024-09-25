@@ -1,11 +1,13 @@
 from setuptools import find_packages, setup
+import os
+from glob import glob
 
 package_name = 'smrr_utilities'
 
 setup(
     name=package_name,
     version='0.0.0',
-    packages=find_packages(exclude=['test']),
+    packages=find_packages(package_name, "smrr_utilities/include"),
     data_files=[
         ('share/ament_index/resource_index/packages',
             ['resource/' + package_name]),
