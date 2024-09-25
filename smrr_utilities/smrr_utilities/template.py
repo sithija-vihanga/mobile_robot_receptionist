@@ -3,15 +3,15 @@ import rclpy
 from rclpy.node import Node
 from .include.transform import GeometricTransformations
 
-class Template(Node):
+class Template(Node):  # Include the following functions within therequired class instead of this class.
 
     def __init__(self):
         super().__init__('template')
-        self.point_arr = None 
+        self.point_arr = None # Configure this with required points to transform to new frames.
         self.transform      = GeometricTransformations(self)
         
-    def listener_callback_collision(self, msg):
-        transformation   = self.transform.get_transform('map', 'base_link')          
+    def transform(self):   # Template function for calling transformations.
+        transformation   = self.transform.get_transform('map', 'base_link')     # Adjust the link frames here. ('target frame', 'source frame')     
 
         if transformation:
             transformed_points  = self.transform.transform_points(self.point_arr, transformation)
