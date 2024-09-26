@@ -18,7 +18,7 @@ class GeometricTransformations():
             self.node.get_logger().warn("Failed to get transform: {}".format(e))
             return None
     
-    def transform_points(self,obstacle_arr,transform):
+    def transform_points(self,point_arr,transform):
 
         quaternion  = np.array([transform.rotation.x, transform.rotation.y, transform.rotation.z, transform.rotation.w])
         translation = np.array([transform.translation.x, transform.translation.y, transform.translation.z])
@@ -27,6 +27,6 @@ class GeometricTransformations():
         T[:3,:3] = Rotation.from_quat(quaternion).as_matrix()
         T[:3, 3] = translation.reshape(3,)
         T[ 3, 3] = 1
-        transformed_points = T.dot(obstacle_arr) 
+        transformed_points = T.dot(point_arr) 
         
         return transformed_points[:2,:] 
