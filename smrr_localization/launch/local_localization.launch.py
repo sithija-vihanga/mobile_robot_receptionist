@@ -21,7 +21,7 @@ def generate_launch_description():
             os.path.join(get_package_share_directory("slam_toolbox"), "launch", "online_async_launch.py" )
         ),
         launch_arguments={
-            'slam_params_file':os.path.join(get_package_share_directory("smrr_controller"), "config", "mapper_params_online_async.yaml"),
+            'slam_params_file':os.path.join(get_package_share_directory("smrr_multinav"), "config", "mapper_params_online_async.yaml"),
             'use_sim_time':'true'
         }.items()
     )
