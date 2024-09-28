@@ -5,11 +5,11 @@ GoToPose::GoToPose(const std::string &name,
                   rclcpp::Node::SharedPtr node_ptr)
         : BT::StatefulActionNode(name, config), node_ptr_(node_ptr)
     {
-        action_client_ptr = rclcpp_action::create_client<NavigateToPose>(node_ptr_, "/navigate_to_pose");
+        action_client_ptr_ = rclcpp_action::create_client<NavigateToPose>(node_ptr_, "/navigate_to_pose");
         done_flag_ = false;
     }
 
-    BT::PortList GoToPose::providePorts()
+    BT::PortsList GoToPose::providedPorts()
     {
         return {BT::InputPort<std::string>("loc")};
     }
@@ -23,7 +23,7 @@ GoToPose::GoToPose(const std::string &name,
         std::vector<float> pose = locations[loc.value()].as<std::vector<float>>();
 
         auto send_goal_options = rclcpp_action::Client<NavigateToPose>::SendGoalOptions();
-        send_goal_options.result_callback = std::bind(&GoToPose::nav_to_pose_callback, this, std::placeholder::_1);
+        send_goal_options.result_callback = std::bind(&GoToPose::nav_to_pose_callback, this, std::placeholders::_1);
 
         auto goal_msg = NavigateToPose::Goal();
         goal_msg.pose.header.frame_id = "map";
@@ -33,11 +33,11 @@ GoToPose::GoToPose(const std::string &name,
         tf2::Quaternion q;
         q.setRPY(0, 0, pose[2]);
         q.normalize();
-        goal_msg.pose.pose.pose.orientation = tf2::toMsg(q);
+        goal_msg.pose.pose.orientation = tf2::toMsg(q);
 
         done_flag_ = false;
         action_client_ptr_->async_send_goal(goal_msg, send_goal_options);
-        RCLCPP_INFO(this->get_logger(), "Sent Goal to Nav2\n");
+        RCLCPP_INFO(node_ptr_->get_logger(), "Sent Goal to Nav2\n");
         return BT::NodeStatus::RUNNING;
 
 
@@ -47,7 +47,7 @@ GoToPose::GoToPose(const std::string &name,
     {
         if(done_flag_)
         {
-            RCLCPP_INFO(this->get_logger(), "[%s] goal reached\n",this->name());
+            RCLCPP_INFO(node_ptr_->get_logger(), "[%s] goal reached\n",this->name());
             return BT::NodeStatus::SUCCESS;
         }
         else
@@ -56,7 +56,7 @@ GoToPose::GoToPose(const std::string &name,
         }
     }
 
-    void GoToPose::nav_to_pose_callback(const GoalHandleNav::WrapperResult &result)
+    void GoToPose::nav_to_pose_callback(const GoalHandleNav::WrappedResult &result)
     {
         if(result.result)
         {

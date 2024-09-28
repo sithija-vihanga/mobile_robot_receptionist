@@ -5,10 +5,10 @@ using namespace std::chrono_literals;
 const std::string bt_xml_dir = 
         ament_index_cpp::get_package_share_directory("smrr_multinav") + "/bt_xml";
 
-MultiNav::MultiNav(const std::string &node_name) : Node(nodeName)
+MultiNav::MultiNav(const std::string &node_name) : Node(node_name)
 {   
     this->declare_parameter("location_file", "none");
-    RCLCPP_INFO(get_logger(), "Init Done")
+    RCLCPP_INFO(get_logger(), "Init Done");
 }
 
 void MultiNav::setup()
@@ -18,8 +18,8 @@ void MultiNav::setup()
     const auto timer_period = 500ms;
     timer_ = this->create_wall_timer(
         timer_period,
-        std::bind(&MultiNav::update_behavior_tree, this);
-    )
+        std::bind(&MultiNav::update_behavior_tree, this)
+    );
 
 }
 
@@ -34,18 +34,18 @@ void MultiNav::create_behavior_tree()
     };
 
     factory.registerBuilder<GoToPose>("GoToPose", builder);
-    tree_ = factory.createTreeFromFile(bt_xml_dir + "/tree.xml")
+    tree_ = factory.createTreeFromFile(bt_xml_dir + "/tree.xml");
 }
 
 void MultiNav::update_behavior_tree()
 {
-    BT::NodeStatus tree_Status = tree.tickRoot();
+    BT::NodeStatus tree_status = tree_.tickRoot();
 
     if (tree_status == BT::NodeStatus::RUNNING)
     {
         return;
     }
-    else if (tree_status == BT::NodeStatus::SUCESS)
+    else if (tree_status == BT::NodeStatus::SUCCESS)
     {
         RCLCPP_INFO(this->get_logger(), "Finished Navigation");
     }
