@@ -79,7 +79,7 @@ def generate_launch_description():
         arguments=["-entity", "smrr", "-topic", "robot_description",
                    "-x", "-3", "-y", "0", "-z", "0"]
     )
-
+    
     return LaunchDescription([
         *env_use_nvidia_gpu,
         env_var,
@@ -88,7 +88,8 @@ def generate_launch_description():
         robot_state_publisher_node,
         start_gazebo_server,
         start_gazebo_client,
-        spawn_robot
+        spawn_robot,
+        
     ]
     )
 

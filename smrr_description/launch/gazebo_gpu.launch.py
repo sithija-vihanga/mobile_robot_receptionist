@@ -72,6 +72,13 @@ def generate_launch_description():
                         output="screen"
     )
 
+    joystick_control = IncludeLaunchDescription(
+        PythonLaunchDescriptionSource(
+            os.path.join(get_package_share_directory("smrr_controller"), "launch", "joystick_teleop.launch.py")
+        )
+    )
+
+
     controllers = IncludeLaunchDescription(
         PythonLaunchDescriptionSource(
             os.path.join(get_package_share_directory("smrr_controller"), "launch", "controller.launch.py")
@@ -87,5 +94,6 @@ def generate_launch_description():
         start_gazebo_client,
         robot_state_publisher_node,
         spawn_robot,
-        controllers
+        controllers,
+        joystick_control
     ])
