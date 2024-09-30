@@ -15,6 +15,7 @@ class GoalPredictor(Node):
             self.predictor_callback,
             10)
         
+        self.pos_publisher  = self.create_publisher(Entities,'/pos', 10)
         self.vel_publisher  = self.create_publisher(Entities,'/vel', 10)
         self.goal_publisher = self.create_publisher(Entities,'/goals', 10)
 
@@ -44,19 +45,20 @@ class GoalPredictor(Node):
 
     def predictor_callback(self, msg):
         self.agents          = msg   
-        
+      
         self.vel.count       = self.agents.count
         self.vel.x           = [0.0]*self.vel.count  
         self.vel.y           = [0.0]*self.vel.count 
         
-        self.goals.count       = self.agents.count
-        self.goals.x           = [0.0]*self.vel.count  
-        self.goals.y           = [0.0]*self.vel.count 
+        self.goals.count     = self.agents.count
+        self.goals.x         = [0.0]*self.vel.count  
+        self.goals.y         = [0.0]*self.vel.count 
 
         self.update_path()
-        self.vel_publisher.publish(self.vel)
         self.predict_goals()
+        self.vel_publisher.publish(self.vel)
         self.goal_publisher.publish(self.goals)
+        self.pos_publisher.publish(self.agents)
 
     def update_path(self):
         if (len(self.pedestrian_pos) == 0):
@@ -132,18 +134,21 @@ class GoalPredictor(Node):
         #return D[np.argmax(destination_probs)], destination_probs
 
     def predict_goals(self):
-        agent_num = 5 # For visualization
-        pos, vel = self.pedestrian_state(timeStep=0, pd = agent_num )
-        plt.clf()  
-        plt.quiver(pos[0], pos[1], vel[0], vel[1], color='r', scale=8)  # Pedestrian velocity
-        plt.scatter(self.destinations[:, 0], self.destinations[:, 1], c='blue', label='Destinations' , s= 50)
+        ######################################### For visualization  ###################################################
+        # agent_num = 5 
+        # pos, vel = self.pedestrian_state(timeStep=0, pd = agent_num )
+        # plt.clf()  
+        # plt.quiver(pos[0], pos[1], vel[0], vel[1], color='r', scale=8)  # Pedestrian velocity
+        # plt.scatter(self.destinations[:, 0], self.destinations[:, 1], c='blue', label='Destinations' , s= 50)
         
         pred_dest = self.predict_destination(self.destinations)
-        plt.scatter(pred_dest.x[agent_num], pred_dest.y[agent_num], c='green', label='Predicted Destination', marker='X' , s= 200)
-        
-        plt.legend()
-        plt.draw()  
-        plt.pause(0.01)  
+
+        ######################################### For visualization  ###################################################
+
+        # plt.scatter(pred_dest.x[agent_num], pred_dest.y[agent_num], c='green', label='Predicted Destination', marker='X' , s= 200)
+        # plt.legend()
+        # plt.draw()  
+        # plt.pause(0.01)  
 
 
 def main(args=None):
