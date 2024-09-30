@@ -72,8 +72,8 @@ class GoalPredictor(Node):
             for j in range(self.agents.count):
                 self.pedestrian_vel[j][:2*self.path_buffer-2] = self.pedestrian_vel[j][2:2*self.path_buffer] # Shifting velocity buffer
                 
-                self.vel.x[j] = (self.pedestrian_pos[j][-2] - self.pedestrian_pos[j][-4])/self.dt
-                self.vel.y[j] = (self.pedestrian_pos[j][-1] - self.pedestrian_pos[j][-3])/self.dt  # Velocity calculation
+                self.vel.x[j] = ((self.pedestrian_pos[j][-2] + self.pedestrian_pos[j][-4]) - (self.pedestrian_pos[j][-6] + self.pedestrian_pos[j][-8]))/self.dt
+                self.vel.y[j] = ((self.pedestrian_pos[j][-1] + self.pedestrian_pos[j][-3]) - (self.pedestrian_pos[j][-5] + self.pedestrian_pos[j][-7]))/self.dt  # Velocity calculation
                 
                 self.pedestrian_vel[j][2*self.path_buffer-2:] = [self.vel.x[j], self.vel.y[j]]
 
