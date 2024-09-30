@@ -54,11 +54,12 @@ class GoalPredictor(Node):
         self.goals.x         = [0.0]*self.vel.count  
         self.goals.y         = [0.0]*self.vel.count 
 
-        self.update_path()
-        self.predict_goals()
-        self.vel_publisher.publish(self.vel)
-        self.goal_publisher.publish(self.goals)
-        self.pos_publisher.publish(self.agents)
+        if(self.agents.count!=0): # Handling errors in human detection
+            self.update_path()
+            self.predict_goals()
+            self.vel_publisher.publish(self.vel)
+            self.goal_publisher.publish(self.goals)
+            self.pos_publisher.publish(self.agents)
 
     def update_path(self):
         if (len(self.pedestrian_pos) == 0):
