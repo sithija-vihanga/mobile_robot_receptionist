@@ -8,6 +8,8 @@
 #include "tf2_geometry_msgs/tf2_geometry_msgs.hpp"
 #include <string>
 
+#include "slam_toolbox/srv/deserialize_map_pose_graph.hpp"
+#include <future>
 
 class GoToPose : public BT::StatefulActionNode
 {
@@ -32,3 +34,24 @@ class GoToPose : public BT::StatefulActionNode
         void nav_to_pose_callback(const GoalHandleNav::WrappedResult &result);
 
 };
+
+class LoadMapFromSlamBT : public BT::StatefulActionNode
+{
+public:
+    LoadMapFromSlamBT(const std::string &name, const BT::NodeConfiguration &config, rclcpp::Node::SharedPtr node_ptr);
+
+    static BT::PortsList providedPorts();
+
+    BT::NodeStatus onStart() override;
+
+    BT::NodeStatus onRunning() override;
+
+    void onHalted() override;
+
+private:
+    rclcpp::Node::SharedPtr node_ptr_;
+    rclcpp::Client<slam_toolbox::srv::DeserializeMapPoseGraph>::SharedPtr client_;
+    std::shared_future<slam_toolbox::srv::DeserializeMapPoseGraph::Response::SharedPtr> future_;
+    bool map_loading_done_flag_;
+};
+

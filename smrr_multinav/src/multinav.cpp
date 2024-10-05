@@ -32,8 +32,14 @@ void MultiNav::create_behavior_tree()
     {
         return std::make_unique<GoToPose>(name, config, shared_from_this());
     };
-
     factory.registerBuilder<GoToPose>("GoToPose", builder);
+
+    BT::NodeBuilder builder =
+        [=](const std::string &name, const BT::NodeConfiguration &config)
+    {
+        return std::make_unique<LoadMapFromSlam>(name, config, shared_from_this());
+    };
+    factory.registerBuilder<LoadMapFromSlam>("LoadMapFromSlam", builder);
     tree_ = factory.createTreeFromFile(bt_xml_dir + "/tree.xml");
 }
 
@@ -47,11 +53,11 @@ void MultiNav::update_behavior_tree()
     }
     else if (tree_status == BT::NodeStatus::SUCCESS)
     {
-        RCLCPP_INFO(this->get_logger(), "Finished Navigation");
+        RCLCPP_INFO(this->get_logger(), "BT completed");
     }
     else if (tree_status == BT::NodeStatus::FAILURE)
     {
-        RCLCPP_INFO(this->get_logger(), "Navigation Failed");
+        RCLCPP_INFO(this->get_logger(), "BT failed");
         timer_->cancel();
     }
     
