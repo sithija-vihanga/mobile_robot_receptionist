@@ -10,6 +10,7 @@
 
 #include "slam_toolbox/srv/deserialize_pose_graph.hpp"
 #include "geometry_msgs/msg/point.hpp"
+#include "std_msgs/msg/bool.hpp"
 #include <future>
 
 class GoToPose : public BT::StatefulActionNode
@@ -56,3 +57,24 @@ private:
     bool map_loading_done_flag_;
 };
 
+class WaitEvent : public BT::StatefulActionNode
+{
+public:
+    WaitEvent(const std::string &name, const BT::NodeConfiguration &config, rclcpp::Node::SharedPtr node_ptr);
+
+    static BT::PortsList providedPorts();
+
+    BT::NodeStatus onStart() override;
+
+    BT::NodeStatus onRunning() override;
+
+    void onHalted() override;
+
+    bool wait_event_flag_;
+
+private:
+    rclcpp::Node::SharedPtr node_ptr_;
+    rclcpp::Subscription<std_msgs::msg::Bool>::SharedPtr subscription_;
+    
+    void wait_event_callback(const std_msgs::msg::Bool & msg);
+};

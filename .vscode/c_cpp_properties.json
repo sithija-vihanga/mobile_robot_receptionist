@@ -1,31 +1,32 @@
 {
-  "configurations": [
-    {
-      "browse": {
-        "databaseFilename": "${default}",
-        "limitSymbolsToIncludedHeaders": false
-      },
-      "includePath": [
-        "/home/sithija/mobile_receptionist_ws/install/smrr_interfaces/include/**",
-        "/home/sithija/mobile_receptionist_ws/install/gazebo_sfm_plugin/include/**",
-        "/home/sithija/voyager_ws/install/voyager_msgs/include/**",
-        "/home/sithija/voyager_ws/install/voyager_localization/include/**",
-        "/home/sithija/voyager_ws/install/voyager_controller/include/**",
-        "/opt/ros/humble/include/**",
-        "/home/sithija/mobile_receptionist_ws/src/elevator/include/**",
-        "/home/sithija/mobile_receptionist_ws/src/gazebo_sfm_plugin-galactic/include/**",
-        "/home/sithija/mobile_receptionist_ws/src/smrr_controller/include/**",
-        "/home/sithija/mobile_receptionist_ws/src/smrr_description/include/**",
-        "/home/sithija/mobile_receptionist_ws/src/smrr_localization/include/**",
-        "/home/sithija/mobile_receptionist_ws/src/smrr_multinav/include/**",
-        "/usr/include/**"
-      ],
-      "name": "ROS",
-      "intelliSenseMode": "gcc-x64",
-      "compilerPath": "/usr/bin/gcc",
-      "cStandard": "gnu11",
-      "cppStandard": "c++14"
-    }
-  ],
-  "version": 4
+    "configurations": [
+        {
+            "browse": {
+                "databaseFilename": "${default}",
+                "limitSymbolsToIncludedHeaders": false
+            },
+            "includePath": [
+                "/home/sithija/mobile_receptionist_ws/install/smrr_interfaces/include/**",
+                "/home/sithija/mobile_receptionist_ws/install/gazebo_sfm_plugin/include/**",
+                "/home/sithija/voyager_ws/install/voyager_msgs/include/**",
+                "/home/sithija/voyager_ws/install/voyager_localization/include/**",
+                "/home/sithija/voyager_ws/install/voyager_controller/include/**",
+                "/opt/ros/humble/include/**",
+                "/home/sithija/mobile_receptionist_ws/src/elevator/include/**",
+                "/home/sithija/mobile_receptionist_ws/src/gazebo_sfm_plugin-galactic/include/**",
+                "/home/sithija/mobile_receptionist_ws/src/smrr_controller/include/**",
+                "/home/sithija/mobile_receptionist_ws/src/smrr_description/include/**",
+                "/home/sithija/mobile_receptionist_ws/src/smrr_localization/include/**",
+                "/home/sithija/mobile_receptionist_ws/src/smrr_multinav/include/**",
+                "/usr/include/**"
+            ],
+            "name": "ROS",
+            "intelliSenseMode": "gcc-x64",
+            "compilerPath": "/usr/bin/gcc",
+            "cStandard": "gnu11",
+            "cppStandard": "c++14",
+            "compileCommands": "${workspaceFolder}/gazebo_plugins/build/compile_commands.json"
+        }
+    ],
+    "version": 4
 }

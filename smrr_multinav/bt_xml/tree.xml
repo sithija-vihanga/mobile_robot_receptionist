@@ -4,7 +4,10 @@
             <LoadMapFromSlam name="load_map_05" posegraph_file="posegraph_file"/>
             <GoToPose name="go_to_location1" loc="location1"/>
             <GoToPose name="go_to_location2" loc="location2"/>
+            <WaitEvent name="wait_event" event="elevator"/>
+            <LoadMapFromSlam name="load_map_05" posegraph_file="posegraph_file"/>
             <GoToPose name="go_to_location3" loc="location3"/>
+            <WaitEvent name="wait_event" event="elevator"/>
             <GoToPose name="go_to_location4" loc="location4"/> 
         </Sequence>
     </BehaviorTree>

@@ -40,6 +40,13 @@ void MultiNav::create_behavior_tree()
         return std::make_unique<LoadMapFromSlam>(name, config, shared_from_this());
     };
     factory.registerBuilder<LoadMapFromSlam>("LoadMapFromSlam", load_map_builder);
+
+    BT::NodeBuilder wait_event_builder =
+        [=](const std::string &name, const BT::NodeConfiguration &config)
+    {
+        return std::make_unique<WaitEvent>(name, config, shared_from_this());
+    };
+    factory.registerBuilder<WaitEvent>("WaitEvent", wait_event_builder);
     
     tree_ = factory.createTreeFromFile(bt_xml_dir + "/tree.xml");
 }
