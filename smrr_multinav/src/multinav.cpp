@@ -27,19 +27,20 @@ void MultiNav::create_behavior_tree()
 {
     BT::BehaviorTreeFactory factory;
 
-    BT::NodeBuilder builder =
+    BT::NodeBuilder go_to_pose_builder =
         [=](const std::string &name, const BT::NodeConfiguration &config)
     {
         return std::make_unique<GoToPose>(name, config, shared_from_this());
     };
-    factory.registerBuilder<GoToPose>("GoToPose", builder);
+    factory.registerBuilder<GoToPose>("GoToPose", go_to_pose_builder);
 
-    BT::NodeBuilder builder =
+    BT::NodeBuilder load_map_builder =
         [=](const std::string &name, const BT::NodeConfiguration &config)
     {
         return std::make_unique<LoadMapFromSlam>(name, config, shared_from_this());
     };
-    factory.registerBuilder<LoadMapFromSlam>("LoadMapFromSlam", builder);
+    factory.registerBuilder<LoadMapFromSlam>("LoadMapFromSlam", load_map_builder);
+    
     tree_ = factory.createTreeFromFile(bt_xml_dir + "/tree.xml");
 }
 

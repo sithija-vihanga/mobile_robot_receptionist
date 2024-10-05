@@ -1,0 +1,86 @@
+[35m[1mConsolidate compiler generated dependencies of target multinav[0m
+[ 33%] [32mBuilding CXX object CMakeFiles/multinav.dir/src/multinav_behaviors.cpp.o[0m
+In file included from [01m[K/opt/ros/humble/include/rclcpp/rclcpp/logging.hpp:24[m[K,
+                 from [01m[K/opt/ros/humble/include/rclcpp/rclcpp/client.hpp:40[m[K,
+                 from [01m[K/opt/ros/humble/include/rclcpp/rclcpp/callback_group.hpp:24[m[K,
+                 from [01m[K/opt/ros/humble/include/rclcpp/rclcpp/any_executable.hpp:20[m[K,
+                 from [01m[K/opt/ros/humble/include/rclcpp/rclcpp/memory_strategy.hpp:25[m[K,
+                 from [01m[K/opt/ros/humble/include/rclcpp/rclcpp/memory_strategies.hpp:18[m[K,
+                 from [01m[K/opt/ros/humble/include/rclcpp/rclcpp/executor_options.hpp:20[m[K,
+                 from [01m[K/opt/ros/humble/include/rclcpp/rclcpp/executor.hpp:37[m[K,
+                 from [01m[K/opt/ros/humble/include/rclcpp/rclcpp/executors/multi_threaded_executor.hpp:25[m[K,
+                 from [01m[K/opt/ros/humble/include/rclcpp/rclcpp/executors.hpp:21[m[K,
+                 from [01m[K/opt/ros/humble/include/rclcpp/rclcpp/rclcpp.hpp:155[m[K,
+                 from [01m[K/home/sithija/mobile_receptionist_ws/src/smrr_multinav/include/smrr_multinav/multinav_behaviors.h:2[m[K,
+                 from [01m[K/home/sithija/mobile_receptionist_ws/src/smrr_multinav/src/multinav_behaviors.cpp:1[m[K:
+[01m[K/home/sithija/mobile_receptionist_ws/src/smrr_multinav/src/multinav_behaviors.cpp:[m[K In member function ‘[01m[Kvirtual BT::NodeStatus GoToPose::onRunning()[m[K’:
+[01m[K/home/sithija/mobile_receptionist_ws/src/smrr_multinav/src/multinav_behaviors.cpp:50:50:[m[K [01;35m[Kwarning: [m[Kformat ‘[01m[K%s[m[K’ expects argument of type ‘[01m[Kchar*[m[K’, but argument 5 has type ‘[01m[Kconst string[m[K’ {aka ‘[01m[Kconst std::__cxx11::basic_string<char>[m[K’} [[01;35m[K]8;;https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html#index-Wformat=-Wformat=]8;;[m[K]
+   50 |             RCLCPP_INFO(node_ptr_->get_logger(), [01;35m[K"[%s] goal reached\n"[m[K,this->name());
+      |                                                  [01;35m[K^~~~~~~~~~~~~~~~~~~~~[m[K
+[01m[K/home/sithija/mobile_receptionist_ws/src/smrr_multinav/src/multinav_behaviors.cpp:50:53:[m[K [01;36m[Knote: [m[Kformat string is defined here
+   50 |             RCLCPP_INFO(node_ptr_->get_logger(), "[[01;36m[K%s[m[K] goal reached\n",this->name());
+      |                                                    [01;36m[K~^[m[K
+      |                                                     [01;36m[K|[m[K
+      |                                                     [01;36m[Kchar*[m[K
+In file included from [01m[K/opt/ros/humble/include/rclcpp/rclcpp/logging.hpp:24[m[K,
+                 from [01m[K/opt/ros/humble/include/rclcpp/rclcpp/client.hpp:40[m[K,
+                 from [01m[K/opt/ros/humble/include/rclcpp/rclcpp/callback_group.hpp:24[m[K,
+                 from [01m[K/opt/ros/humble/include/rclcpp/rclcpp/any_executable.hpp:20[m[K,
+                 from [01m[K/opt/ros/humble/include/rclcpp/rclcpp/memory_strategy.hpp:25[m[K,
+                 from [01m[K/opt/ros/humble/include/rclcpp/rclcpp/memory_strategies.hpp:18[m[K,
+                 from [01m[K/opt/ros/humble/include/rclcpp/rclcpp/executor_options.hpp:20[m[K,
+                 from [01m[K/opt/ros/humble/include/rclcpp/rclcpp/executor.hpp:37[m[K,
+                 from [01m[K/opt/ros/humble/include/rclcpp/rclcpp/executors/multi_threaded_executor.hpp:25[m[K,
+                 from [01m[K/opt/ros/humble/include/rclcpp/rclcpp/executors.hpp:21[m[K,
+                 from [01m[K/opt/ros/humble/include/rclcpp/rclcpp/rclcpp.hpp:155[m[K,
+                 from [01m[K/home/sithija/mobile_receptionist_ws/src/smrr_multinav/include/smrr_multinav/multinav_behaviors.h:2[m[K,
+                 from [01m[K/home/sithija/mobile_receptionist_ws/src/smrr_multinav/src/multinav_behaviors.cpp:1[m[K:
+[01m[K/home/sithija/mobile_receptionist_ws/src/smrr_multinav/src/multinav_behaviors.cpp:[m[K In member function ‘[01m[Kvirtual BT::NodeStatus LoadMapFromSlam::onStart()[m[K’:
+[01m[K/home/sithija/mobile_receptionist_ws/src/smrr_multinav/src/multinav_behaviors.cpp:87:42:[m[K [01;35m[Kwarning: [m[Ktoo many arguments for format [[01;35m[K]8;;https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html#index-Wformat-extra-args-Wformat-extra-args]8;;[m[K]
+   87 |     RCLCPP_INFO(node_ptr_->get_logger(), [01;35m[K" map file path: "[m[K, map_path);
+      |                                          [01;35m[K^~~~~~~~~~~~~~~~~~[m[K
+[01m[K/home/sithija/mobile_receptionist_ws/src/smrr_multinav/src/multinav_behaviors.cpp:93:50:[m[K [01;35m[Kwarning: [m[K‘[01m[Krclcpp::Client<ServiceT>::FutureAndRequestId::operator rclcpp::Client<ServiceT>::SharedFuture() [with ServiceT = slam_toolbox::srv::DeserializePoseGraph; rclcpp::Client<ServiceT>::SharedFuture = std::shared_future<std::shared_ptr<slam_toolbox::srv::DeserializePoseGraph_Response_<std::allocator<void> > > >][m[K’ is deprecated: FutureAndRequestId: use .future.share() instead of an implicit conversion [[01;35m[K]8;;https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html#index-Wdeprecated-declarations-Wdeprecated-declarations]8;;[m[K]
+   93 |     future_ = client_->async_send_request(request[01;35m[K)[m[K;
+      |                                                  [01;35m[K^[m[K
+In file included from [01m[K/opt/ros/humble/include/rclcpp/rclcpp/callback_group.hpp:24[m[K,
+                 from [01m[K/opt/ros/humble/include/rclcpp/rclcpp/any_executable.hpp:20[m[K,
+                 from [01m[K/opt/ros/humble/include/rclcpp/rclcpp/memory_strategy.hpp:25[m[K,
+                 from [01m[K/opt/ros/humble/include/rclcpp/rclcpp/memory_strategies.hpp:18[m[K,
+                 from [01m[K/opt/ros/humble/include/rclcpp/rclcpp/executor_options.hpp:20[m[K,
+                 from [01m[K/opt/ros/humble/include/rclcpp/rclcpp/executor.hpp:37[m[K,
+                 from [01m[K/opt/ros/humble/include/rclcpp/rclcpp/executors/multi_threaded_executor.hpp:25[m[K,
+                 from [01m[K/opt/ros/humble/include/rclcpp/rclcpp/executors.hpp:21[m[K,
+                 from [01m[K/opt/ros/humble/include/rclcpp/rclcpp/rclcpp.hpp:155[m[K,
+                 from [01m[K/home/sithija/mobile_receptionist_ws/src/smrr_multinav/include/smrr_multinav/multinav_behaviors.h:2[m[K,
+                 from [01m[K/home/sithija/mobile_receptionist_ws/src/smrr_multinav/src/multinav_behaviors.cpp:1[m[K:
+[01m[K/opt/ros/humble/include/rclcpp/rclcpp/client.hpp:415:5:[m[K [01;36m[Knote: [m[Kdeclared here
+  415 |     [01;36m[Koperator[m[K SharedFuture() {return this->future.share();}
+      |     [01;36m[K^~~~~~~~[m[K
+[ 66%] [32m[1mLinking CXX executable multinav[0m
+[100%] Built target multinav
+-- Install configuration: ""
+-- Execute custom install script
+-- Symlinking: /home/sithija/mobile_receptionist_ws/src/install/smrr_multinav/share/smrr_multinav/config/locations.yaml
+-- Symlinking: /home/sithija/mobile_receptionist_ws/src/install/smrr_multinav/share/smrr_multinav/config/mapper_params_online_async.yaml
+-- Symlinking: /home/sithija/mobile_receptionist_ws/src/install/smrr_multinav/share/smrr_multinav/config/nav2_params.yaml
+-- Symlinking: /home/sithija/mobile_receptionist_ws/src/install/smrr_multinav/share/smrr_multinav/bt_xml/tree.xml
+-- Symlinking: /home/sithija/mobile_receptionist_ws/src/install/smrr_multinav/share/smrr_multinav/launch/.vscode/c_cpp_properties.json
+-- Symlinking: /home/sithija/mobile_receptionist_ws/src/install/smrr_multinav/share/smrr_multinav/launch/.vscode/settings.json
+-- Symlinking: /home/sithija/mobile_receptionist_ws/src/install/smrr_multinav/share/smrr_multinav/launch/multinav.launch.py
+-- Symlinking: /home/sithija/mobile_receptionist_ws/src/install/smrr_multinav/share/smrr_multinav/launch/navigation_launch.py
+-- Symlinking: /home/sithija/mobile_receptionist_ws/src/install/smrr_multinav/lib/smrr_multinav/multinav
+-- Symlinking: /home/sithija/mobile_receptionist_ws/src/install/smrr_multinav/share/ament_index/resource_index/package_run_dependencies/smrr_multinav
+-- Symlinking: /home/sithija/mobile_receptionist_ws/src/install/smrr_multinav/share/ament_index/resource_index/parent_prefix_path/smrr_multinav
+-- Symlinking: /home/sithija/mobile_receptionist_ws/src/install/smrr_multinav/share/smrr_multinav/environment/ament_prefix_path.sh
+-- Symlinking: /home/sithija/mobile_receptionist_ws/src/install/smrr_multinav/share/smrr_multinav/environment/ament_prefix_path.dsv
+-- Symlinking: /home/sithija/mobile_receptionist_ws/src/install/smrr_multinav/share/smrr_multinav/environment/path.sh
+-- Symlinking: /home/sithija/mobile_receptionist_ws/src/install/smrr_multinav/share/smrr_multinav/environment/path.dsv
+-- Symlinking: /home/sithija/mobile_receptionist_ws/src/install/smrr_multinav/share/smrr_multinav/local_setup.bash
+-- Symlinking: /home/sithija/mobile_receptionist_ws/src/install/smrr_multinav/share/smrr_multinav/local_setup.sh
+-- Symlinking: /home/sithija/mobile_receptionist_ws/src/install/smrr_multinav/share/smrr_multinav/local_setup.zsh
+-- Symlinking: /home/sithija/mobile_receptionist_ws/src/install/smrr_multinav/share/smrr_multinav/local_setup.dsv
+-- Symlinking: /home/sithija/mobile_receptionist_ws/src/install/smrr_multinav/share/smrr_multinav/package.dsv
+-- Symlinking: /home/sithija/mobile_receptionist_ws/src/install/smrr_multinav/share/ament_index/resource_index/packages/smrr_multinav
+-- Symlinking: /home/sithija/mobile_receptionist_ws/src/install/smrr_multinav/share/smrr_multinav/cmake/smrr_multinavConfig.cmake
+-- Symlinking: /home/sithija/mobile_receptionist_ws/src/install/smrr_multinav/share/smrr_multinav/cmake/smrr_multinavConfig-version.cmake
+-- Symlinking: /home/sithija/mobile_receptionist_ws/src/install/smrr_multinav/share/smrr_multinav/package.xml

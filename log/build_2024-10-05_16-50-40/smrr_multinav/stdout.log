@@ -1,0 +1,30 @@
+[35m[1mConsolidate compiler generated dependencies of target multinav[0m
+[ 33%] [32mBuilding CXX object CMakeFiles/multinav.dir/src/multinav_behaviors.cpp.o[0m
+[ 66%] [32m[1mLinking CXX executable multinav[0m
+[100%] Built target multinav
+-- Install configuration: ""
+-- Execute custom install script
+-- Symlinking: /home/sithija/mobile_receptionist_ws/src/install/smrr_multinav/share/smrr_multinav/config/locations.yaml
+-- Symlinking: /home/sithija/mobile_receptionist_ws/src/install/smrr_multinav/share/smrr_multinav/config/mapper_params_online_async.yaml
+-- Symlinking: /home/sithija/mobile_receptionist_ws/src/install/smrr_multinav/share/smrr_multinav/config/nav2_params.yaml
+-- Symlinking: /home/sithija/mobile_receptionist_ws/src/install/smrr_multinav/share/smrr_multinav/bt_xml/tree.xml
+-- Symlinking: /home/sithija/mobile_receptionist_ws/src/install/smrr_multinav/share/smrr_multinav/launch/.vscode/c_cpp_properties.json
+-- Symlinking: /home/sithija/mobile_receptionist_ws/src/install/smrr_multinav/share/smrr_multinav/launch/.vscode/settings.json
+-- Symlinking: /home/sithija/mobile_receptionist_ws/src/install/smrr_multinav/share/smrr_multinav/launch/multinav.launch.py
+-- Symlinking: /home/sithija/mobile_receptionist_ws/src/install/smrr_multinav/share/smrr_multinav/launch/navigation_launch.py
+-- Symlinking: /home/sithija/mobile_receptionist_ws/src/install/smrr_multinav/lib/smrr_multinav/multinav
+-- Symlinking: /home/sithija/mobile_receptionist_ws/src/install/smrr_multinav/share/ament_index/resource_index/package_run_dependencies/smrr_multinav
+-- Symlinking: /home/sithija/mobile_receptionist_ws/src/install/smrr_multinav/share/ament_index/resource_index/parent_prefix_path/smrr_multinav
+-- Symlinking: /home/sithija/mobile_receptionist_ws/src/install/smrr_multinav/share/smrr_multinav/environment/ament_prefix_path.sh
+-- Symlinking: /home/sithija/mobile_receptionist_ws/src/install/smrr_multinav/share/smrr_multinav/environment/ament_prefix_path.dsv
+-- Symlinking: /home/sithija/mobile_receptionist_ws/src/install/smrr_multinav/share/smrr_multinav/environment/path.sh
+-- Symlinking: /home/sithija/mobile_receptionist_ws/src/install/smrr_multinav/share/smrr_multinav/environment/path.dsv
+-- Symlinking: /home/sithija/mobile_receptionist_ws/src/install/smrr_multinav/share/smrr_multinav/local_setup.bash
+-- Symlinking: /home/sithija/mobile_receptionist_ws/src/install/smrr_multinav/share/smrr_multinav/local_setup.sh
+-- Symlinking: /home/sithija/mobile_receptionist_ws/src/install/smrr_multinav/share/smrr_multinav/local_setup.zsh
+-- Symlinking: /home/sithija/mobile_receptionist_ws/src/install/smrr_multinav/share/smrr_multinav/local_setup.dsv
+-- Symlinking: /home/sithija/mobile_receptionist_ws/src/install/smrr_multinav/share/smrr_multinav/package.dsv
+-- Symlinking: /home/sithija/mobile_receptionist_ws/src/install/smrr_multinav/share/ament_index/resource_index/packages/smrr_multinav
+-- Symlinking: /home/sithija/mobile_receptionist_ws/src/install/smrr_multinav/share/smrr_multinav/cmake/smrr_multinavConfig.cmake
+-- Symlinking: /home/sithija/mobile_receptionist_ws/src/install/smrr_multinav/share/smrr_multinav/cmake/smrr_multinavConfig-version.cmake
+-- Symlinking: /home/sithija/mobile_receptionist_ws/src/install/smrr_multinav/share/smrr_multinav/package.xml

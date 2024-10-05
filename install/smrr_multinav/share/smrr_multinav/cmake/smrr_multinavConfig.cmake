@@ -1,0 +1,1 @@
+/home/sithija/mobile_receptionist_ws/src/build/smrr_multinav/ament_cmake_core/smrr_multinavConfig.cmake

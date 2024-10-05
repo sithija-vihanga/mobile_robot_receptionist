@@ -1,6 +1,7 @@
 <root main_tree_to_execute = "MainTree">
     <BehaviorTree ID="MainTree">
         <Sequence name="sequence">
+            <LoadMapFromSlam name="load_map_05" posegraph_file="posegraph_file"/>
             <GoToPose name="go_to_location1" loc="location1"/>
             <GoToPose name="go_to_location2" loc="location2"/>
             <GoToPose name="go_to_location3" loc="location3"/>

@@ -8,7 +8,8 @@
 #include "tf2_geometry_msgs/tf2_geometry_msgs.hpp"
 #include <string>
 
-#include "slam_toolbox/srv/deserialize_map_pose_graph.hpp"
+#include "slam_toolbox/srv/deserialize_pose_graph.hpp"
+#include "geometry_msgs/msg/point.hpp"
 #include <future>
 
 class GoToPose : public BT::StatefulActionNode
@@ -35,10 +36,10 @@ class GoToPose : public BT::StatefulActionNode
 
 };
 
-class LoadMapFromSlamBT : public BT::StatefulActionNode
+class LoadMapFromSlam : public BT::StatefulActionNode
 {
 public:
-    LoadMapFromSlamBT(const std::string &name, const BT::NodeConfiguration &config, rclcpp::Node::SharedPtr node_ptr);
+    LoadMapFromSlam(const std::string &name, const BT::NodeConfiguration &config, rclcpp::Node::SharedPtr node_ptr);
 
     static BT::PortsList providedPorts();
 
@@ -50,8 +51,8 @@ public:
 
 private:
     rclcpp::Node::SharedPtr node_ptr_;
-    rclcpp::Client<slam_toolbox::srv::DeserializeMapPoseGraph>::SharedPtr client_;
-    std::shared_future<slam_toolbox::srv::DeserializeMapPoseGraph::Response::SharedPtr> future_;
+    rclcpp::Client<slam_toolbox::srv::DeserializePoseGraph>::SharedPtr client_;
+    std::shared_future<slam_toolbox::srv::DeserializePoseGraph::Response::SharedPtr> future_;
     bool map_loading_done_flag_;
 };
 

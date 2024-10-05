@@ -9,4 +9,4 @@ location2: [-2.52, -0.90, 1.57]
 location3: [-2.847, 2.292, -1.57]
 location4: [ -5.68, -3.54, -1.57]
 
-posegraph_file: /home/sithija/mobile_receptionist_ws/src/smrr_localization/maps/floor05
+posegraph_file: "/home/sithija/mobile_receptionist_ws/src/smrr_localization/maps/floor05"

@@ -13,6 +13,7 @@ find_package(behaviortree_cpp_v3 REQUIRED)
 find_package(yaml-cpp REQUIRED)
 find_package(tf2 REQUIRED)
 find_package(tf2_geometry_msgs REQUIRED)
+find_package(slam_toolbox REQUIRED)
 
 install (
   DIRECTORY config bt_xml launch
@@ -27,10 +28,12 @@ set(TARGET_DEPENDS
     rclcpp
     rclcpp_action
     nav2_msgs
+    geometry_msgs
     behaviortree_cpp_v3
     yaml-cpp
     tf2
     tf2_geometry_msgs
+    slam_toolbox
 )
 
 include_directories(include/${PROJECT_NAME})

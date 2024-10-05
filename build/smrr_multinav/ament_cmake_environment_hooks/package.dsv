@@ -1,0 +1,4 @@
+source;share/smrr_multinav/local_setup.bash
+source;share/smrr_multinav/local_setup.dsv
+source;share/smrr_multinav/local_setup.sh
+source;share/smrr_multinav/local_setup.zsh

@@ -1,0 +1,240 @@
+[0.000000] (-) TimerEvent: {}
+[0.000593] (-) JobUnselected: {'identifier': 'elevator'}
+[0.000641] (-) JobUnselected: {'identifier': 'gazebo_plugins'}
+[0.000795] (-) JobUnselected: {'identifier': 'gazebo_sfm_plugin'}
+[0.000824] (-) JobUnselected: {'identifier': 'goal_predictor'}
+[0.000862] (-) JobUnselected: {'identifier': 'smrr_controller'}
+[0.000891] (-) JobUnselected: {'identifier': 'smrr_crowd_nav'}
+[0.000916] (-) JobUnselected: {'identifier': 'smrr_description'}
+[0.001005] (-) JobUnselected: {'identifier': 'smrr_interfaces'}
+[0.001030] (-) JobUnselected: {'identifier': 'smrr_localization'}
+[0.001067] (-) JobUnselected: {'identifier': 'smrr_utilities'}
+[0.001097] (smrr_multinav) JobQueued: {'identifier': 'smrr_multinav', 'dependencies': OrderedDict()}
+[0.001128] (smrr_multinav) JobStarted: {'identifier': 'smrr_multinav'}
+[0.099800] (-) TimerEvent: {}
+[0.105964] (smrr_multinav) JobProgress: {'identifier': 'smrr_multinav', 'progress': 'cmake'}
+[0.106345] (smrr_multinav) Command: {'cmd': ['/usr/bin/cmake', '/home/sithija/mobile_receptionist_ws/src/smrr_multinav', '-DAMENT_CMAKE_SYMLINK_INSTALL=1', '-DCMAKE_INSTALL_PREFIX=/home/sithija/mobile_receptionist_ws/src/install/smrr_multinav'], 'cwd': '/home/sithija/mobile_receptionist_ws/src/build/smrr_multinav', 'env': OrderedDict([('LESSOPEN', '| /usr/bin/lesspipe %s'), ('USER', 'sithija'), ('LC_TIME', 'id_ID.UTF-8'), ('ROS_PACKAGE_PATH', '/home/sithija/mobile_receptionist_ws/install/turtlebot3_description/share'), ('XDG_SESSION_TYPE', 'x11'), ('SHLVL', '1'), ('LD_LIBRARY_PATH', '/home/sithija/mobile_receptionist_ws/install/smrr_interfaces/lib:/home/sithija/mobile_receptionist_ws/install/gazebo_sfm_plugin/lib:/home/sithija/voyager_ws/install/voyager_msgs/lib:/usr/lib/x86_64-linux-gnu/gazebo-11/plugins:/opt/ros/humble/opt/rviz_ogre_vendor/lib:/opt/ros/humble/lib/x86_64-linux-gnu:/opt/ros/humble/lib:/usr/lib/x86_64-linux-gnu:/usr/lib/x86_64-linux-gnu/gazebo-11/plugins:/home/sithija/mobile_receptionist_ws/src/gazebo_plugins/build/:'), ('HOME', '/home/sithija'), ('CYCLONEDDS_URI', '/home/sithija/.ros/dds.xml'), ('OLDPWD', '/home/sithija/mobile_receptionist_ws'), ('DESKTOP_SESSION', 'ubuntu'), ('GAZEBO_MASTER_URI', 'http://localhost:11345'), ('ROS_PYTHON_VERSION', '3'), ('GNOME_SHELL_SESSION_MODE', 'ubuntu'), ('GTK_MODULES', 'gail:atk-bridge'), ('LC_MONETARY', 'id_ID.UTF-8'), ('SYSTEMD_EXEC_PID', '15623'), ('DBUS_SESSION_BUS_ADDRESS', 'unix:path=/run/user/1000/bus'), ('COLORTERM', 'truecolor'), ('_colcon_cd_root', '/opt/ros/humble/'), ('COLCON_PREFIX_PATH', '/home/sithija/mini_project/install:/home/sithija/mobile_receptionist_ws/install:/home/sithija/voyager_ws/install'), ('ROS_DISTRO', 'humble'), ('GTK_IM_MODULE', 'ibus'), ('LOGNAME', 'sithija'), ('_', '/usr/bin/colcon'), ('ROS_VERSION', '2'), ('PKG_CONFIG_PATH', '/home/sithija/mobile_receptionist_ws/install/turtlebot3_description/lib/x86_64-linux-gnu/pkgconfig:/home/sithija/mobile_receptionist_ws/install/turtlebot3_description/lib/pkgconfig'), ('XDG_SESSION_CLASS', 'user'), ('USERNAME', 'sithija'), ('TERM', 'xterm-256color'), ('GAZEBO_MODEL_PATH', '/usr/share/gazebo-11/models::/opt/ros/humble/share/turtlebot3_gazebo/models'), ('GNOME_DESKTOP_SESSION_ID', 'this-is-deprecated'), ('ROS_LOCALHOST_ONLY', '1'), ('WINDOWPATH', '2'), ('OGRE_RESOURCE_PATH', '/usr/lib/x86_64-linux-gnu/OGRE-1.9.0'), ('PATH', '/opt/ros/humble/bin:/home/sithija/.cargo/bin:/home/sithija/.local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin:/snap/bin:/usr/bin/python3'), ('SESSION_MANAGER', 'local/sithija-rog:@/tmp/.ICE-unix/2095,unix/sithija-rog:/tmp/.ICE-unix/2095'), ('XDG_MENU_PREFIX', 'gnome-'), ('LC_ADDRESS', 'id_ID.UTF-8'), ('GNOME_TERMINAL_SCREEN', '/org/gnome/Terminal/screen/a5c4078f_93f3_4c2d_80ec_56a703e0aefc'), ('XDG_RUNTIME_DIR', '/run/user/1000'), ('DISPLAY', ':1'), ('LANG', 'en_US.UTF-8'), ('XDG_CURRENT_DESKTOP', 'ubuntu:GNOME'), ('LC_TELEPHONE', 'id_ID.UTF-8'), ('RMW_IMPLEMENTATION', 'rmw_cyclonedds_cpp'), ('XMODIFIERS', '@im=ibus'), ('XDG_SESSION_DESKTOP', 'ubuntu'), ('XAUTHORITY', '/run/user/1000/gdm/Xauthority'), ('LS_COLORS', 'rs=0:di=01;34:ln=01;36:mh=00:pi=40;33:so=01;35:do=01;35:bd=40;33;01:cd=40;33;01:or=40;31;01:mi=00:su=37;41:sg=30;43:ca=30;41:tw=30;42:ow=34;42:st=37;44:ex=01;32:*.tar=01;31:*.tgz=01;31:*.arc=01;31:*.arj=01;31:*.taz=01;31:*.lha=01;31:*.lz4=01;31:*.lzh=01;31:*.lzma=01;31:*.tlz=01;31:*.txz=01;31:*.tzo=01;31:*.t7z=01;31:*.zip=01;31:*.z=01;31:*.dz=01;31:*.gz=01;31:*.lrz=01;31:*.lz=01;31:*.lzo=01;31:*.xz=01;31:*.zst=01;31:*.tzst=01;31:*.bz2=01;31:*.bz=01;31:*.tbz=01;31:*.tbz2=01;31:*.tz=01;31:*.deb=01;31:*.rpm=01;31:*.jar=01;31:*.war=01;31:*.ear=01;31:*.sar=01;31:*.rar=01;31:*.alz=01;31:*.ace=01;31:*.zoo=01;31:*.cpio=01;31:*.7z=01;31:*.rz=01;31:*.cab=01;31:*.wim=01;31:*.swm=01;31:*.dwm=01;31:*.esd=01;31:*.jpg=01;35:*.jpeg=01;35:*.mjpg=01;35:*.mjpeg=01;35:*.gif=01;35:*.bmp=01;35:*.pbm=01;35:*.pgm=01;35:*.ppm=01;35:*.tga=01;35:*.xbm=01;35:*.xpm=01;35:*.tif=01;35:*.tiff=01;35:*.png=01;35:*.svg=01;35:*.svgz=01;35:*.mng=01;35:*.pcx=01;35:*.mov=01;35:*.mpg=01;35:*.mpeg=01;35:*.m2v=01;35:*.mkv=01;35:*.webm=01;35:*.webp=01;35:*.ogm=01;35:*.mp4=01;35:*.m4v=01;35:*.mp4v=01;35:*.vob=01;35:*.qt=01;35:*.nuv=01;35:*.wmv=01;35:*.asf=01;35:*.rm=01;35:*.rmvb=01;35:*.flc=01;35:*.avi=01;35:*.fli=01;35:*.flv=01;35:*.gl=01;35:*.dl=01;35:*.xcf=01;35:*.xwd=01;35:*.yuv=01;35:*.cgm=01;35:*.emf=01;35:*.ogv=01;35:*.ogx=01;35:*.aac=00;36:*.au=00;36:*.flac=00;36:*.m4a=00;36:*.mid=00;36:*.midi=00;36:*.mka=00;36:*.mp3=00;36:*.mpc=00;36:*.ogg=00;36:*.ra=00;36:*.wav=00;36:*.oga=00;36:*.opus=00;36:*.spx=00;36:*.xspf=00;36:'), ('GNOME_TERMINAL_SERVICE', ':1.390'), ('SSH_AGENT_LAUNCHER', 'gnome-keyring'), ('SSH_AUTH_SOCK', '/run/user/1000/keyring/ssh'), ('ROS_DOMAIN_ID', '20'), ('AMENT_PREFIX_PATH', '/home/sithija/mobile_receptionist_ws/install/smrr_utilities:/home/sithija/mobile_receptionist_ws/install/smrr_multinav:/home/sithija/mobile_receptionist_ws/install/smrr_localization:/home/sithija/mobile_receptionist_ws/install/smrr_interfaces:/home/sithija/mobile_receptionist_ws/install/smrr_description:/home/sithija/mobile_receptionist_ws/install/smrr_crowd_nav:/home/sithija/mobile_receptionist_ws/install/smrr_controller:/home/sithija/mobile_receptionist_ws/install/goal_predictor:/home/sithija/mobile_receptionist_ws/install/gazebo_sfm_plugin:/home/sithija/mobile_receptionist_ws/install/gazebo_plugins:/home/sithija/mobile_receptionist_ws/install/elevator:/home/sithija/mini_project/install/extended_kalman_filter:/home/sithija/mini_project/install/ekf:/home/sithija/mini_project/install/crowd_simulator:/home/sithija/mini_project/install/EKF:/home/sithija/voyager_ws/install/voyager_description:/home/sithija/voyager_ws/install/voyager_msgs:/home/sithija/voyager_ws/install/voyager_localization:/home/sithija/voyager_ws/install/voyager_controller:/opt/ros/humble'), ('SHELL', '/bin/bash'), ('LC_NAME', 'id_ID.UTF-8'), ('QT_ACCESSIBILITY', '1'), ('GDMSESSION', 'ubuntu'), ('LESSCLOSE', '/usr/bin/lesspipe %s %s'), ('LC_MEASUREMENT', 'id_ID.UTF-8'), ('GPG_AGENT_INFO', '/run/user/1000/gnupg/S.gpg-agent:0:1'), ('GAZEBO_RESOURCE_PATH', '/usr/share/gazebo-11:'), ('LC_IDENTIFICATION', 'id_ID.UTF-8'), ('SIMBODY_HOME', '/usr/share/doc/simbody'), ('GAZEBO_MODEL_DATABASE_URI', 'http://models.gazebosim.org'), ('QT_IM_MODULE', 'ibus'), ('PWD', '/home/sithija/mobile_receptionist_ws/src/build/smrr_multinav'), ('TURTLEBOT3_MODEL', 'waffle'), ('LC_ALL', 'en_US.UTF-8'), ('XDG_CONFIG_DIRS', '/etc/xdg/xdg-ubuntu:/etc/xdg'), ('GAZEBO_PLUGIN_PATH', '/usr/lib/x86_64-linux-gnu/gazebo-11/plugins:/home/sithija/mobile_receptionist_ws/src/gazebo_plugins/build/:'), ('XDG_DATA_DIRS', '/usr/share/ubuntu:/usr/share/gnome:/usr/local/share/:/usr/share/:/var/lib/snapd/desktop'), ('PYTHONPATH', '/home/sithija/mobile_receptionist_ws/build/smrr_utilities:/home/sithija/mobile_receptionist_ws/install/smrr_utilities/lib/python3.10/site-packages:/home/sithija/mobile_receptionist_ws/install/smrr_interfaces/local/lib/python3.10/dist-packages:/home/sithija/mobile_receptionist_ws/build/smrr_crowd_nav:/home/sithija/mobile_receptionist_ws/install/smrr_crowd_nav/lib/python3.10/site-packages:/home/sithija/mobile_receptionist_ws/build/goal_predictor:/home/sithija/mobile_receptionist_ws/install/goal_predictor/lib/python3.10/site-packages:/home/sithija/mini_project/build/crowd_simulator:/home/sithija/mini_project/install/crowd_simulator/lib/python3.10/site-packages:/home/sithija/voyager_ws/install/voyager_msgs/local/lib/python3.10/dist-packages:/home/sithija/voyager_ws/install/voyager_localization/local/lib/python3.10/dist-packages:/opt/ros/humble/lib/python3.10/site-packages:/opt/ros/humble/local/lib/python3.10/dist-packages'), ('LC_NUMERIC', 'id_ID.UTF-8'), ('LC_PAPER', 'id_ID.UTF-8'), ('COLCON', '1'), ('VTE_VERSION', '6800'), ('CMAKE_PREFIX_PATH', '/home/sithija/mobile_receptionist_ws/install/smrr_utilities:/home/sithija/mobile_receptionist_ws/install/smrr_crowd_nav:/home/sithija/mobile_receptionist_ws/install/goal_predictor:/home/sithija/mini_project/install/crowd_simulator:/opt/ros/humble:/home/sithija/mobile_receptionist_ws/install/turtlebot3_description:/home/sithija/mobile_receptionist_ws/install/smrr_multinav:/home/sithija/mobile_receptionist_ws/install/smrr_localization:/home/sithija/mobile_receptionist_ws/install/smrr_interfaces:/home/sithija/mobile_receptionist_ws/install/smrr_description:/home/sithija/mobile_receptionist_ws/install/smrr_controller:/home/sithija/mobile_receptionist_ws/install/gazebo_sfm_plugin:/home/sithija/mobile_receptionist_ws/install/gazebo_plugins:/home/sithija/mobile_receptionist_ws/install/elevator:/home/sithija/mini_project/install/extended_kalman_filter:/home/sithija/mini_project/install/ekf:/home/sithija/mini_project/install/EKF:/home/sithija/voyager_ws/install/voyager_description:/home/sithija/voyager_ws/install/voyager_msgs:/home/sithija/voyager_ws/install/voyager_localization:/home/sithija/voyager_ws/install/voyager_controller')]), 'shell': False}
+[0.199935] (-) TimerEvent: {}
+[0.259249] (smrr_multinav) StdoutLine: {'line': b'-- The C compiler identification is GNU 11.4.0\n'}
+[0.300039] (-) TimerEvent: {}
+[0.353078] (smrr_multinav) StdoutLine: {'line': b'-- The CXX compiler identification is GNU 11.4.0\n'}
+[0.371744] (smrr_multinav) StdoutLine: {'line': b'-- Detecting C compiler ABI info\n'}
+[0.400141] (-) TimerEvent: {}
+[0.467546] (smrr_multinav) StdoutLine: {'line': b'-- Detecting C compiler ABI info - done\n'}
+[0.481732] (smrr_multinav) StdoutLine: {'line': b'-- Check for working C compiler: /usr/bin/cc - skipped\n'}
+[0.483414] (smrr_multinav) StdoutLine: {'line': b'-- Detecting C compile features\n'}
+[0.484329] (smrr_multinav) StdoutLine: {'line': b'-- Detecting C compile features - done\n'}
+[0.490218] (smrr_multinav) StdoutLine: {'line': b'-- Detecting CXX compiler ABI info\n'}
+[0.500249] (-) TimerEvent: {}
+[0.583694] (smrr_multinav) StdoutLine: {'line': b'-- Detecting CXX compiler ABI info - done\n'}
+[0.599766] (smrr_multinav) StdoutLine: {'line': b'-- Check for working CXX compiler: /usr/bin/c++ - skipped\n'}
+[0.600294] (smrr_multinav) StdoutLine: {'line': b'-- Detecting CXX compile features\n'}
+[0.600401] (-) TimerEvent: {}
+[0.601134] (smrr_multinav) StdoutLine: {'line': b'-- Detecting CXX compile features - done\n'}
+[0.609221] (smrr_multinav) StdoutLine: {'line': b'-- Found ament_cmake: 1.3.6 (/opt/ros/humble/share/ament_cmake/cmake)\n'}
+[0.700530] (-) TimerEvent: {}
+[0.800829] (-) TimerEvent: {}
+[0.833889] (smrr_multinav) StdoutLine: {'line': b'-- Found Python3: /usr/bin/python3.10 (found version "3.10.12") found components: Interpreter \n'}
+[0.896697] (smrr_multinav) StdoutLine: {'line': b'-- Override CMake install command with custom implementation using symlinks instead of copying resources\n'}
+[0.900945] (-) TimerEvent: {}
+[0.965152] (smrr_multinav) StdoutLine: {'line': b'-- Found rclcpp: 16.0.7 (/opt/ros/humble/share/rclcpp/cmake)\n'}
+[1.001058] (-) TimerEvent: {}
+[1.018386] (smrr_multinav) StdoutLine: {'line': b'-- Found rosidl_generator_c: 3.1.5 (/opt/ros/humble/share/rosidl_generator_c/cmake)\n'}
+[1.025109] (smrr_multinav) StdoutLine: {'line': b'-- Found rosidl_adapter: 3.1.5 (/opt/ros/humble/share/rosidl_adapter/cmake)\n'}
+[1.036257] (smrr_multinav) StdoutLine: {'line': b'-- Found rosidl_generator_cpp: 3.1.5 (/opt/ros/humble/share/rosidl_generator_cpp/cmake)\n'}
+[1.050932] (smrr_multinav) StdoutLine: {'line': b'-- Using all available rosidl_typesupport_c: rosidl_typesupport_fastrtps_c;rosidl_typesupport_introspection_c\n'}
+[1.071718] (smrr_multinav) StdoutLine: {'line': b'-- Using all available rosidl_typesupport_cpp: rosidl_typesupport_fastrtps_cpp;rosidl_typesupport_introspection_cpp\n'}
+[1.101194] (-) TimerEvent: {}
+[1.142387] (smrr_multinav) StdoutLine: {'line': b'-- Found rmw_implementation_cmake: 6.1.1 (/opt/ros/humble/share/rmw_implementation_cmake/cmake)\n'}
+[1.146013] (smrr_multinav) StdoutLine: {'line': b'-- Found rmw_cyclonedds_cpp: 1.3.4 (/opt/ros/humble/share/rmw_cyclonedds_cpp/cmake)\n'}
+[1.185191] (smrr_multinav) StdoutLine: {'line': b"-- Using RMW implementation 'rmw_cyclonedds_cpp' as default\n"}
+[1.197996] (smrr_multinav) StdoutLine: {'line': b'-- Looking for pthread.h\n'}
+[1.201315] (-) TimerEvent: {}
+[1.294142] (smrr_multinav) StdoutLine: {'line': b'-- Looking for pthread.h - found\n'}
+[1.294316] (smrr_multinav) StdoutLine: {'line': b'-- Performing Test CMAKE_HAVE_LIBC_PTHREAD\n'}
+[1.301416] (-) TimerEvent: {}
+[1.383666] (smrr_multinav) StdoutLine: {'line': b'-- Performing Test CMAKE_HAVE_LIBC_PTHREAD - Success\n'}
+[1.385314] (smrr_multinav) StdoutLine: {'line': b'-- Found Threads: TRUE  \n'}
+[1.401533] (-) TimerEvent: {}
+[1.501869] (-) TimerEvent: {}
+[1.558407] (smrr_multinav) StdoutLine: {'line': b'-- Found rclcpp_action: 16.0.7 (/opt/ros/humble/share/rclcpp_action/cmake)\n'}
+[1.601998] (-) TimerEvent: {}
+[1.649296] (smrr_multinav) StdoutLine: {'line': b'-- Found nav2_msgs: 1.1.12 (/opt/ros/humble/share/nav2_msgs/cmake)\n'}
+[1.702122] (-) TimerEvent: {}
+[1.802454] (-) TimerEvent: {}
+[1.902803] (-) TimerEvent: {}
+[1.943910] (smrr_multinav) StdoutLine: {'line': b'-- Found tf2: 0.25.5 (/opt/ros/humble/share/tf2/cmake)\n'}
+[1.961737] (smrr_multinav) StdoutLine: {'line': b'-- Found tf2_geometry_msgs: 0.25.5 (/opt/ros/humble/share/tf2_geometry_msgs/cmake)\n'}
+[1.982617] (smrr_multinav) StdoutLine: {'line': b'-- Found eigen3_cmake_module: 0.1.1 (/opt/ros/humble/share/eigen3_cmake_module/cmake)\n'}
+[1.983649] (smrr_multinav) StdoutLine: {'line': b'-- Found Eigen3: TRUE (found version "3.4.0") \n'}
+[1.983826] (smrr_multinav) StdoutLine: {'line': b'-- Ensuring Eigen3 include directory is part of orocos-kdl CMake target\n'}
+[2.002927] (-) TimerEvent: {}
+[2.103251] (-) TimerEvent: {}
+[2.203580] (-) TimerEvent: {}
+[2.212153] (smrr_multinav) StdoutLine: {'line': b'-- Found slam_toolbox: 2.6.6 (/opt/ros/humble/share/slam_toolbox/cmake)\n'}
+[2.303709] (-) TimerEvent: {}
+[2.404031] (-) TimerEvent: {}
+[2.504360] (-) TimerEvent: {}
+[2.604705] (-) TimerEvent: {}
+[2.705787] (-) TimerEvent: {}
+[2.748210] (smrr_multinav) StdoutLine: {'line': b"-- Setting OGRE_DIR to: '/opt/ros/humble/share/rviz_ogre_vendor/cmake/../../../opt/rviz_ogre_vendor/lib/OGRE/cmake'\n"}
+[2.749334] (smrr_multinav) StdoutLine: {'line': b'-- Found OGRE\n'}
+[2.749569] (smrr_multinav) StdoutLine: {'line': b'--   static     : OFF\n'}
+[2.749700] (smrr_multinav) StdoutLine: {'line': b'--   components : HLMS;MeshLodGenerator;Overlay;Paging;Property;RTShaderSystem;Terrain;Volume\n'}
+[2.749804] (smrr_multinav) StdoutLine: {'line': b'--   plugins    : Plugin_BSPSceneManager;Plugin_OctreeSceneManager;Plugin_PCZSceneManager;Plugin_ParticleFX;RenderSystem_GL;RenderSystem_GL3Plus;Codec_STBI\n'}
+[2.749983] (smrr_multinav) StdoutLine: {'line': b'--   media      : /opt/ros/humble/opt/rviz_ogre_vendor/share/OGRE/Media\n'}
+[2.750037] (smrr_multinav) StdoutLine: {'line': b'-- OGRE_LIBRARIES: OgreHLMS;OgreMeshLodGenerator;OgreOverlay;OgrePaging;OgreProperty;OgreRTShaderSystem;OgreTerrain;OgreVolume;OgreMain\n'}
+[2.750082] (smrr_multinav) StdoutLine: {'line': b'-- OGRE_LIBRARY_DIRS: /opt/ros/humble/opt/rviz_ogre_vendor/lib\n'}
+[2.750123] (smrr_multinav) StdoutLine: {'line': b'-- OGRE_PLUGINS: Plugin_BSPSceneManager;Plugin_OctreeSceneManager;Plugin_PCZSceneManager;Plugin_ParticleFX;RenderSystem_GL;RenderSystem_GL3Plus;Codec_STBI\n'}
+[2.750230] (smrr_multinav) StdoutLine: {'line': b'-- OGRE_PLUGIN_DIR: /opt/ros/humble/opt/rviz_ogre_vendor/lib/OGRE\n'}
+[2.750331] (smrr_multinav) StdoutLine: {'line': b'-- rviz_ogre_vendor::OgreOverlay for IMPORTED_LOCATION_RELEASE: /opt/ros/humble/opt/rviz_ogre_vendor/lib/libOgreOverlay.so\n'}
+[2.750420] (smrr_multinav) StdoutLine: {'line': b'-- rviz_ogre_vendor::OgreOverlay for IMPORTED_LOCATION_DEBUG: /opt/ros/humble/opt/rviz_ogre_vendor/lib/libOgreOverlay.so\n'}
+[2.750539] (smrr_multinav) StdoutLine: {'line': b'-- rviz_ogre_vendor::OgreMain for IMPORTED_LOCATION_RELEASE: /opt/ros/humble/opt/rviz_ogre_vendor/lib/libOgreMain.so\n'}
+[2.750636] (smrr_multinav) StdoutLine: {'line': b'-- rviz_ogre_vendor::OgreMain for IMPORTED_LOCATION_DEBUG: /opt/ros/humble/opt/rviz_ogre_vendor/lib/libOgreMain.so\n'}
+[2.774846] (smrr_multinav) StdoutLine: {'line': b'-- Found ZLIB: /usr/lib/x86_64-linux-gnu/libz.so (found version "1.2.11") \n'}
+[2.780852] (smrr_multinav) StdoutLine: {'line': b'-- Found OpenGL: /usr/lib/x86_64-linux-gnu/libOpenGL.so   \n'}
+[2.805905] (-) TimerEvent: {}
+[2.906222] (-) TimerEvent: {}
+[2.919093] (smrr_multinav) StdoutLine: {'line': b'-- Found X11: /usr/include   \n'}
+[2.919394] (smrr_multinav) StdoutLine: {'line': b'-- Looking for XOpenDisplay in /usr/lib/x86_64-linux-gnu/libX11.so;/usr/lib/x86_64-linux-gnu/libXext.so\n'}
+[2.998466] (smrr_multinav) StdoutLine: {'line': b'-- Looking for XOpenDisplay in /usr/lib/x86_64-linux-gnu/libX11.so;/usr/lib/x86_64-linux-gnu/libXext.so - found\n'}
+[2.998720] (smrr_multinav) StdoutLine: {'line': b'-- Looking for gethostbyname\n'}
+[3.006314] (-) TimerEvent: {}
+[3.085513] (smrr_multinav) StdoutLine: {'line': b'-- Looking for gethostbyname - found\n'}
+[3.085760] (smrr_multinav) StdoutLine: {'line': b'-- Looking for connect\n'}
+[3.106432] (-) TimerEvent: {}
+[3.171918] (smrr_multinav) StdoutLine: {'line': b'-- Looking for connect - found\n'}
+[3.172077] (smrr_multinav) StdoutLine: {'line': b'-- Looking for remove\n'}
+[3.206549] (-) TimerEvent: {}
+[3.248603] (smrr_multinav) StdoutLine: {'line': b'-- Looking for remove - found\n'}
+[3.248758] (smrr_multinav) StdoutLine: {'line': b'-- Looking for shmat\n'}
+[3.306678] (-) TimerEvent: {}
+[3.325299] (smrr_multinav) StdoutLine: {'line': b'-- Looking for shmat - found\n'}
+[3.325499] (smrr_multinav) StdoutLine: {'line': b'-- Looking for IceConnectionNumber in ICE\n'}
+[3.406803] (-) TimerEvent: {}
+[3.435611] (smrr_multinav) StdoutLine: {'line': b'-- Looking for IceConnectionNumber in ICE - found\n'}
+[3.440125] (smrr_multinav) StdoutLine: {'line': b'-- rviz_ogre_vendor::RenderSystem_GL for IMPORTED_LOCATION_RELEASE: _render_system_gl_static_library_abs-NOTFOUND\n'}
+[3.440458] (smrr_multinav) StdoutLine: {'line': b'-- rviz_ogre_vendor::RenderSystem_GL for IMPORTED_LOCATION_DEBUG: _render_system_gl_static_library_abs-NOTFOUND\n'}
+[3.506947] (-) TimerEvent: {}
+[3.572551] (smrr_multinav) StdoutLine: {'line': b'-- library: /usr/lib/x86_64-linux-gnu/libcurl.so\n'}
+[3.607046] (-) TimerEvent: {}
+[3.707383] (-) TimerEvent: {}
+[3.807749] (-) TimerEvent: {}
+[3.908075] (-) TimerEvent: {}
+[4.008440] (-) TimerEvent: {}
+[4.015588] (smrr_multinav) StdoutLine: {'line': b'-- Found ament_lint_auto: 0.12.9 (/opt/ros/humble/share/ament_lint_auto/cmake)\n'}
+[4.108143] (smrr_multinav) StdoutLine: {'line': b"-- Added test 'cppcheck' to perform static code analysis on C / C++ code\n"}
+[4.108397] (smrr_multinav) StdoutLine: {'line': b'-- Configured cppcheck include dirs: /home/sithija/mobile_receptionist_ws/src/smrr_multinav/include/smrr_multinav\n'}
+[4.108522] (-) TimerEvent: {}
+[4.108651] (smrr_multinav) StdoutLine: {'line': b'-- Configured cppcheck exclude dirs and/or files: \n'}
+[4.109169] (smrr_multinav) StdoutLine: {'line': b"-- Added test 'flake8' to check Python code syntax and style conventions\n"}
+[4.109985] (smrr_multinav) StdoutLine: {'line': b"-- Added test 'lint_cmake' to check CMake code style\n"}
+[4.110645] (smrr_multinav) StdoutLine: {'line': b"-- Added test 'pep257' to check Python code against some of the docstring style conventions in PEP 257\n"}
+[4.112307] (smrr_multinav) StdoutLine: {'line': b"-- Added test 'uncrustify' to check C / C++ code style\n"}
+[4.112455] (smrr_multinav) StdoutLine: {'line': b'-- Configured uncrustify additional arguments: \n'}
+[4.113009] (smrr_multinav) StdoutLine: {'line': b"-- Added test 'xmllint' to check XML markup files\n"}
+[4.114988] (smrr_multinav) StdoutLine: {'line': b'-- Configuring done\n'}
+[4.138434] (smrr_multinav) StdoutLine: {'line': b'-- Generating done\n'}
+[4.140777] (smrr_multinav) StdoutLine: {'line': b'-- Build files have been written to: /home/sithija/mobile_receptionist_ws/src/build/smrr_multinav\n'}
+[4.153847] (smrr_multinav) CommandEnded: {'returncode': 0}
+[4.154765] (smrr_multinav) JobProgress: {'identifier': 'smrr_multinav', 'progress': 'build'}
+[4.156128] (smrr_multinav) Command: {'cmd': ['/usr/bin/cmake', '--build', '/home/sithija/mobile_receptionist_ws/src/build/smrr_multinav', '--', '-j16', '-l16'], 'cwd': '/home/sithija/mobile_receptionist_ws/src/build/smrr_multinav', 'env': OrderedDict([('LESSOPEN', '| /usr/bin/lesspipe %s'), ('USER', 'sithija'), ('LC_TIME', 'id_ID.UTF-8'), ('ROS_PACKAGE_PATH', '/home/sithija/mobile_receptionist_ws/install/turtlebot3_description/share'), ('XDG_SESSION_TYPE', 'x11'), ('SHLVL', '1'), ('LD_LIBRARY_PATH', '/home/sithija/mobile_receptionist_ws/install/smrr_interfaces/lib:/home/sithija/mobile_receptionist_ws/install/gazebo_sfm_plugin/lib:/home/sithija/voyager_ws/install/voyager_msgs/lib:/usr/lib/x86_64-linux-gnu/gazebo-11/plugins:/opt/ros/humble/opt/rviz_ogre_vendor/lib:/opt/ros/humble/lib/x86_64-linux-gnu:/opt/ros/humble/lib:/usr/lib/x86_64-linux-gnu:/usr/lib/x86_64-linux-gnu/gazebo-11/plugins:/home/sithija/mobile_receptionist_ws/src/gazebo_plugins/build/:'), ('HOME', '/home/sithija'), ('CYCLONEDDS_URI', '/home/sithija/.ros/dds.xml'), ('OLDPWD', '/home/sithija/mobile_receptionist_ws'), ('DESKTOP_SESSION', 'ubuntu'), ('GAZEBO_MASTER_URI', 'http://localhost:11345'), ('ROS_PYTHON_VERSION', '3'), ('GNOME_SHELL_SESSION_MODE', 'ubuntu'), ('GTK_MODULES', 'gail:atk-bridge'), ('LC_MONETARY', 'id_ID.UTF-8'), ('SYSTEMD_EXEC_PID', '15623'), ('DBUS_SESSION_BUS_ADDRESS', 'unix:path=/run/user/1000/bus'), ('COLORTERM', 'truecolor'), ('_colcon_cd_root', '/opt/ros/humble/'), ('COLCON_PREFIX_PATH', '/home/sithija/mini_project/install:/home/sithija/mobile_receptionist_ws/install:/home/sithija/voyager_ws/install'), ('ROS_DISTRO', 'humble'), ('GTK_IM_MODULE', 'ibus'), ('LOGNAME', 'sithija'), ('_', '/usr/bin/colcon'), ('ROS_VERSION', '2'), ('PKG_CONFIG_PATH', '/home/sithija/mobile_receptionist_ws/install/turtlebot3_description/lib/x86_64-linux-gnu/pkgconfig:/home/sithija/mobile_receptionist_ws/install/turtlebot3_description/lib/pkgconfig'), ('XDG_SESSION_CLASS', 'user'), ('USERNAME', 'sithija'), ('TERM', 'xterm-256color'), ('GAZEBO_MODEL_PATH', '/usr/share/gazebo-11/models::/opt/ros/humble/share/turtlebot3_gazebo/models'), ('GNOME_DESKTOP_SESSION_ID', 'this-is-deprecated'), ('ROS_LOCALHOST_ONLY', '1'), ('WINDOWPATH', '2'), ('OGRE_RESOURCE_PATH', '/usr/lib/x86_64-linux-gnu/OGRE-1.9.0'), ('PATH', '/opt/ros/humble/bin:/home/sithija/.cargo/bin:/home/sithija/.local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin:/snap/bin:/usr/bin/python3'), ('SESSION_MANAGER', 'local/sithija-rog:@/tmp/.ICE-unix/2095,unix/sithija-rog:/tmp/.ICE-unix/2095'), ('XDG_MENU_PREFIX', 'gnome-'), ('LC_ADDRESS', 'id_ID.UTF-8'), ('GNOME_TERMINAL_SCREEN', '/org/gnome/Terminal/screen/a5c4078f_93f3_4c2d_80ec_56a703e0aefc'), ('XDG_RUNTIME_DIR', '/run/user/1000'), ('DISPLAY', ':1'), ('LANG', 'en_US.UTF-8'), ('XDG_CURRENT_DESKTOP', 'ubuntu:GNOME'), ('LC_TELEPHONE', 'id_ID.UTF-8'), ('RMW_IMPLEMENTATION', 'rmw_cyclonedds_cpp'), ('XMODIFIERS', '@im=ibus'), ('XDG_SESSION_DESKTOP', 'ubuntu'), ('XAUTHORITY', '/run/user/1000/gdm/Xauthority'), ('LS_COLORS', 'rs=0:di=01;34:ln=01;36:mh=00:pi=40;33:so=01;35:do=01;35:bd=40;33;01:cd=40;33;01:or=40;31;01:mi=00:su=37;41:sg=30;43:ca=30;41:tw=30;42:ow=34;42:st=37;44:ex=01;32:*.tar=01;31:*.tgz=01;31:*.arc=01;31:*.arj=01;31:*.taz=01;31:*.lha=01;31:*.lz4=01;31:*.lzh=01;31:*.lzma=01;31:*.tlz=01;31:*.txz=01;31:*.tzo=01;31:*.t7z=01;31:*.zip=01;31:*.z=01;31:*.dz=01;31:*.gz=01;31:*.lrz=01;31:*.lz=01;31:*.lzo=01;31:*.xz=01;31:*.zst=01;31:*.tzst=01;31:*.bz2=01;31:*.bz=01;31:*.tbz=01;31:*.tbz2=01;31:*.tz=01;31:*.deb=01;31:*.rpm=01;31:*.jar=01;31:*.war=01;31:*.ear=01;31:*.sar=01;31:*.rar=01;31:*.alz=01;31:*.ace=01;31:*.zoo=01;31:*.cpio=01;31:*.7z=01;31:*.rz=01;31:*.cab=01;31:*.wim=01;31:*.swm=01;31:*.dwm=01;31:*.esd=01;31:*.jpg=01;35:*.jpeg=01;35:*.mjpg=01;35:*.mjpeg=01;35:*.gif=01;35:*.bmp=01;35:*.pbm=01;35:*.pgm=01;35:*.ppm=01;35:*.tga=01;35:*.xbm=01;35:*.xpm=01;35:*.tif=01;35:*.tiff=01;35:*.png=01;35:*.svg=01;35:*.svgz=01;35:*.mng=01;35:*.pcx=01;35:*.mov=01;35:*.mpg=01;35:*.mpeg=01;35:*.m2v=01;35:*.mkv=01;35:*.webm=01;35:*.webp=01;35:*.ogm=01;35:*.mp4=01;35:*.m4v=01;35:*.mp4v=01;35:*.vob=01;35:*.qt=01;35:*.nuv=01;35:*.wmv=01;35:*.asf=01;35:*.rm=01;35:*.rmvb=01;35:*.flc=01;35:*.avi=01;35:*.fli=01;35:*.flv=01;35:*.gl=01;35:*.dl=01;35:*.xcf=01;35:*.xwd=01;35:*.yuv=01;35:*.cgm=01;35:*.emf=01;35:*.ogv=01;35:*.ogx=01;35:*.aac=00;36:*.au=00;36:*.flac=00;36:*.m4a=00;36:*.mid=00;36:*.midi=00;36:*.mka=00;36:*.mp3=00;36:*.mpc=00;36:*.ogg=00;36:*.ra=00;36:*.wav=00;36:*.oga=00;36:*.opus=00;36:*.spx=00;36:*.xspf=00;36:'), ('GNOME_TERMINAL_SERVICE', ':1.390'), ('SSH_AGENT_LAUNCHER', 'gnome-keyring'), ('SSH_AUTH_SOCK', '/run/user/1000/keyring/ssh'), ('ROS_DOMAIN_ID', '20'), ('AMENT_PREFIX_PATH', '/home/sithija/mobile_receptionist_ws/install/smrr_utilities:/home/sithija/mobile_receptionist_ws/install/smrr_multinav:/home/sithija/mobile_receptionist_ws/install/smrr_localization:/home/sithija/mobile_receptionist_ws/install/smrr_interfaces:/home/sithija/mobile_receptionist_ws/install/smrr_description:/home/sithija/mobile_receptionist_ws/install/smrr_crowd_nav:/home/sithija/mobile_receptionist_ws/install/smrr_controller:/home/sithija/mobile_receptionist_ws/install/goal_predictor:/home/sithija/mobile_receptionist_ws/install/gazebo_sfm_plugin:/home/sithija/mobile_receptionist_ws/install/gazebo_plugins:/home/sithija/mobile_receptionist_ws/install/elevator:/home/sithija/mini_project/install/extended_kalman_filter:/home/sithija/mini_project/install/ekf:/home/sithija/mini_project/install/crowd_simulator:/home/sithija/mini_project/install/EKF:/home/sithija/voyager_ws/install/voyager_description:/home/sithija/voyager_ws/install/voyager_msgs:/home/sithija/voyager_ws/install/voyager_localization:/home/sithija/voyager_ws/install/voyager_controller:/opt/ros/humble'), ('SHELL', '/bin/bash'), ('LC_NAME', 'id_ID.UTF-8'), ('QT_ACCESSIBILITY', '1'), ('GDMSESSION', 'ubuntu'), ('LESSCLOSE', '/usr/bin/lesspipe %s %s'), ('LC_MEASUREMENT', 'id_ID.UTF-8'), ('GPG_AGENT_INFO', '/run/user/1000/gnupg/S.gpg-agent:0:1'), ('GAZEBO_RESOURCE_PATH', '/usr/share/gazebo-11:'), ('LC_IDENTIFICATION', 'id_ID.UTF-8'), ('SIMBODY_HOME', '/usr/share/doc/simbody'), ('GAZEBO_MODEL_DATABASE_URI', 'http://models.gazebosim.org'), ('QT_IM_MODULE', 'ibus'), ('PWD', '/home/sithija/mobile_receptionist_ws/src/build/smrr_multinav'), ('TURTLEBOT3_MODEL', 'waffle'), ('LC_ALL', 'en_US.UTF-8'), ('XDG_CONFIG_DIRS', '/etc/xdg/xdg-ubuntu:/etc/xdg'), ('GAZEBO_PLUGIN_PATH', '/usr/lib/x86_64-linux-gnu/gazebo-11/plugins:/home/sithija/mobile_receptionist_ws/src/gazebo_plugins/build/:'), ('XDG_DATA_DIRS', '/usr/share/ubuntu:/usr/share/gnome:/usr/local/share/:/usr/share/:/var/lib/snapd/desktop'), ('PYTHONPATH', '/home/sithija/mobile_receptionist_ws/build/smrr_utilities:/home/sithija/mobile_receptionist_ws/install/smrr_utilities/lib/python3.10/site-packages:/home/sithija/mobile_receptionist_ws/install/smrr_interfaces/local/lib/python3.10/dist-packages:/home/sithija/mobile_receptionist_ws/build/smrr_crowd_nav:/home/sithija/mobile_receptionist_ws/install/smrr_crowd_nav/lib/python3.10/site-packages:/home/sithija/mobile_receptionist_ws/build/goal_predictor:/home/sithija/mobile_receptionist_ws/install/goal_predictor/lib/python3.10/site-packages:/home/sithija/mini_project/build/crowd_simulator:/home/sithija/mini_project/install/crowd_simulator/lib/python3.10/site-packages:/home/sithija/voyager_ws/install/voyager_msgs/local/lib/python3.10/dist-packages:/home/sithija/voyager_ws/install/voyager_localization/local/lib/python3.10/dist-packages:/opt/ros/humble/lib/python3.10/site-packages:/opt/ros/humble/local/lib/python3.10/dist-packages'), ('LC_NUMERIC', 'id_ID.UTF-8'), ('LC_PAPER', 'id_ID.UTF-8'), ('COLCON', '1'), ('VTE_VERSION', '6800'), ('CMAKE_PREFIX_PATH', '/home/sithija/mobile_receptionist_ws/install/smrr_utilities:/home/sithija/mobile_receptionist_ws/install/smrr_crowd_nav:/home/sithija/mobile_receptionist_ws/install/goal_predictor:/home/sithija/mini_project/install/crowd_simulator:/opt/ros/humble:/home/sithija/mobile_receptionist_ws/install/turtlebot3_description:/home/sithija/mobile_receptionist_ws/install/smrr_multinav:/home/sithija/mobile_receptionist_ws/install/smrr_localization:/home/sithija/mobile_receptionist_ws/install/smrr_interfaces:/home/sithija/mobile_receptionist_ws/install/smrr_description:/home/sithija/mobile_receptionist_ws/install/smrr_controller:/home/sithija/mobile_receptionist_ws/install/gazebo_sfm_plugin:/home/sithija/mobile_receptionist_ws/install/gazebo_plugins:/home/sithija/mobile_receptionist_ws/install/elevator:/home/sithija/mini_project/install/extended_kalman_filter:/home/sithija/mini_project/install/ekf:/home/sithija/mini_project/install/EKF:/home/sithija/voyager_ws/install/voyager_description:/home/sithija/voyager_ws/install/voyager_msgs:/home/sithija/voyager_ws/install/voyager_localization:/home/sithija/voyager_ws/install/voyager_controller')]), 'shell': False}
+[4.208660] (-) TimerEvent: {}
+[4.232263] (smrr_multinav) StdoutLine: {'line': b'[ 66%] \x1b[32mBuilding CXX object CMakeFiles/multinav.dir/src/multinav.cpp.o\x1b[0m\n'}
+[4.232434] (smrr_multinav) StdoutLine: {'line': b'[ 66%] \x1b[32mBuilding CXX object CMakeFiles/multinav.dir/src/multinav_behaviors.cpp.o\x1b[0m\n'}
+[4.308755] (-) TimerEvent: {}
+[4.409053] (-) TimerEvent: {}
+[4.509325] (-) TimerEvent: {}
+[4.609538] (-) TimerEvent: {}
+[4.709800] (-) TimerEvent: {}
+[4.810095] (-) TimerEvent: {}
+[4.910573] (-) TimerEvent: {}
+[5.010870] (-) TimerEvent: {}
+[5.111182] (-) TimerEvent: {}
+[5.211515] (-) TimerEvent: {}
+[5.311823] (-) TimerEvent: {}
+[5.412153] (-) TimerEvent: {}
+[5.512551] (-) TimerEvent: {}
+[5.612847] (-) TimerEvent: {}
+[5.713147] (-) TimerEvent: {}
+[5.813451] (-) TimerEvent: {}
+[5.913776] (-) TimerEvent: {}
+[6.014088] (-) TimerEvent: {}
+[6.114400] (-) TimerEvent: {}
+[6.214709] (-) TimerEvent: {}
+[6.314990] (-) TimerEvent: {}
+[6.415309] (-) TimerEvent: {}
+[6.515613] (-) TimerEvent: {}
+[6.615912] (-) TimerEvent: {}
+[6.716209] (-) TimerEvent: {}
+[6.816530] (-) TimerEvent: {}
+[6.916829] (-) TimerEvent: {}
+[6.993970] (smrr_multinav) StderrLine: {'line': b'In file included from \x1b[01m\x1b[K/opt/ros/humble/include/rclcpp/rclcpp/logging.hpp:24\x1b[m\x1b[K,\n'}
+[6.994212] (smrr_multinav) StderrLine: {'line': b'                 from \x1b[01m\x1b[K/opt/ros/humble/include/rclcpp/rclcpp/client.hpp:40\x1b[m\x1b[K,\n'}
+[6.994326] (smrr_multinav) StderrLine: {'line': b'                 from \x1b[01m\x1b[K/opt/ros/humble/include/rclcpp/rclcpp/callback_group.hpp:24\x1b[m\x1b[K,\n'}
+[6.994407] (smrr_multinav) StderrLine: {'line': b'                 from \x1b[01m\x1b[K/opt/ros/humble/include/rclcpp/rclcpp/any_executable.hpp:20\x1b[m\x1b[K,\n'}
+[6.994497] (smrr_multinav) StderrLine: {'line': b'                 from \x1b[01m\x1b[K/opt/ros/humble/include/rclcpp/rclcpp/memory_strategy.hpp:25\x1b[m\x1b[K,\n'}
+[6.994583] (smrr_multinav) StderrLine: {'line': b'                 from \x1b[01m\x1b[K/opt/ros/humble/include/rclcpp/rclcpp/memory_strategies.hpp:18\x1b[m\x1b[K,\n'}
+[6.994646] (smrr_multinav) StderrLine: {'line': b'                 from \x1b[01m\x1b[K/opt/ros/humble/include/rclcpp/rclcpp/executor_options.hpp:20\x1b[m\x1b[K,\n'}
+[6.994709] (smrr_multinav) StderrLine: {'line': b'                 from \x1b[01m\x1b[K/opt/ros/humble/include/rclcpp/rclcpp/executor.hpp:37\x1b[m\x1b[K,\n'}
+[6.994773] (smrr_multinav) StderrLine: {'line': b'                 from \x1b[01m\x1b[K/opt/ros/humble/include/rclcpp/rclcpp/executors/multi_threaded_executor.hpp:25\x1b[m\x1b[K,\n'}
+[6.994859] (smrr_multinav) StderrLine: {'line': b'                 from \x1b[01m\x1b[K/opt/ros/humble/include/rclcpp/rclcpp/executors.hpp:21\x1b[m\x1b[K,\n'}
+[6.994934] (smrr_multinav) StderrLine: {'line': b'                 from \x1b[01m\x1b[K/opt/ros/humble/include/rclcpp/rclcpp/rclcpp.hpp:155\x1b[m\x1b[K,\n'}
+[6.995003] (smrr_multinav) StderrLine: {'line': b'                 from \x1b[01m\x1b[K/home/sithija/mobile_receptionist_ws/src/smrr_multinav/include/smrr_multinav/multinav_behaviors.h:2\x1b[m\x1b[K,\n'}
+[6.995065] (smrr_multinav) StderrLine: {'line': b'                 from \x1b[01m\x1b[K/home/sithija/mobile_receptionist_ws/src/smrr_multinav/src/multinav_behaviors.cpp:1\x1b[m\x1b[K:\n'}
+[6.995123] (smrr_multinav) StderrLine: {'line': b'\x1b[01m\x1b[K/home/sithija/mobile_receptionist_ws/src/smrr_multinav/src/multinav_behaviors.cpp:\x1b[m\x1b[K In member function \xe2\x80\x98\x1b[01m\x1b[Kvirtual BT::NodeStatus GoToPose::onRunning()\x1b[m\x1b[K\xe2\x80\x99:\n'}
+[6.995181] (smrr_multinav) StderrLine: {'line': b'\x1b[01m\x1b[K/home/sithija/mobile_receptionist_ws/src/smrr_multinav/src/multinav_behaviors.cpp:50:50:\x1b[m\x1b[K \x1b[01;35m\x1b[Kwarning: \x1b[m\x1b[Kformat \xe2\x80\x98\x1b[01m\x1b[K%s\x1b[m\x1b[K\xe2\x80\x99 expects argument of type \xe2\x80\x98\x1b[01m\x1b[Kchar*\x1b[m\x1b[K\xe2\x80\x99, but argument 5 has type \xe2\x80\x98\x1b[01m\x1b[Kconst string\x1b[m\x1b[K\xe2\x80\x99 {aka \xe2\x80\x98\x1b[01m\x1b[Kconst std::__cxx11::basic_string<char>\x1b[m\x1b[K\xe2\x80\x99} [\x1b[01;35m\x1b[K\x1b]8;;https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html#index-Wformat=\x07-Wformat=\x1b]8;;\x07\x1b[m\x1b[K]\n'}
+[6.995248] (smrr_multinav) StderrLine: {'line': b'   50 |             RCLCPP_INFO(node_ptr_->get_logger(), \x1b[01;35m\x1b[K"[%s] goal reached\\n"\x1b[m\x1b[K,this->name());\n'}
+[6.995307] (smrr_multinav) StderrLine: {'line': b'      |                                                  \x1b[01;35m\x1b[K^~~~~~~~~~~~~~~~~~~~~\x1b[m\x1b[K\n'}
+[6.995364] (smrr_multinav) StderrLine: {'line': b'\x1b[01m\x1b[K/home/sithija/mobile_receptionist_ws/src/smrr_multinav/src/multinav_behaviors.cpp:50:53:\x1b[m\x1b[K \x1b[01;36m\x1b[Knote: \x1b[m\x1b[Kformat string is defined here\n'}
+[6.995423] (smrr_multinav) StderrLine: {'line': b'   50 |             RCLCPP_INFO(node_ptr_->get_logger(), "[\x1b[01;36m\x1b[K%s\x1b[m\x1b[K] goal reached\\n",this->name());\n'}
+[6.995497] (smrr_multinav) StderrLine: {'line': b'      |                                                    \x1b[01;36m\x1b[K~^\x1b[m\x1b[K\n'}
+[6.995569] (smrr_multinav) StderrLine: {'line': b'      |                                                     \x1b[01;36m\x1b[K|\x1b[m\x1b[K\n'}
+[6.995644] (smrr_multinav) StderrLine: {'line': b'      |                                                     \x1b[01;36m\x1b[Kchar*\x1b[m\x1b[K\n'}
+[6.995880] (smrr_multinav) StderrLine: {'line': b'In file included from \x1b[01m\x1b[K/opt/ros/humble/include/rclcpp/rclcpp/logging.hpp:24\x1b[m\x1b[K,\n'}
+[6.995987] (smrr_multinav) StderrLine: {'line': b'                 from \x1b[01m\x1b[K/opt/ros/humble/include/rclcpp/rclcpp/client.hpp:40\x1b[m\x1b[K,\n'}
+[6.996146] (smrr_multinav) StderrLine: {'line': b'                 from \x1b[01m\x1b[K/opt/ros/humble/include/rclcpp/rclcpp/callback_group.hpp:24\x1b[m\x1b[K,\n'}
+[6.996219] (smrr_multinav) StderrLine: {'line': b'                 from \x1b[01m\x1b[K/opt/ros/humble/include/rclcpp/rclcpp/any_executable.hpp:20\x1b[m\x1b[K,\n'}
+[6.996287] (smrr_multinav) StderrLine: {'line': b'                 from \x1b[01m\x1b[K/opt/ros/humble/include/rclcpp/rclcpp/memory_strategy.hpp:25\x1b[m\x1b[K,\n'}
+[6.996356] (smrr_multinav) StderrLine: {'line': b'                 from \x1b[01m\x1b[K/opt/ros/humble/include/rclcpp/rclcpp/memory_strategies.hpp:18\x1b[m\x1b[K,\n'}
+[6.996424] (smrr_multinav) StderrLine: {'line': b'                 from \x1b[01m\x1b[K/opt/ros/humble/include/rclcpp/rclcpp/executor_options.hpp:20\x1b[m\x1b[K,\n'}
+[6.996517] (smrr_multinav) StderrLine: {'line': b'                 from \x1b[01m\x1b[K/opt/ros/humble/include/rclcpp/rclcpp/executor.hpp:37\x1b[m\x1b[K,\n'}
+[6.996610] (smrr_multinav) StderrLine: {'line': b'                 from \x1b[01m\x1b[K/opt/ros/humble/include/rclcpp/rclcpp/executors/multi_threaded_executor.hpp:25\x1b[m\x1b[K,\n'}
+[6.996680] (smrr_multinav) StderrLine: {'line': b'                 from \x1b[01m\x1b[K/opt/ros/humble/include/rclcpp/rclcpp/executors.hpp:21\x1b[m\x1b[K,\n'}
+[6.996751] (smrr_multinav) StderrLine: {'line': b'                 from \x1b[01m\x1b[K/opt/ros/humble/include/rclcpp/rclcpp/rclcpp.hpp:155\x1b[m\x1b[K,\n'}
+[6.996812] (smrr_multinav) StderrLine: {'line': b'                 from \x1b[01m\x1b[K/home/sithija/mobile_receptionist_ws/src/smrr_multinav/include/smrr_multinav/multinav_behaviors.h:2\x1b[m\x1b[K,\n'}
+[6.996867] (smrr_multinav) StderrLine: {'line': b'                 from \x1b[01m\x1b[K/home/sithija/mobile_receptionist_ws/src/smrr_multinav/src/multinav_behaviors.cpp:1\x1b[m\x1b[K:\n'}
+[6.996931] (smrr_multinav) StderrLine: {'line': b'\x1b[01m\x1b[K/home/sithija/mobile_receptionist_ws/src/smrr_multinav/src/multinav_behaviors.cpp:\x1b[m\x1b[K In member function \xe2\x80\x98\x1b[01m\x1b[Kvirtual BT::NodeStatus LoadMapFromSlam::onStart()\x1b[m\x1b[K\xe2\x80\x99:\n'}
+[6.996994] (smrr_multinav) StderrLine: {'line': b'\x1b[01m\x1b[K/home/sithija/mobile_receptionist_ws/src/smrr_multinav/src/multinav_behaviors.cpp:87:42:\x1b[m\x1b[K \x1b[01;35m\x1b[Kwarning: \x1b[m\x1b[Ktoo many arguments for format [\x1b[01;35m\x1b[K\x1b]8;;https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html#index-Wformat-extra-args\x07-Wformat-extra-args\x1b]8;;\x07\x1b[m\x1b[K]\n'}
+[6.997053] (smrr_multinav) StderrLine: {'line': b'   87 |     RCLCPP_INFO(node_ptr_->get_logger(), \x1b[01;35m\x1b[K" map file path: "\x1b[m\x1b[K, map_path);\n'}
+[6.997118] (smrr_multinav) StderrLine: {'line': b'      |                                          \x1b[01;35m\x1b[K^~~~~~~~~~~~~~~~~~\x1b[m\x1b[K\n'}
+[6.997177] (smrr_multinav) StderrLine: {'line': b'\x1b[01m\x1b[K/home/sithija/mobile_receptionist_ws/src/smrr_multinav/src/multinav_behaviors.cpp:89:26:\x1b[m\x1b[K \x1b[01;31m\x1b[Kerror: \x1b[m\x1b[Kexpected \xe2\x80\x98\x1b[01m\x1b[K;\x1b[m\x1b[K\xe2\x80\x99 before \xe2\x80\x98\x1b[01m\x1b[Krequest\x1b[m\x1b[K\xe2\x80\x99\n'}
+[6.997233] (smrr_multinav) StderrLine: {'line': b'   89 |     request->match_type=2\n'}
+[6.997289] (smrr_multinav) StderrLine: {'line': b'      |                          \x1b[01;31m\x1b[K^\x1b[m\x1b[K\n'}
+[6.997345] (smrr_multinav) StderrLine: {'line': b'      |                          \x1b[32m\x1b[K;\x1b[m\x1b[K\n'}
+[6.997402] (smrr_multinav) StderrLine: {'line': b'   90 |     \x1b[32m\x1b[Krequest\x1b[m\x1b[K->initial_pose=geometry_msgs.msg.Pose2D(x=0.0, y=0.0, theta=0.0)\n'}
+[6.997462] (smrr_multinav) StderrLine: {'line': b'      |     \x1b[32m\x1b[K~~~~~~~\x1b[m\x1b[K               \n'}
+[7.016942] (-) TimerEvent: {}
+[7.117249] (-) TimerEvent: {}
+[7.217558] (-) TimerEvent: {}
+[7.317854] (-) TimerEvent: {}
+[7.418155] (-) TimerEvent: {}
+[7.518458] (-) TimerEvent: {}
+[7.618780] (-) TimerEvent: {}
+[7.719064] (-) TimerEvent: {}
+[7.819349] (-) TimerEvent: {}
+[7.919649] (-) TimerEvent: {}
+[7.966644] (smrr_multinav) StderrLine: {'line': b'gmake[2]: *** [CMakeFiles/multinav.dir/build.make:90: CMakeFiles/multinav.dir/src/multinav_behaviors.cpp.o] Error 1\n'}
+[7.966814] (smrr_multinav) StderrLine: {'line': b'gmake[2]: *** Waiting for unfinished jobs....\n'}
+[8.019757] (-) TimerEvent: {}
+[8.120037] (-) TimerEvent: {}
+[8.220311] (-) TimerEvent: {}
+[8.320587] (-) TimerEvent: {}
+[8.420851] (-) TimerEvent: {}
+[8.508630] (smrr_multinav) StderrLine: {'line': b'gmake[1]: *** [CMakeFiles/Makefile2:137: CMakeFiles/multinav.dir/all] Error 2\n'}
+[8.509028] (smrr_multinav) StderrLine: {'line': b'gmake: *** [Makefile:146: all] Error 2\n'}
+[8.512026] (smrr_multinav) CommandEnded: {'returncode': 2}
+[8.520976] (-) TimerEvent: {}
+[8.621307] (-) TimerEvent: {}
+[8.630735] (smrr_multinav) JobEnded: {'identifier': 'smrr_multinav', 'rc': 2}
+[8.641361] (-) EventReactorShutdown: {}
