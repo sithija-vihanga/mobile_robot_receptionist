@@ -32,6 +32,7 @@ set(TARGET_DEPENDS
     behaviortree_cpp_v3
     yaml-cpp
     tf2
+    tf2_ros
     tf2_geometry_msgs
     slam_toolbox
 )

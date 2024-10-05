@@ -1,5 +1,7 @@
 #include "multinav_behaviors.h"
 
+///////////////////////////////////////////////// Go to Pose //////////////////////////////////////////////////////////
+
 GoToPose::GoToPose(const std::string &name,
                   const BT::NodeConfiguration &config,
                   rclcpp::Node::SharedPtr node_ptr)
@@ -63,10 +65,10 @@ GoToPose::GoToPose(const std::string &name,
             done_flag_ = true;
         }
     }
-
+///////////////////////////////////////////////// Load Map //////////////////////////////////////////////////////////
 
 LoadMapFromSlam::LoadMapFromSlam(const std::string &name, const BT::NodeConfiguration &config, rclcpp::Node::SharedPtr node_ptr)
-    : BT::StatefulActionNode(name, config), node_ptr_(node_ptr)
+    : BT::StatefulActionNode(name, config), node_ptr_(node_ptr), tf_buffer_(node_ptr->get_clock()), tf_listener_(tf_buffer_)
     {
         client_ = node_ptr_->create_client<slam_toolbox::srv::DeserializePoseGraph>("/slam_toolbox/deserialize_map");
     }
@@ -87,12 +89,34 @@ LoadMapFromSlam::LoadMapFromSlam(const std::string &name, const BT::NodeConfigur
         RCLCPP_INFO(node_ptr_->get_logger(), "Map file path: %s", map_path.c_str());
         request->filename = map_path; //"/home/sithija/mobile_receptionist_ws/src/smrr_localization/maps/floor05";
         request->match_type= 2;
-        geometry_msgs::msg::Pose2D pose;  // This creates a Pose2D instance
-        pose.x = 0.0;
-        pose.y = 0.0;
-        pose.theta = 0.0;
-        request->initial_pose= pose; //geometry_msgs.msg.Pose2D(x=0.0, y=0.0, theta=0.0); // Change at run time
 
+        last_pose_ = this->getMapToBaseLink();
+        RCLCPP_INFO(node_ptr_->get_logger(), "Transform from map to base_link: Translation: [%f, %f, %f], Rotation: [%f, %f, %f, %f]",
+                last_pose_.transform.translation.x,
+                last_pose_.transform.translation.y,
+                last_pose_.transform.translation.z,
+                last_pose_.transform.rotation.x,
+                last_pose_.transform.rotation.y,
+                last_pose_.transform.rotation.z,
+                last_pose_.transform.rotation.w);
+
+       
+        tf2::Quaternion tf_quaternion(last_pose_.transform.rotation.x,
+                                      last_pose_.transform.rotation.y,
+                                      last_pose_.transform.rotation.z,
+                                      last_pose_.transform.rotation.w);
+
+        tf2::Matrix3x3 mat(tf_quaternion);
+        
+        mat.getRPY(roll, pitch, yaw);
+        RCLCPP_INFO(node_ptr_->get_logger(), "Roll: %f, Pitch: %f, Yaw: %f", roll, pitch, yaw);
+
+
+        geometry_msgs::msg::Pose2D pose;  
+        pose.x = last_pose_.transform.translation.x;
+        pose.y = last_pose_.transform.translation.y;
+        pose.theta = yaw;
+        request->initial_pose= pose; //geometry_msgs.msg.Pose2D(x=0.0, y=0.0, theta=0.0); // Change at run time
 
         future_ = client_->async_send_request(request);
         map_loading_done_flag_ = true; 
@@ -113,6 +137,25 @@ LoadMapFromSlam::LoadMapFromSlam(const std::string &name, const BT::NodeConfigur
     {
         RCLCPP_INFO(node_ptr_->get_logger(), "Map loading was halted.");
     }
+
+    geometry_msgs::msg::TransformStamped LoadMapFromSlam::getMapToBaseLink()
+    {
+        geometry_msgs::msg::TransformStamped transformStamped;
+        try
+        {
+            transformStamped = tf_buffer_.lookupTransform("map", "base_link", tf2::TimePointZero, tf2::durationFromSec(1.0));
+ 
+        }
+        catch (tf2::TransformException &ex)
+        {
+            RCLCPP_ERROR(node_ptr_->get_logger(), "Could not get transform: %s", ex.what());
+        }
+
+        return transformStamped;
+    }
+
+
+///////////////////////////////////////////////// Wait Event //////////////////////////////////////////////////////////
 
 WaitEvent::WaitEvent(const std::string &name, const BT::NodeConfiguration &config, rclcpp::Node::SharedPtr node_ptr)
     : BT::StatefulActionNode(name, config), node_ptr_(node_ptr)

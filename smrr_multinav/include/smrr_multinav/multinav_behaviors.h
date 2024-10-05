@@ -13,6 +13,11 @@
 #include "std_msgs/msg/bool.hpp"
 #include <future>
 
+#include <tf2_ros/transform_listener.h>
+#include <tf2_ros/buffer.h>
+#include <geometry_msgs/msg/transform_stamped.hpp>
+#include <tf2/exceptions.h>
+
 class GoToPose : public BT::StatefulActionNode
 {
     public:
@@ -55,6 +60,13 @@ private:
     rclcpp::Client<slam_toolbox::srv::DeserializePoseGraph>::SharedPtr client_;
     std::shared_future<slam_toolbox::srv::DeserializePoseGraph::Response::SharedPtr> future_;
     bool map_loading_done_flag_;
+    geometry_msgs::msg::TransformStamped last_pose_;
+    double roll, pitch, yaw;
+
+    tf2_ros::Buffer tf_buffer_;
+    tf2_ros::TransformListener tf_listener_;
+
+    geometry_msgs::msg::TransformStamped getMapToBaseLink();
 };
 
 class WaitEvent : public BT::StatefulActionNode
