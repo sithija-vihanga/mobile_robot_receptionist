@@ -79,7 +79,7 @@ LoadMapFromSlam::LoadMapFromSlam(const std::string &name, const BT::NodeConfigur
     }
 
     BT::NodeStatus LoadMapFromSlam::onStart()
-    {
+    {   
         BT::Optional<std::string> posegraph_file = getInput<std::string>("posegraph_file");
         const std::string location_file = node_ptr_->get_parameter("location_file").as_string();
         YAML::Node locations = YAML::LoadFile(location_file);
@@ -126,7 +126,8 @@ LoadMapFromSlam::LoadMapFromSlam(const std::string &name, const BT::NodeConfigur
     BT::NodeStatus LoadMapFromSlam::onRunning()
     {
         if (map_loading_done_flag_)
-        {
+        {   
+            map_loading_done_flag_ = false;
             return BT::NodeStatus::SUCCESS;
         }
 

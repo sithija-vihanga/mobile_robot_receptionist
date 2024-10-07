@@ -5,8 +5,8 @@
 # location4: [ -3.0, 0.0, 1.57]
 
 location1: [3.58, -2.12, -0.5]
-location2: [-3.5, -0.30, 1.57] #[-2.52, -0.90, 1.57]
-location3: [-3.8, 1.5, -1.57]
+location2: [-3.2, -0.20, 1.57] #[-2.52, -0.90, 1.57]
+location3: [-3.4, 1.5, -0.75]
 location4: [ -5.68, -3.54, -1.57]
 
 posegraph_file_01: "/home/sithija/mobile_receptionist_ws/src/smrr_localization/maps/floor05"
