@@ -27,6 +27,8 @@ class GoalPredictor(Node):
         self.dt             = 0.2       # Position publisher rate
         self.sigma_phi      = 0.1
 
+        self.max_agent_buffer = 12
+
         self.destinations = np.array([[5.0, 8.0], 
            [2.3, 1.4], 
            [3.2, 7.6], 
@@ -63,7 +65,7 @@ class GoalPredictor(Node):
 
     def update_path(self):
         if (len(self.pedestrian_pos) == 0):
-            self.pedestrian_pos = np.zeros([self.agents.count, self.path_buffer*2], dtype='float') # Creating buffer for each agent's position
+            self.pedestrian_pos = np.zeros([self.max_agent_buffer, self.path_buffer*2], dtype='float') # Creating buffer for each agent's position
             self.pedestrian_vel = np.zeros_like(self.pedestrian_pos)                             # Creating buffer for each agent's velocity
         else:
             for i in range(self.agents.count):
