@@ -1,13 +1,14 @@
 <root main_tree_to_execute = "MainTree">
     <BehaviorTree ID="MainTree">
         <Sequence name="sequence">
-            <LoadMapFromSlam name="load_map_05" posegraph_file="posegraph_file"/>
+            <LoadMapFromSlam name="load_map_05" posegraph_file="posegraph_file_01"/>
             <GoToPose name="go_to_location1" loc="location1"/>
             <GoToPose name="go_to_location2" loc="location2"/>
             <WaitEvent name="wait_event" event="elevator"/>
-            <LoadMapFromSlam name="load_map_05" posegraph_file="posegraph_file"/>
+            <LoadMapFromSlam name="load_map_05" posegraph_file="posegraph_file_01"/>
             <GoToPose name="go_to_location3" loc="location3"/>
             <WaitEvent name="wait_event" event="elevator"/>
+            <LoadMapFromSlam name="load_map_06" posegraph_file="posegraph_file_02"/>
             <GoToPose name="go_to_location4" loc="location4"/> 
         </Sequence>
     </BehaviorTree>
