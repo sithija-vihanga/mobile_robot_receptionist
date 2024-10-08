@@ -4,11 +4,22 @@
 # location3: [-3.0, -3.0, -0.7]
 # location4: [ -3.0, 0.0, 1.57]
 
-location1: [3.58, -2.12, -0.5]
-location2: [-3.2, -0.20, 1.57] #[-2.52, -0.90, 1.57]
-location3: [-3.4, 1.5, -0.75]
-location4: [ -5.68, -3.54, -1.57]
+# location1: [3.58, -2.12, -0.5]
+# location2: [-3.2, -0.20, 1.57] #[-2.52, -0.90, 1.57]
+# location3: [-3.4, 1.5, -0.75]
+# location4: [ -5.68, -3.54, -1.57]
 
-posegraph_file_01: "/home/sithija/mobile_receptionist_ws/src/smrr_localization/maps/floor05"
-posegraph_file_02: "/home/sithija/mobile_receptionist_ws/src/smrr_localization/maps/floor6"
+# posegraph_file_01: "/home/sithija/mobile_receptionist_ws/src/smrr_localization/maps/floor05"
+# posegraph_file_02: "/home/sithija/mobile_receptionist_ws/src/smrr_localization/maps/floor6"
+# event: "elevator_wait"
+
+location1: [2.0, -2.12, -0.5]
+location2: [3.0, 0.5, 1.57] #[-2.52, -0.90, 1.57]
+location3: [3.0, 1.5, -1.57]
+location4: [ -3.0, -3.0, -1.57]
+
+posegraph_file_01: "/home/sithija/mobile_receptionist_ws/src/smrr_localization/maps/BT_floor_02_closed"
+posegraph_file_02: "/home/sithija/mobile_receptionist_ws/src/smrr_localization/maps/BT_floor_02_open"
+posegraph_file_03: "/home/sithija/mobile_receptionist_ws/src/smrr_localization/maps/BT_floor_03_closed"
+posegraph_file_04: "/home/sithija/mobile_receptionist_ws/src/smrr_localization/maps/BT_floor_03_open"
 event: "elevator_wait"
