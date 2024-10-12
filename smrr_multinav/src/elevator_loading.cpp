@@ -1,17 +1,24 @@
+#include <chrono>
+#include <functional>
 #include <memory>
+#include <string>
+#include <algorithm>
 
 #include "rclcpp/rclcpp.hpp"
 #include "sensor_msgs/msg/laser_scan.hpp"
 using std::placeholders::_1;
 
+using namespace std::chrono_literals;
+
 class ElevatorLoading : public rclcpp::Node
 {
   public:
     ElevatorLoading()
-    : Node("elevator_loading")
+    : Node("elevator_loading") , A(20, std::vector<float>(2, 1))
     {
       laser_subscription_ = this->create_subscription<sensor_msgs::msg::LaserScan>(
       "scan", 10, std::bind(&ElevatorLoading::laser_callback, this, _1));
+      timer_ = this->create_wall_timer(500ms, std::bind(&ElevatorLoading::set_orientation, this));
     }
 
   private:
@@ -22,7 +29,45 @@ class ElevatorLoading : public rclcpp::Node
       //RCLCPP_INFO(this->get_logger(), "first value: %f",laser_scan.ranges[0]);
     }
 
+    void set_orientation()
+    {
+    if (laser_scan.ranges.size() < 250) {
+        RCLCPP_WARN(this->get_logger(), "Not enough laser scan data received.");
+        return;
+    }
+
+    std::vector<float> laser_slice(laser_scan.ranges.begin() + 149, laser_scan.ranges.begin() + 250);
+    if (laser_slice.size() < 100) { 
+        RCLCPP_WARN(this->get_logger(), "Laser slice does not contain enough elements.");
+        return;
+    }
+
+    filtered_points.clear();
+    for (int i = 0; i < 20; i++) 
+    {
+      std::sort(laser_slice.begin() + 5 * i, laser_slice.begin() + 5 * i + 5); // Sort dynamic window of 5 elements
+      filtered_points.push_back(laser_slice[5 * i + 2]); // Get the middle reading as median
+      A[i][1] = laser_slice[5*i+2]; 
+    }
+    RCLCPP_INFO(this->get_logger(), "Filtered points: %f", filtered_points[19]);
+
+    for (const auto& row : A) {
+        for (const auto& elem : row) {
+            std::cout << elem << " ";
+        }
+        std::cout << std::endl;
+    }
+
+    //RCLCPP_INFO(this->get_logger(), "Filtered points: %f", filtered_points[19]);
+
+    }
+
+    std::vector<std::vector<float>> A;
+    std::vector<float> B;
+    std::vector<float> X;
+    std::vector<float> filtered_points;
     sensor_msgs::msg::LaserScan laser_scan;
+    rclcpp::TimerBase::SharedPtr timer_;
     rclcpp::Subscription<sensor_msgs::msg::LaserScan>::SharedPtr laser_subscription_;
 };
 
