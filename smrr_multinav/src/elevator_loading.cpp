@@ -3,6 +3,7 @@
 #include <memory>
 #include <string>
 #include <algorithm>
+#include <cmath>
 
 #include "rclcpp/rclcpp.hpp"
 #include "sensor_msgs/msg/laser_scan.hpp"
@@ -14,7 +15,7 @@ class ElevatorLoading : public rclcpp::Node
 {
   public:
     ElevatorLoading()
-    : Node("elevator_loading") , A(20, std::vector<float>(2, 1))
+    : Node("elevator_loading") , A(20, std::vector<float>(2, 1)) ,B(20, 0)
     {
       laser_subscription_ = this->create_subscription<sensor_msgs::msg::LaserScan>(
       "scan", 10, std::bind(&ElevatorLoading::laser_callback, this, _1));
@@ -25,8 +26,6 @@ class ElevatorLoading : public rclcpp::Node
     void laser_callback(const sensor_msgs::msg::LaserScan & msg)
     {
       laser_scan = msg;
-      //RCLCPP_INFO(this->get_logger(), "I heard");
-      //RCLCPP_INFO(this->get_logger(), "first value: %f",laser_scan.ranges[0]);
     }
 
     void set_orientation()
@@ -47,18 +46,19 @@ class ElevatorLoading : public rclcpp::Node
     {
       std::sort(laser_slice.begin() + 5 * i, laser_slice.begin() + 5 * i + 5); // Sort dynamic window of 5 elements
       filtered_points.push_back(laser_slice[5 * i + 2]); // Get the middle reading as median
-      A[i][1] = laser_slice[5*i+2]; 
+      A[i][1] = laser_slice[5*i+2]*cos((-28.8 +3*i)* (M_PI / 180.0));
+      B[i]    = laser_slice[5*i+2]*sin((-28.8 +3*i)* (M_PI / 180.0));
     }
-    RCLCPP_INFO(this->get_logger(), "Filtered points: %f", filtered_points[19]);
-
-    for (const auto& row : A) {
-        for (const auto& elem : row) {
-            std::cout << elem << " ";
-        }
-        std::cout << std::endl;
-    }
-
-    //RCLCPP_INFO(this->get_logger(), "Filtered points: %f", filtered_points[19]);
+    // for (const auto& row : A) {
+    //     for (const auto& elem : row) {
+    //         std::cout << elem << " ";
+    //     }
+    //     std::cout << std::endl;
+    // }
+    // for (const auto& elem : B)
+    // {
+    //   std::cout<<elem<<std::endl;
+    // }
 
     }
 
