@@ -43,6 +43,14 @@ add_executable(multinav src/multinav.cpp ${BEHAVIOR_SOURCES})
 ament_target_dependencies(multinav ${TARGET_DEPENDS})
 target_link_libraries(multinav ${YAML_CPP_LIBRARIES})
 
+add_executable(elevator_loading src/elevator_loading.cpp)
+ament_target_dependencies(elevator_loading rclcpp sensor_msgs)
+
+install(
+  TARGETS elevator_loading
+  DESTINATION lib/${PROJECT_NAME}
+)
+
 install(
   TARGETS multinav
   DESTINATION lib/${PROJECT_NAME}
