@@ -14,6 +14,7 @@ find_package(yaml-cpp REQUIRED)
 find_package(tf2 REQUIRED)
 find_package(tf2_geometry_msgs REQUIRED)
 find_package(slam_toolbox REQUIRED)
+find_package(Eigen3 REQUIRED)
 
 install (
   DIRECTORY config bt_xml launch
@@ -38,13 +39,14 @@ set(TARGET_DEPENDS
 )
 
 include_directories(include/${PROJECT_NAME})
+include_directories(include /usr/include/eigen3)
 
 add_executable(multinav src/multinav.cpp ${BEHAVIOR_SOURCES})
 ament_target_dependencies(multinav ${TARGET_DEPENDS})
 target_link_libraries(multinav ${YAML_CPP_LIBRARIES})
 
 add_executable(elevator_loading src/elevator_loading.cpp)
-ament_target_dependencies(elevator_loading rclcpp sensor_msgs)
+ament_target_dependencies(elevator_loading rclcpp sensor_msgs Eigen3 )
 
 install(
   TARGETS elevator_loading
