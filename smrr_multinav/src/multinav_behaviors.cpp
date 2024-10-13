@@ -321,16 +321,16 @@ ElevatorLoading::ElevatorLoading(const std::string &name, const BT::NodeConfigur
                 timer_.reset();
                 RCLCPP_INFO(node_ptr_->get_logger(),"Door opened");
             }
-        
+        }
         else if(action_type.value() == "wait")
         {
+            std::this_thread::sleep_for(std::chrono::seconds(10));
             complete_flag_ = true;
             timer_.reset();
             RCLCPP_INFO(node_ptr_->get_logger(),"Wait complete");
         }
             //RCLCPP_INFO(node_ptr_->get_logger(),"laser mean: %f",laser_mean);
             // std::cout<< "Laser mean :" <<laser_mean<<std::endl;
-        }
-        
+    
     }
     
