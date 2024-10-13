@@ -7,6 +7,7 @@
 #include <Eigen/Dense>
 #include "rclcpp/rclcpp.hpp"
 #include "sensor_msgs/msg/laser_scan.hpp"
+#include "geometry_msgs/msg/twist_stamped.hpp"
 
 using std::placeholders::_1;
 using namespace std::chrono_literals;
@@ -16,7 +17,8 @@ class ElevatorLoading : public rclcpp::Node
 public:
     ElevatorLoading()
     : Node("elevator_loading"), A(Eigen::MatrixXf::Ones(20, 2)), B(Eigen::VectorXf::Zero(20))
-    {
+    {   
+        orientation_publisher_ = this->create_publisher<geometry_msgs::msg::TwistStamped>("diff_drive_controller/cmd_vel", 10);
         laser_subscription_ = this->create_subscription<sensor_msgs::msg::LaserScan>(
             "scan", 10, std::bind(&ElevatorLoading::laser_callback, this, _1));
         timer_ = this->create_wall_timer(500ms, std::bind(&ElevatorLoading::set_orientation, this));
@@ -47,21 +49,45 @@ private:
             if (5 * i + 4 < laser_slice.size()) {
                 std::sort(laser_slice.begin() + 5 * i, laser_slice.begin() + 5 * i + 5); // Sort dynamic window of 5 elements
                 filtered_points.push_back(laser_slice[5 * i + 2]); // Get the middle reading as median
-                A(i, 1) = laser_slice[5 * i + 2] * cos((-28.8 + 3 * i) * (M_PI / 180.0));
-                B(i) = laser_slice[5 * i + 2] * sin((-28.8 + 3 * i) * (M_PI / 180.0));
+                A(i, 1) = laser_slice[5 * i + 2] * cos((90-(-28.8 + 3 * i)) * (M_PI / 180.0));
+                B(i) = laser_slice[5 * i + 2] * sin((90-(-28.8 + 3 * i)) * (M_PI / 180.0));
             }
         }
 
         Eigen::VectorXf X = ((A.transpose()*A).inverse())*A.transpose()*B;
-        std::cout<<X[0] <<" "<<X[1]<<std::endl;
-    }
+        //std::cout<<X[0] <<" "<<X[1]<<std::endl;
+        current_angle = (X[1]);
+        if(current_angle<0.08 and current_angle>-0.08)
+        {
+            omega = 0;
+            RCLCPP_INFO(this->get_logger(),"Rotation Complete");
+        }
+        else
+        {
+            omega = -(K_P*current_angle - K_D*(current_angle - prev_angle));
+        }
+        auto cmd_vel = geometry_msgs::msg::TwistStamped();
+        cmd_vel.twist.angular.z = omega;
+        orientation_publisher_->publish(cmd_vel);
 
+        prev_angle = current_angle;
+        // std::cout<<"angle: " <<current_angle <<std::endl;
+        // std::cout<<"Omega: " <<current_angle <<std::endl;
+
+    }
+    float K_P = 1.2;
+    float K_D = 0.8;
+
+    float current_angle;
+    float prev_angle;
+    float omega;
     Eigen::MatrixXf A; 
     Eigen::VectorXf B; 
     Eigen::VectorXf X; 
     std::vector<float> filtered_points;
     sensor_msgs::msg::LaserScan laser_scan;
     rclcpp::TimerBase::SharedPtr timer_;
+    rclcpp::Publisher<geometry_msgs::msg::TwistStamped>::SharedPtr orientation_publisher_;
     rclcpp::Subscription<sensor_msgs::msg::LaserScan>::SharedPtr laser_subscription_;
 };
 
