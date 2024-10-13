@@ -4,11 +4,13 @@
             <LoadMapFromSlam name="load_map_02" posegraph_file="posegraph_file_01"/>
             <GoToPose name="go_to_location1" loc="location1"/>
             <GoToPose name="go_to_location2" loc="location2"/>
-            <RotateToElevator name="Elevator_align"/>
-            <WaitEvent name="wait_event" event="elevator"/>
+            <ElevatorLoading name="Elevator_loading01" type="rotate"/>
+            <ElevatorLoading name="Elevator_loading02" type="check_door"/>
             <LoadMapFromSlam name="load_map_02" posegraph_file="posegraph_file_02"/>
             <GoToPose name="go_to_location3" loc="location3"/>
-            <WaitEvent name="wait_event" event="elevator"/>
+            <ElevatorLoading name="Elevator_loading03" type="wait"/>
+            <ElevatorLoading name="Elevator_loading04" type="rotate"/>
+            <ElevatorLoading name="Elevator_loading05" type="check_door"/>
             <LoadMapFromSlam name="load_map_03" posegraph_file="posegraph_file_04"/>
             <GoToPose name="go_to_location4" loc="location4"/> 
         </Sequence>

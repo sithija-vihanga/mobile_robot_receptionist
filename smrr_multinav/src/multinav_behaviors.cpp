@@ -217,31 +217,38 @@ WaitEvent::WaitEvent(const std::string &name, const BT::NodeConfiguration &confi
 
 ///////////////////////////////////////////////// Rotate to Elevator //////////////////////////////////////////////////////////
 
-RotateToElevator::RotateToElevator(const std::string &name, const BT::NodeConfiguration &config, rclcpp::Node::SharedPtr node_ptr)
+ElevatorLoading::ElevatorLoading(const std::string &name, const BT::NodeConfiguration &config, rclcpp::Node::SharedPtr node_ptr)
     : BT::StatefulActionNode(name, config), node_ptr_(node_ptr) ,A(Eigen::MatrixXf::Ones(20, 2)), B(Eigen::VectorXf::Zero(20))
     {   
         orientation_publisher_  = node_ptr_->create_publisher<geometry_msgs::msg::TwistStamped>("diff_drive_controller/cmd_vel", 10);
         laser_subscription_     = node_ptr_->create_subscription<sensor_msgs::msg::LaserScan>(
-            "scan", 10, std::bind(&RotateToElevator::laser_callback, this, _1));    
+            "scan", 10, std::bind(&ElevatorLoading::laser_callback, this, _1));    
         const std::string location_file = node_ptr_->get_parameter("location_file").as_string();
         YAML::Node locations = YAML::LoadFile(location_file);
         K_P = locations["rotate_to_elevator"]["K_P"].as<float>();
         K_D = locations["rotate_to_elevator"]["K_D"].as<float>();
-        RCLCPP_INFO(node_ptr_->get_logger(), "Rotate to elevator");
+
+        RCLCPP_INFO(node_ptr_->get_logger(), "Elevator loading initialized");
     }
 
-    BT::NodeStatus RotateToElevator::onStart()
+    BT::PortsList ElevatorLoading::providedPorts()
+    {
+        return {BT::InputPort<std::string>("type")};
+    }
+
+    BT::NodeStatus ElevatorLoading::onStart()
     {   
-        RCLCPP_INFO(node_ptr_->get_logger(), "Rotation started");
-        align_elevator_flag_ = false;
-        timer_ = node_ptr_->create_wall_timer(500ms, std::bind(&RotateToElevator::set_orientation, this));
+        RCLCPP_INFO(node_ptr_->get_logger(), "Elevator loading started");
+        action_type = getInput<std::string>("type");
+        complete_flag_ = false;
+        timer_ = node_ptr_->create_wall_timer(500ms, std::bind(&ElevatorLoading::scan_extractor, this));
         return BT::NodeStatus::RUNNING;
     }
 
-    BT::NodeStatus RotateToElevator::onRunning()
+    BT::NodeStatus ElevatorLoading::onRunning()
     {   
-        RCLCPP_INFO(node_ptr_->get_logger(), "Rotation running");
-        if (align_elevator_flag_)
+        RCLCPP_INFO(node_ptr_->get_logger(), "Elevator loading running");
+        if (complete_flag_)
         {
             return BT::NodeStatus::SUCCESS;
         }
@@ -249,17 +256,17 @@ RotateToElevator::RotateToElevator(const std::string &name, const BT::NodeConfig
         return BT::NodeStatus::RUNNING;
     }
 
-    void RotateToElevator::onHalted()
+    void ElevatorLoading::onHalted()
     {
         RCLCPP_INFO(node_ptr_->get_logger(), "rotate to elevator was halted.");
     }
 
-    void RotateToElevator::laser_callback(const sensor_msgs::msg::LaserScan & msg)
+    void ElevatorLoading::laser_callback(const sensor_msgs::msg::LaserScan & msg)
     {
         laser_scan = msg;
     }
 
-    void RotateToElevator::set_orientation()
+    void ElevatorLoading::scan_extractor()
     {   
         if (laser_scan.ranges.size() < 250) {
             RCLCPP_WARN(node_ptr_->get_logger(), "Not enough laser scan data received.");
@@ -282,25 +289,48 @@ RotateToElevator::RotateToElevator(const std::string &name, const BT::NodeConfig
                 B(i) = laser_slice[5 * i + 2] * sin((90-(-28.8 + 3 * i)) * (M_PI / 180.0));
             }
         }
-
-        Eigen::VectorXf X = ((A.transpose()*A).inverse())*A.transpose()*B;
-        current_angle = (X[1]);
-        if(current_angle<0.04 and current_angle>-0.04)
+        if(action_type.value() == "rotate")
         {
-            omega = 0;
-            align_elevator_flag_ = true;
+            Eigen::VectorXf X = ((A.transpose()*A).inverse())*A.transpose()*B;
+            current_angle = (X[1]);
+            if(current_angle<0.04 and current_angle>-0.04)
+            {
+                omega = 0;
+                complete_flag_ = true;
+                timer_.reset();
+                RCLCPP_INFO(node_ptr_->get_logger(),"Rotation Complete");
+                
+            }
+            else
+            {
+                omega = -(K_P*current_angle - K_D*(current_angle - prev_angle));
+            }
+            auto cmd_vel = geometry_msgs::msg::TwistStamped();
+            cmd_vel.twist.angular.z = omega;
+            orientation_publisher_->publish(cmd_vel);
+
+            prev_angle = current_angle;
+        }
+        else if(action_type.value() == "check_door")
+        {
+            laser_mean = std::accumulate(laser_slice.begin(), laser_slice.end(), 0.0)/laser_slice.size();
+            RCLCPP_INFO(node_ptr_->get_logger(),"laser mean: %f",laser_mean);
+            if(laser_mean > 3.0)
+            {
+                complete_flag_ = true;
+                timer_.reset();
+                RCLCPP_INFO(node_ptr_->get_logger(),"Door opened");
+            }
+        
+        else if(action_type.value() == "wait")
+        {
+            complete_flag_ = true;
             timer_.reset();
-            RCLCPP_INFO(node_ptr_->get_logger(),"Rotation Complete");
-            
+            RCLCPP_INFO(node_ptr_->get_logger(),"Wait complete");
         }
-        else
-        {
-            omega = -(K_P*current_angle - K_D*(current_angle - prev_angle));
+            //RCLCPP_INFO(node_ptr_->get_logger(),"laser mean: %f",laser_mean);
+            // std::cout<< "Laser mean :" <<laser_mean<<std::endl;
         }
-        auto cmd_vel = geometry_msgs::msg::TwistStamped();
-        cmd_vel.twist.angular.z = omega;
-        orientation_publisher_->publish(cmd_vel);
-
-        prev_angle = current_angle;
+        
     }
     

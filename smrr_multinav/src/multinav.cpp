@@ -48,12 +48,12 @@ void MultiNav::create_behavior_tree()
     };
     factory.registerBuilder<WaitEvent>("WaitEvent", wait_event_builder);
 
-    BT::NodeBuilder rotate_to_elevator_builder =
+    BT::NodeBuilder elevator_loading_builder =
         [=](const std::string &name, const BT::NodeConfiguration &config)
     {
-        return std::make_unique<RotateToElevator>(name, config, shared_from_this());
+        return std::make_unique<ElevatorLoading>(name, config, shared_from_this());
     };
-    factory.registerBuilder<RotateToElevator>("RotateToElevator", rotate_to_elevator_builder);
+    factory.registerBuilder<ElevatorLoading>("ElevatorLoading", elevator_loading_builder);
     
     tree_ = factory.createTreeFromFile(bt_xml_dir + "/tree.xml");
 }
