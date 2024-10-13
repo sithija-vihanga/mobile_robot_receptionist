@@ -241,7 +241,6 @@ RotateToElevator::RotateToElevator(const std::string &name, const BT::NodeConfig
     BT::NodeStatus RotateToElevator::onRunning()
     {   
         RCLCPP_INFO(node_ptr_->get_logger(), "Rotation running");
-        this->set_orientation();
         if (align_elevator_flag_)
         {
             return BT::NodeStatus::SUCCESS;
@@ -290,6 +289,7 @@ RotateToElevator::RotateToElevator(const std::string &name, const BT::NodeConfig
         {
             omega = 0;
             align_elevator_flag_ = true;
+            timer_.reset();
             RCLCPP_INFO(node_ptr_->get_logger(),"Rotation Complete");
             
         }
