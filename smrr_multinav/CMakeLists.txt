@@ -15,6 +15,7 @@ find_package(tf2 REQUIRED)
 find_package(tf2_geometry_msgs REQUIRED)
 find_package(slam_toolbox REQUIRED)
 find_package(Eigen3 REQUIRED)
+find_package(sensor_msgs REQUIRED)
 
 install (
   DIRECTORY config bt_xml launch
@@ -36,6 +37,8 @@ set(TARGET_DEPENDS
     tf2_ros
     tf2_geometry_msgs
     slam_toolbox
+    Eigen3
+    sensor_msgs
 )
 
 include_directories(include/${PROJECT_NAME})

@@ -1,3 +1,5 @@
+// Author: Sithija Ranaraja
+
 #include "multinav_behaviors.h"
 
 ///////////////////////////////////////////////// Go to Pose //////////////////////////////////////////////////////////
@@ -9,6 +11,7 @@ GoToPose::GoToPose(const std::string &name,
     {
         action_client_ptr_ = rclcpp_action::create_client<NavigateToPose>(node_ptr_, "/navigate_to_pose");
         done_flag_ = false;
+        RCLCPP_INFO(node_ptr_->get_logger(), "Go to pose initialized");
     }
 
     BT::PortsList GoToPose::providedPorts()
@@ -17,7 +20,8 @@ GoToPose::GoToPose(const std::string &name,
     }
 
     BT::NodeStatus GoToPose::onStart()
-    {
+    {   
+        RCLCPP_INFO(node_ptr_->get_logger(), "Go to pose started");
         BT::Optional<std::string> loc = getInput<std::string>("loc");
         const std::string location_file = node_ptr_->get_parameter("location_file").as_string();
 
@@ -46,7 +50,8 @@ GoToPose::GoToPose(const std::string &name,
     }
 
     BT::NodeStatus GoToPose::onRunning()
-    {
+    {   
+        RCLCPP_INFO(node_ptr_->get_logger(), "Go to pose running");
         if(done_flag_)
         {
             RCLCPP_INFO(node_ptr_->get_logger(), "[%s] goal reached\n",this->name());
@@ -69,8 +74,9 @@ GoToPose::GoToPose(const std::string &name,
 
 LoadMapFromSlam::LoadMapFromSlam(const std::string &name, const BT::NodeConfiguration &config, rclcpp::Node::SharedPtr node_ptr)
     : BT::StatefulActionNode(name, config), node_ptr_(node_ptr), tf_buffer_(node_ptr->get_clock()), tf_listener_(tf_buffer_)
-    {
+    {   
         client_ = node_ptr_->create_client<slam_toolbox::srv::DeserializePoseGraph>("/slam_toolbox/deserialize_map");
+        RCLCPP_INFO(node_ptr_->get_logger(), "Map loading initialized");
     }
 
     BT::PortsList LoadMapFromSlam::providedPorts()
@@ -80,6 +86,7 @@ LoadMapFromSlam::LoadMapFromSlam(const std::string &name, const BT::NodeConfigur
 
     BT::NodeStatus LoadMapFromSlam::onStart()
     {   
+        RCLCPP_INFO(node_ptr_->get_logger(), "Map loading started");
         BT::Optional<std::string> posegraph_file = getInput<std::string>("posegraph_file");
         const std::string location_file = node_ptr_->get_parameter("location_file").as_string();
         YAML::Node locations = YAML::LoadFile(location_file);
@@ -124,7 +131,8 @@ LoadMapFromSlam::LoadMapFromSlam(const std::string &name, const BT::NodeConfigur
     }
 
     BT::NodeStatus LoadMapFromSlam::onRunning()
-    {
+    {   
+        RCLCPP_INFO(node_ptr_->get_logger(), "Map loading running");
         if (map_loading_done_flag_)
         {   
             map_loading_done_flag_ = false;
@@ -164,6 +172,7 @@ WaitEvent::WaitEvent(const std::string &name, const BT::NodeConfiguration &confi
         subscription_ = node_ptr_->create_subscription<std_msgs::msg::Bool>(
             "wait_event", 10,
             std::bind(&WaitEvent::wait_event_callback, this, std::placeholders::_1));
+        RCLCPP_INFO(node_ptr_->get_logger(), "Wait event initialized");
     }
 
     BT::PortsList WaitEvent::providedPorts()
@@ -172,7 +181,8 @@ WaitEvent::WaitEvent(const std::string &name, const BT::NodeConfiguration &confi
     }
 
     BT::NodeStatus WaitEvent::onStart()
-    {
+    {   
+        RCLCPP_INFO(node_ptr_->get_logger(), "Wait event started");
         BT::Optional<std::string> posegraph_file = getInput<std::string>("event");
         const std::string location_file = node_ptr_->get_parameter("location_file").as_string();
         YAML::Node locations = YAML::LoadFile(location_file);
@@ -182,7 +192,8 @@ WaitEvent::WaitEvent(const std::string &name, const BT::NodeConfiguration &confi
     }
 
     BT::NodeStatus WaitEvent::onRunning()
-    {
+    {   
+        RCLCPP_INFO(node_ptr_->get_logger(), "Wait event running");
         if (wait_event_flag_)
         {
             return BT::NodeStatus::SUCCESS;
@@ -203,4 +214,93 @@ WaitEvent::WaitEvent(const std::string &name, const BT::NodeConfiguration &confi
             wait_event_flag_ = true;
         }
     }
-                    
+
+///////////////////////////////////////////////// Rotate to Elevator //////////////////////////////////////////////////////////
+
+RotateToElevator::RotateToElevator(const std::string &name, const BT::NodeConfiguration &config, rclcpp::Node::SharedPtr node_ptr)
+    : BT::StatefulActionNode(name, config), node_ptr_(node_ptr) ,A(Eigen::MatrixXf::Ones(20, 2)), B(Eigen::VectorXf::Zero(20))
+    {   
+        orientation_publisher_  = node_ptr_->create_publisher<geometry_msgs::msg::TwistStamped>("diff_drive_controller/cmd_vel", 10);
+        laser_subscription_     = node_ptr_->create_subscription<sensor_msgs::msg::LaserScan>(
+            "scan", 10, std::bind(&RotateToElevator::laser_callback, this, _1));    
+        const std::string location_file = node_ptr_->get_parameter("location_file").as_string();
+        YAML::Node locations = YAML::LoadFile(location_file);
+        K_P = locations["rotate_to_elevator"]["K_P"].as<float>();
+        K_D = locations["rotate_to_elevator"]["K_D"].as<float>();
+        RCLCPP_INFO(node_ptr_->get_logger(), "Rotate to elevator");
+    }
+
+    BT::NodeStatus RotateToElevator::onStart()
+    {   
+        RCLCPP_INFO(node_ptr_->get_logger(), "Rotation started");
+        align_elevator_flag_ = false;
+        timer_ = node_ptr_->create_wall_timer(500ms, std::bind(&RotateToElevator::set_orientation, this));
+        return BT::NodeStatus::RUNNING;
+    }
+
+    BT::NodeStatus RotateToElevator::onRunning()
+    {   
+        RCLCPP_INFO(node_ptr_->get_logger(), "Rotation running");
+        this->set_orientation();
+        if (align_elevator_flag_)
+        {
+            return BT::NodeStatus::SUCCESS;
+        }
+
+        return BT::NodeStatus::RUNNING;
+    }
+
+    void RotateToElevator::onHalted()
+    {
+        RCLCPP_INFO(node_ptr_->get_logger(), "rotate to elevator was halted.");
+    }
+
+    void RotateToElevator::laser_callback(const sensor_msgs::msg::LaserScan & msg)
+    {
+        laser_scan = msg;
+    }
+
+    void RotateToElevator::set_orientation()
+    {   
+        if (laser_scan.ranges.size() < 250) {
+            RCLCPP_WARN(node_ptr_->get_logger(), "Not enough laser scan data received.");
+            return;
+        }
+
+        std::vector<float> laser_slice(laser_scan.ranges.begin() + 149, laser_scan.ranges.begin() + 250);
+        if (laser_slice.size() < 100) { 
+            RCLCPP_WARN(node_ptr_->get_logger(), "Laser slice does not contain enough elements.");
+            return;
+        }
+
+        filtered_points.clear();
+        for (int i = 0; i < 20; i++) 
+        {
+            if (5 * i + 4 < laser_slice.size()) {
+                std::sort(laser_slice.begin() + 5 * i, laser_slice.begin() + 5 * i + 5); // Sort dynamic window of 5 elements
+                filtered_points.push_back(laser_slice[5 * i + 2]); // Get the middle reading as median
+                A(i, 1) = laser_slice[5 * i + 2] * cos((90-(-28.8 + 3 * i)) * (M_PI / 180.0));
+                B(i) = laser_slice[5 * i + 2] * sin((90-(-28.8 + 3 * i)) * (M_PI / 180.0));
+            }
+        }
+
+        Eigen::VectorXf X = ((A.transpose()*A).inverse())*A.transpose()*B;
+        current_angle = (X[1]);
+        if(current_angle<0.04 and current_angle>-0.04)
+        {
+            omega = 0;
+            align_elevator_flag_ = true;
+            RCLCPP_INFO(node_ptr_->get_logger(),"Rotation Complete");
+            
+        }
+        else
+        {
+            omega = -(K_P*current_angle - K_D*(current_angle - prev_angle));
+        }
+        auto cmd_vel = geometry_msgs::msg::TwistStamped();
+        cmd_vel.twist.angular.z = omega;
+        orientation_publisher_->publish(cmd_vel);
+
+        prev_angle = current_angle;
+    }
+    

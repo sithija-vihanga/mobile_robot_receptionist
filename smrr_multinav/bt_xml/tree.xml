@@ -4,6 +4,7 @@
             <LoadMapFromSlam name="load_map_02" posegraph_file="posegraph_file_01"/>
             <GoToPose name="go_to_location1" loc="location1"/>
             <GoToPose name="go_to_location2" loc="location2"/>
+            <RotateToElevator name="Elevator_align"/>
             <WaitEvent name="wait_event" event="elevator"/>
             <LoadMapFromSlam name="load_map_02" posegraph_file="posegraph_file_02"/>
             <GoToPose name="go_to_location3" loc="location3"/>

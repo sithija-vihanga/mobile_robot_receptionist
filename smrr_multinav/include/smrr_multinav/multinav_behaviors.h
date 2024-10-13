@@ -18,6 +18,18 @@
 #include <geometry_msgs/msg/transform_stamped.hpp>
 #include <tf2/exceptions.h>
 
+#include <chrono>
+#include <functional>
+#include <memory>
+#include <algorithm>
+#include <cmath>
+#include <Eigen/Dense>
+#include "sensor_msgs/msg/laser_scan.hpp"
+#include "geometry_msgs/msg/twist_stamped.hpp"
+
+using std::placeholders::_1;
+using namespace std::chrono_literals;
+
 class GoToPose : public BT::StatefulActionNode
 {
     public:
@@ -89,4 +101,36 @@ private:
     rclcpp::Subscription<std_msgs::msg::Bool>::SharedPtr subscription_;
     
     void wait_event_callback(const std_msgs::msg::Bool & msg);
+};
+
+class RotateToElevator : public BT::StatefulActionNode
+{
+public:
+    RotateToElevator(const std::string &name, const BT::NodeConfiguration &config, rclcpp::Node::SharedPtr node_ptr);
+
+    BT::NodeStatus onStart() override;
+
+    BT::NodeStatus onRunning() override;
+
+    void onHalted() override;
+
+private:
+    rclcpp::Node::SharedPtr node_ptr_;
+    float K_P;
+    float K_D;
+    bool align_elevator_flag_;
+    float current_angle;
+    float prev_angle;
+    float omega;
+    Eigen::MatrixXf A; 
+    Eigen::VectorXf B; 
+    Eigen::VectorXf X; 
+    std::vector<float> filtered_points;
+    sensor_msgs::msg::LaserScan laser_scan;
+    rclcpp::TimerBase::SharedPtr timer_;
+    rclcpp::Publisher<geometry_msgs::msg::TwistStamped>::SharedPtr orientation_publisher_;
+    rclcpp::Subscription<sensor_msgs::msg::LaserScan>::SharedPtr laser_subscription_;
+    
+    void laser_callback(const sensor_msgs::msg::LaserScan & msg);
+    void set_orientation();
 };

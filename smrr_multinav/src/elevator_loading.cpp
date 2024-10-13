@@ -57,7 +57,7 @@ private:
         Eigen::VectorXf X = ((A.transpose()*A).inverse())*A.transpose()*B;
         //std::cout<<X[0] <<" "<<X[1]<<std::endl;
         current_angle = (X[1]);
-        if(current_angle<0.08 and current_angle>-0.08)
+        if(current_angle<0.04 and current_angle>-0.04)
         {
             omega = 0;
             RCLCPP_INFO(this->get_logger(),"Rotation Complete");
@@ -75,8 +75,8 @@ private:
         // std::cout<<"Omega: " <<current_angle <<std::endl;
 
     }
-    float K_P = 1.2;
-    float K_D = 0.8;
+    float K_P = 1.0;
+    float K_D = 0.6;
 
     float current_angle;
     float prev_angle;
