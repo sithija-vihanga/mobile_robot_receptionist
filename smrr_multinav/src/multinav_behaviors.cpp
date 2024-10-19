@@ -253,6 +253,11 @@ MultiFloorGoal::MultiFloorGoal(const std::string &name, const BT::NodeConfigurat
         multinav_config = node_ptr_->get_parameter("multinav_config").as_string();
         multinav = YAML::LoadFile(multinav_config);
 
+        multinav["multinav_status"]["current_floor"] = multinav["multinav_status"]["desired_floor"].as<int>(); 
+        std::ofstream fout(multinav_config);
+        fout << multinav;
+        fout.close();
+
         goal_recieved_flag_ = false; 
         return BT::NodeStatus::RUNNING;
     }
@@ -275,21 +280,28 @@ MultiFloorGoal::MultiFloorGoal(const std::string &name, const BT::NodeConfigurat
 
     void MultiFloorGoal::goal_callback(const geometry_msgs::msg::Twist & msg)
     {
-
         current_floor_ = multinav["multinav_status"]["current_floor"].as<int>();
-        desired_floor_ = msg.linear.z;
-
+        desired_floor_ = (int)msg.linear.z;
+        
         std::string current_open_map_path   = multinav["preloaded_maps"]["openedMap"+ std::to_string(current_floor_)].as<std::string>();
         std::string current_close_map_path  = multinav["preloaded_maps"]["closedMap"+ std::to_string(current_floor_)].as<std::string>();
         std::string desired_open_map_path   = multinav["preloaded_maps"]["openedMap"+ std::to_string(desired_floor_)].as<std::string>();
+     
 
         multinav["multinav_status"]["current_floor_opened"] = current_open_map_path;
         multinav["multinav_status"]["current_floor_closed"] = current_close_map_path;
         multinav["multinav_status"]["desired_floor_opened"] = desired_open_map_path;
+        multinav["multinav_status"]["desired_floor"] = desired_floor_;
+
+        std::vector<double> goal = {msg.linear.x, msg.linear.y, msg.angular.z};
+
+        multinav["elevator_locations"]["location4"] = goal;  
 
         std::ofstream fout(multinav_config);
-        fout << config;
+        fout << multinav;
         fout.close();
+
+        goal_recieved_flag_ = true;
 
 
     }

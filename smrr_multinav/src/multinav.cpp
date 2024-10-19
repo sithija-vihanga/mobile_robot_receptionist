@@ -55,6 +55,13 @@ void MultiNav::create_behavior_tree()
         return std::make_unique<ElevatorLoading>(name, config, shared_from_this());
     };
     factory.registerBuilder<ElevatorLoading>("ElevatorLoading", elevator_loading_builder);
+
+    BT::NodeBuilder multi_floor_goal_builder =
+        [=](const std::string &name, const BT::NodeConfiguration &config)
+    {
+        return std::make_unique<MultiFloorGoal>(name, config, shared_from_this());
+    };
+    factory.registerBuilder<MultiFloorGoal>("MultiFloorGoal", multi_floor_goal_builder);
     
     tree_ = factory.createTreeFromFile(bt_xml_dir + "/tree.xml");
 }

@@ -1,6 +1,7 @@
 <root main_tree_to_execute = "MainTree">
     <BehaviorTree ID="MainTree">
         <Sequence name="sequence">
+            <MultiFloorGoal name="get_goal"/>
             <LoadMapFromSlam name="load_map_02" type="current_floor_closed"/>
             <GoToPose name="go_to_location2" loc="location2"/>
             <ElevatorLoading name="Elevator_loading01" type="rotate"/>
