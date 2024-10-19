@@ -1,0 +1,19 @@
+
+elevator_locations:
+  location1: [2.0, -2.12, -0.5]
+  location2: [3.0, 0.5, 1.57] #[-2.52, -0.90, 1.57]
+  location3: [3.0, 1.2, -1.57] #[3.0, 1.5, -1.57]
+  location4: [-3.0, -3.0, -1.57]
+  location5: [-3.0, -3.0, -1.57]
+
+preloaded_maps:
+  posegraph_file_01: "/home/sithija/mobile_receptionist_ws/src/smrr_localization/maps/BT_floor_02_closed"
+  posegraph_file_02: "/home/sithija/mobile_receptionist_ws/src/smrr_localization/maps/BT_floor_02_open"
+  posegraph_file_03: "/home/sithija/mobile_receptionist_ws/src/smrr_localization/maps/BT_floor_03_closed"
+  posegraph_file_04: "/home/sithija/mobile_receptionist_ws/src/smrr_localization/maps/BT_floor_03_open"
+
+rotate_to_elevator:
+  K_P: 1.0
+  K_D: 0.6
+
+#event: "elevator_wait"

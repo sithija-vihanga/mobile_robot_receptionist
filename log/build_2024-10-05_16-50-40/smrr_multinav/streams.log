@@ -63,7 +63,7 @@
 [5.717s] Invoking command in '/home/sithija/mobile_receptionist_ws/src/build/smrr_multinav': CMAKE_PREFIX_PATH=/home/sithija/mobile_receptionist_ws/install/smrr_utilities:/home/sithija/mobile_receptionist_ws/install/smrr_crowd_nav:/home/sithija/mobile_receptionist_ws/install/goal_predictor:/home/sithija/mini_project/install/crowd_simulator:/opt/ros/humble:${CMAKE_PREFIX_PATH} /usr/bin/cmake --install /home/sithija/mobile_receptionist_ws/src/build/smrr_multinav
 [5.723s] -- Install configuration: ""
 [5.724s] -- Execute custom install script
-[5.724s] -- Symlinking: /home/sithija/mobile_receptionist_ws/src/install/smrr_multinav/share/smrr_multinav/config/locations.yaml
+[5.724s] -- Symlinking: /home/sithija/mobile_receptionist_ws/src/install/smrr_multinav/share/smrr_multinav/config/multinav.yaml
 [5.733s] -- Symlinking: /home/sithija/mobile_receptionist_ws/src/install/smrr_multinav/share/smrr_multinav/config/mapper_params_online_async.yaml
 [5.743s] -- Symlinking: /home/sithija/mobile_receptionist_ws/src/install/smrr_multinav/share/smrr_multinav/config/nav2_params.yaml
 [5.752s] -- Symlinking: /home/sithija/mobile_receptionist_ws/src/install/smrr_multinav/share/smrr_multinav/bt_xml/tree.xml

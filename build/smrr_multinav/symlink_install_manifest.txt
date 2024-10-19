@@ -1,4 +1,4 @@
-/home/sithija/mobile_receptionist_ws/src/install/smrr_multinav/share/smrr_multinav/config/locations.yaml
+/home/sithija/mobile_receptionist_ws/src/install/smrr_multinav/share/smrr_multinav/config/multinav.yaml
 /home/sithija/mobile_receptionist_ws/src/install/smrr_multinav/share/smrr_multinav/config/mapper_params_online_async.yaml
 /home/sithija/mobile_receptionist_ws/src/install/smrr_multinav/share/smrr_multinav/config/nav2_params.yaml
 /home/sithija/mobile_receptionist_ws/src/install/smrr_multinav/share/smrr_multinav/bt_xml/tree.xml

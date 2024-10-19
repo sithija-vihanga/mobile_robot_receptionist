@@ -4,7 +4,7 @@
 [100%] Built target multinav
 -- Install configuration: ""
 -- Execute custom install script
--- Up-to-date symlink: /home/sithija/mobile_receptionist_ws/src/install/smrr_multinav/share/smrr_multinav/config/locations.yaml
+-- Up-to-date symlink: /home/sithija/mobile_receptionist_ws/src/install/smrr_multinav/share/smrr_multinav/config/multinav.yaml
 -- Up-to-date symlink: /home/sithija/mobile_receptionist_ws/src/install/smrr_multinav/share/smrr_multinav/config/mapper_params_online_async.yaml
 -- Up-to-date symlink: /home/sithija/mobile_receptionist_ws/src/install/smrr_multinav/share/smrr_multinav/config/nav2_params.yaml
 -- Up-to-date symlink: /home/sithija/mobile_receptionist_ws/src/install/smrr_multinav/share/smrr_multinav/bt_xml/tree.xml

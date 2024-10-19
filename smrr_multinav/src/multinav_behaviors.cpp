@@ -23,10 +23,10 @@ GoToPose::GoToPose(const std::string &name,
     {   
         RCLCPP_INFO(node_ptr_->get_logger(), "Go to pose started");
         BT::Optional<std::string> loc = getInput<std::string>("loc");
-        const std::string location_file = node_ptr_->get_parameter("location_file").as_string();
+        const std::string multinav_config = node_ptr_->get_parameter("multinav_config").as_string();
 
-        YAML::Node locations = YAML::LoadFile(location_file);
-        std::vector<float> pose = locations[loc.value()].as<std::vector<float>>();
+        YAML::Node multinav = YAML::LoadFile(multinav_config);
+        std::vector<float> pose = multinav["elevator_locations"][loc.value()].as<std::vector<float>>();
 
         auto send_goal_options = rclcpp_action::Client<NavigateToPose>::SendGoalOptions();
         send_goal_options.result_callback = std::bind(&GoToPose::nav_to_pose_callback, this, std::placeholders::_1);
@@ -88,9 +88,9 @@ LoadMapFromSlam::LoadMapFromSlam(const std::string &name, const BT::NodeConfigur
     {   
         RCLCPP_INFO(node_ptr_->get_logger(), "Map loading started");
         BT::Optional<std::string> posegraph_file = getInput<std::string>("posegraph_file");
-        const std::string location_file = node_ptr_->get_parameter("location_file").as_string();
-        YAML::Node locations = YAML::LoadFile(location_file);
-        std::string map_path = locations[posegraph_file.value()].as<std::string>();
+        const std::string multinav_config = node_ptr_->get_parameter("multinav_config").as_string();
+        YAML::Node multinav = YAML::LoadFile(multinav_config);
+        std::string map_path = multinav["preloaded_maps"][posegraph_file.value()].as<std::string>();
 
         auto request = std::make_shared<slam_toolbox::srv::DeserializePoseGraph::Request>();
         RCLCPP_INFO(node_ptr_->get_logger(), "Map file path: %s", map_path.c_str());
@@ -184,8 +184,8 @@ WaitEvent::WaitEvent(const std::string &name, const BT::NodeConfiguration &confi
     {   
         RCLCPP_INFO(node_ptr_->get_logger(), "Wait event started");
         BT::Optional<std::string> posegraph_file = getInput<std::string>("event");
-        const std::string location_file = node_ptr_->get_parameter("location_file").as_string();
-        YAML::Node locations = YAML::LoadFile(location_file);
+        const std::string multinav_config = node_ptr_->get_parameter("multinav_config").as_string();
+        YAML::Node multinav = YAML::LoadFile(multinav_config);
 
         wait_event_flag_ = false; 
         return BT::NodeStatus::RUNNING;
@@ -223,10 +223,10 @@ ElevatorLoading::ElevatorLoading(const std::string &name, const BT::NodeConfigur
         orientation_publisher_  = node_ptr_->create_publisher<geometry_msgs::msg::TwistStamped>("diff_drive_controller/cmd_vel", 10);
         laser_subscription_     = node_ptr_->create_subscription<sensor_msgs::msg::LaserScan>(
             "scan", 10, std::bind(&ElevatorLoading::laser_callback, this, _1));    
-        const std::string location_file = node_ptr_->get_parameter("location_file").as_string();
-        YAML::Node locations = YAML::LoadFile(location_file);
-        K_P = locations["rotate_to_elevator"]["K_P"].as<float>();
-        K_D = locations["rotate_to_elevator"]["K_D"].as<float>();
+        const std::string multinav_config = node_ptr_->get_parameter("multinav_config").as_string();
+        YAML::Node multinav = YAML::LoadFile(multinav_config);
+        K_P = multinav["rotate_to_elevator"]["K_P"].as<float>();
+        K_D = multinav["rotate_to_elevator"]["K_D"].as<float>();
 
         RCLCPP_INFO(node_ptr_->get_logger(), "Elevator loading initialized");
     }

@@ -12,7 +12,7 @@ def generate_launch_description():
         executable="multinav",
         name="multinav_node",
         parameters=[{
-            "location_file": os.path.join(get_package_share_directory("smrr_multinav"), "config", "locations.yaml")
+            "multinav_config": os.path.join(get_package_share_directory("smrr_multinav"), "config", "multinav.yaml")
         }]
     )
 

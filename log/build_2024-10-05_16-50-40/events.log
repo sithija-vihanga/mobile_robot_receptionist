@@ -136,7 +136,7 @@
 [5.720134] (-) TimerEvent: {}
 [5.725102] (smrr_multinav) StdoutLine: {'line': b'-- Install configuration: ""\n'}
 [5.725453] (smrr_multinav) StdoutLine: {'line': b'-- Execute custom install script\n'}
-[5.725811] (smrr_multinav) StdoutLine: {'line': b'-- Symlinking: /home/sithija/mobile_receptionist_ws/src/install/smrr_multinav/share/smrr_multinav/config/locations.yaml\n'}
+[5.725811] (smrr_multinav) StdoutLine: {'line': b'-- Symlinking: /home/sithija/mobile_receptionist_ws/src/install/smrr_multinav/share/smrr_multinav/config/multinav.yaml\n'}
 [5.735024] (smrr_multinav) StdoutLine: {'line': b'-- Symlinking: /home/sithija/mobile_receptionist_ws/src/install/smrr_multinav/share/smrr_multinav/config/mapper_params_online_async.yaml\n'}
 [5.744363] (smrr_multinav) StdoutLine: {'line': b'-- Symlinking: /home/sithija/mobile_receptionist_ws/src/install/smrr_multinav/share/smrr_multinav/config/nav2_params.yaml\n'}
 [5.754099] (smrr_multinav) StdoutLine: {'line': b'-- Symlinking: /home/sithija/mobile_receptionist_ws/src/install/smrr_multinav/share/smrr_multinav/bt_xml/tree.xml\n'}
