@@ -81,16 +81,17 @@ LoadMapFromSlam::LoadMapFromSlam(const std::string &name, const BT::NodeConfigur
 
     BT::PortsList LoadMapFromSlam::providedPorts()
     {
-        return {BT::InputPort<std::string>("posegraph_file")};
+        return {BT::InputPort<std::string>("type")};
     }
 
     BT::NodeStatus LoadMapFromSlam::onStart()
     {   
         RCLCPP_INFO(node_ptr_->get_logger(), "Map loading started");
-        BT::Optional<std::string> posegraph_file = getInput<std::string>("posegraph_file");
+        BT::Optional<std::string> type = getInput<std::string>("type");
         const std::string multinav_config = node_ptr_->get_parameter("multinav_config").as_string();
         YAML::Node multinav = YAML::LoadFile(multinav_config);
-        std::string map_path = multinav["preloaded_maps"][posegraph_file.value()].as<std::string>();
+        //std::string map_path = multinav["preloaded_maps"][type.value()].as<std::string>();
+        std::string map_path = multinav["multinav_status"][type.value()].as<std::string>();
 
         auto request = std::make_shared<slam_toolbox::srv::DeserializePoseGraph::Request>();
         RCLCPP_INFO(node_ptr_->get_logger(), "Map file path: %s", map_path.c_str());
@@ -197,7 +198,7 @@ WaitEvent::WaitEvent(const std::string &name, const BT::NodeConfiguration &confi
     BT::NodeStatus WaitEvent::onStart()
     {   
         RCLCPP_INFO(node_ptr_->get_logger(), "Wait event started");
-        BT::Optional<std::string> posegraph_file = getInput<std::string>("event");
+        BT::Optional<std::string> type = getInput<std::string>("event");
         const std::string multinav_config = node_ptr_->get_parameter("multinav_config").as_string();
         YAML::Node multinav = YAML::LoadFile(multinav_config);
 
@@ -228,6 +229,71 @@ WaitEvent::WaitEvent(const std::string &name, const BT::NodeConfiguration &confi
             wait_event_flag_ = true;
         }
     }
+
+///////////////////////////////////////////////// Multi Floor Goal //////////////////////////////////////////////////////////
+
+MultiFloorGoal::MultiFloorGoal(const std::string &name, const BT::NodeConfiguration &config, rclcpp::Node::SharedPtr node_ptr)
+    : BT::StatefulActionNode(name, config), node_ptr_(node_ptr)
+    {
+        subscription_ = node_ptr_->create_subscription<geometry_msgs::msg::Twist>(
+            "multinav_goal", 10,
+            std::bind(&MultiFloorGoal::goal_callback, this, std::placeholders::_1));
+        RCLCPP_INFO(node_ptr_->get_logger(), "Multi floor goal initialized");
+    }
+
+    BT::PortsList MultiFloorGoal::providedPorts()
+    {
+        return {BT::InputPort<std::string>("type")};
+    }
+
+    BT::NodeStatus MultiFloorGoal::onStart()
+    {   
+        RCLCPP_INFO(node_ptr_->get_logger(), "Multi floor goal started");
+        BT::Optional<std::string> type = getInput<std::string>("event");
+        multinav_config = node_ptr_->get_parameter("multinav_config").as_string();
+        multinav = YAML::LoadFile(multinav_config);
+
+        goal_recieved_flag_ = false; 
+        return BT::NodeStatus::RUNNING;
+    }
+
+    BT::NodeStatus MultiFloorGoal::onRunning()
+    {   
+        RCLCPP_INFO(node_ptr_->get_logger(), "Multi floor goal running");
+        if (goal_recieved_flag_)
+        {
+            return BT::NodeStatus::SUCCESS;
+        }
+
+        return BT::NodeStatus::RUNNING;
+    }
+
+    void MultiFloorGoal::onHalted()
+    {
+        RCLCPP_INFO(node_ptr_->get_logger(), "Multi floor goal was halted.");
+    }
+
+    void MultiFloorGoal::goal_callback(const geometry_msgs::msg::Twist & msg)
+    {
+
+        current_floor_ = multinav["multinav_status"]["current_floor"].as<int>();
+        desired_floor_ = msg.linear.z;
+
+        std::string current_open_map_path   = multinav["preloaded_maps"]["openedMap"+ std::to_string(current_floor_)].as<std::string>();
+        std::string current_close_map_path  = multinav["preloaded_maps"]["closedMap"+ std::to_string(current_floor_)].as<std::string>();
+        std::string desired_open_map_path   = multinav["preloaded_maps"]["openedMap"+ std::to_string(desired_floor_)].as<std::string>();
+
+        multinav["multinav_status"]["current_floor_opened"] = current_open_map_path;
+        multinav["multinav_status"]["current_floor_closed"] = current_close_map_path;
+        multinav["multinav_status"]["desired_floor_opened"] = desired_open_map_path;
+
+        std::ofstream fout(multinav_config);
+        fout << config;
+        fout.close();
+
+
+    }
+
 
 ///////////////////////////////////////////////// Rotate to Elevator //////////////////////////////////////////////////////////
 
@@ -338,7 +404,7 @@ ElevatorLoading::ElevatorLoading(const std::string &name, const BT::NodeConfigur
         }
         else if(action_type.value() == "wait")
         {
-            std::this_thread::sleep_for(std::chrono::seconds(10));
+            std::this_thread::sleep_for(std::chrono::seconds(3));
             complete_flag_ = true;
             timer_.reset();
             RCLCPP_INFO(node_ptr_->get_logger(),"Wait complete");

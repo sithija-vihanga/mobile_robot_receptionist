@@ -1,17 +1,16 @@
 <root main_tree_to_execute = "MainTree">
     <BehaviorTree ID="MainTree">
         <Sequence name="sequence">
-            <LoadMapFromSlam name="load_map_02" posegraph_file="posegraph_file_01"/>
-            <GoToPose name="go_to_location1" loc="location1"/>
+            <LoadMapFromSlam name="load_map_02" type="current_floor_closed"/>
             <GoToPose name="go_to_location2" loc="location2"/>
             <ElevatorLoading name="Elevator_loading01" type="rotate"/>
             <ElevatorLoading name="Elevator_loading02" type="check_door"/>
-            <LoadMapFromSlam name="load_map_02" posegraph_file="posegraph_file_02"/>
+            <LoadMapFromSlam name="load_map_02" type="current_floor_opened"/>
             <GoToPose name="go_to_location3" loc="location3"/>
             <ElevatorLoading name="Elevator_loading03" type="wait"/>
             <ElevatorLoading name="Elevator_loading04" type="rotate"/>
             <ElevatorLoading name="Elevator_loading05" type="check_door"/>
-            <LoadMapFromSlam name="load_map_03" posegraph_file="posegraph_file_04"/>
+            <LoadMapFromSlam name="load_map_03" type="desired_floor_opened"/>
             <GoToPose name="go_to_location4" loc="location4"/> 
         </Sequence>
     </BehaviorTree>

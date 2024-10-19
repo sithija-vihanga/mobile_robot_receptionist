@@ -28,6 +28,7 @@
 #include <Eigen/Dense>
 #include "sensor_msgs/msg/laser_scan.hpp"
 #include "geometry_msgs/msg/twist_stamped.hpp"
+#include <fstream>
 
 using std::placeholders::_1;
 using namespace std::chrono_literals;
@@ -105,6 +106,33 @@ private:
     
     void wait_event_callback(const std_msgs::msg::Bool & msg);
 };
+
+class MultiFloorGoal : public BT::StatefulActionNode
+{
+public:
+    MultiFloorGoal(const std::string &name, const BT::NodeConfiguration &config, rclcpp::Node::SharedPtr node_ptr);
+
+    static BT::PortsList providedPorts();
+
+    BT::NodeStatus onStart() override;
+
+    BT::NodeStatus onRunning() override;
+
+    void onHalted() override;
+
+    bool goal_recieved_flag_;
+    int current_floor_;
+    int desired_floor_;
+    YAML::Node multinav;
+    std::string multinav_config;
+
+private:
+    rclcpp::Node::SharedPtr node_ptr_;
+    rclcpp::Subscription<geometry_msgs::msg::Twist>::SharedPtr subscription_;
+    
+    void goal_callback(const geometry_msgs::msg::Twist & msg);
+};
+
 
 class ElevatorLoading : public BT::StatefulActionNode
 {
