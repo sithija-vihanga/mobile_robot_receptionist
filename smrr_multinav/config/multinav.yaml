@@ -1,3 +1,16 @@
+multinav_status:
+  current_floor: 2
+  desired_floor: 3
+
+  current_floor_opened:
+  current_floor_closed:
+
+  desired_floor_opened:
+  desired_floor_closed:
+
+dock_station:
+  floor_no: 2
+  location: [-3.0, -3.0, 0.0]
 
 elevator_locations:
   location1: [2.0, -2.12, -0.5]

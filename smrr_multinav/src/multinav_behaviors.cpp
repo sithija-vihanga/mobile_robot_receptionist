@@ -118,11 +118,25 @@ LoadMapFromSlam::LoadMapFromSlam(const std::string &name, const BT::NodeConfigur
         mat.getRPY(roll, pitch, yaw);
         RCLCPP_INFO(node_ptr_->get_logger(), "Roll: %f, Pitch: %f, Yaw: %f", roll, pitch, yaw);
 
+        start_from_dock = node_ptr_->get_parameter("start_from_dock").as_bool();
 
         geometry_msgs::msg::Pose2D pose;  
-        pose.x = last_pose_.transform.translation.x;
-        pose.y = last_pose_.transform.translation.y;
-        pose.theta = yaw;
+        if(start_from_dock)
+        {
+            std::vector<float> dock_pose = multinav["dock_station"]["location"].as<std::vector<float>>();
+            pose.x      = dock_pose[0];
+            pose.y      = dock_pose[1];
+            pose.theta  = dock_pose[2];
+
+            node_ptr_->set_parameter(rclcpp::Parameter("start_from_dock", false));
+        }
+        else
+        {
+            pose.x      = last_pose_.transform.translation.x;
+            pose.y      = last_pose_.transform.translation.y;
+            pose.theta  = yaw;
+        }
+   
         request->initial_pose= pose; //geometry_msgs.msg.Pose2D(x=0.0, y=0.0, theta=0.0); // Change at run time
 
         future_ = client_->async_send_request(request);

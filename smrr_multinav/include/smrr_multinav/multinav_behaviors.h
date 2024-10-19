@@ -76,6 +76,7 @@ private:
     bool map_loading_done_flag_;
     geometry_msgs::msg::TransformStamped last_pose_;
     double roll, pitch, yaw;
+    bool start_from_dock;
 
     tf2_ros::Buffer tf_buffer_;
     tf2_ros::TransformListener tf_listener_;

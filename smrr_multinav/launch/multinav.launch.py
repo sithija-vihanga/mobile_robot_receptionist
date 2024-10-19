@@ -11,9 +11,9 @@ def generate_launch_description():
         package="smrr_multinav",
         executable="multinav",
         name="multinav_node",
-        parameters=[{
-            "multinav_config": os.path.join(get_package_share_directory("smrr_multinav"), "config", "multinav.yaml")
-        }]
+        parameters=[
+            {"multinav_config": os.path.join(get_package_share_directory("smrr_multinav"), "config", "multinav.yaml")},
+            {"start_from_dock": True}]
     )
 
     return LaunchDescription([
