@@ -1,19 +1,19 @@
 multinav_status:
   current_floor: 2
-  desired_floor: 2
-  current_floor_opened: /home/sithija/mobile_receptionist_ws/src/smrr_localization/maps/BT_floor_03_open
-  current_floor_closed: /home/sithija/mobile_receptionist_ws/src/smrr_localization/maps/BT_floor_03_closed
-  desired_floor_opened: /home/sithija/mobile_receptionist_ws/src/smrr_localization/maps/BT_floor_02_open
+  desired_floor: 3
+  current_floor_opened: /home/sithija/mobile_receptionist_ws/src/smrr_localization/maps/BT_floor_02_open
+  current_floor_closed: /home/sithija/mobile_receptionist_ws/src/smrr_localization/maps/BT_floor_02_closed
+  desired_floor_opened: /home/sithija/mobile_receptionist_ws/src/smrr_localization/maps/BT_floor_03_open
 dock_station:
   floor_no: 2
   location: [-3.0, -3.0, 0.0]
 elevator_locations:
   location1: [2.0, -2.12, -0.5]
   location2: [3.0, 0.5, 1.57]
-  location3: [3.0, 1.2, -1.57]
+  location3: [3.0, 1.35, -1.57]
   location4:
     - 8
-    - -3
+    - -4
     - 0
 preloaded_maps:
   closedMap2: /home/sithija/mobile_receptionist_ws/src/smrr_localization/maps/BT_floor_02_closed

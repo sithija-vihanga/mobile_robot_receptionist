@@ -125,6 +125,7 @@ public:
     int desired_floor_;
     YAML::Node multinav;
     std::string multinav_config;
+    bool start_from_dock;
 
 private:
     rclcpp::Node::SharedPtr node_ptr_;

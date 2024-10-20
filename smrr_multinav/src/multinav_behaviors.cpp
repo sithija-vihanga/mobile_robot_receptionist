@@ -253,7 +253,15 @@ MultiFloorGoal::MultiFloorGoal(const std::string &name, const BT::NodeConfigurat
         multinav_config = node_ptr_->get_parameter("multinav_config").as_string();
         multinav = YAML::LoadFile(multinav_config);
 
-        multinav["multinav_status"]["current_floor"] = multinav["multinav_status"]["desired_floor"].as<int>(); 
+        start_from_dock = node_ptr_->get_parameter("start_from_dock").as_bool();
+        if(start_from_dock)
+        {
+            multinav["multinav_status"]["current_floor"] = multinav["dock_station"]["floor_no"].as<int>(); 
+        }
+        else
+        {
+            multinav["multinav_status"]["current_floor"] = multinav["multinav_status"]["desired_floor"].as<int>(); 
+        }
         std::ofstream fout(multinav_config);
         fout << multinav;
         fout.close();
