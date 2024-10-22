@@ -1,0 +1,20 @@
+elevator_interaction:
+  depth: 0.61
+  gradient: 0.05
+  initial_pose:
+    pitch: 0.0
+    roll: 0.0
+    x: 0.516
+    y: -0.02
+    yaw: 0.0
+    z: 0.286
+  pixel_coordinates:
+    x: 720
+    y: 1080
+  target_pose:
+    pitch: 0.0
+    roll: 0.0
+    x: 0.631
+    y: -0.027
+    yaw: 0.0
+    z: 0.285

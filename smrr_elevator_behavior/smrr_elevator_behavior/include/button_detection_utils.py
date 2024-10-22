@@ -1,15 +1,14 @@
 import cv2
 from std_msgs.msg import Int16MultiArray
 from cv_bridge import CvBridge
+import yaml
 
 bridge = CvBridge()
 
 class ButtonDetectionUtils():
-    def __init__(self, node, target_button, img_pub, pixel_pub) :
+    def __init__(self, node, target_button) :
         self.node          = node
         self.target_button = target_button
-        self.img_pub       = img_pub
-        self.pixel_pub     = pixel_pub
 
 
     def detect_target_button(self, results, img, target_button, model):
@@ -18,9 +17,8 @@ class ButtonDetectionUtils():
             for box in boxes:
                 b = box.xyxy[0].to('cpu').detach().numpy().copy()
                 c = box.cls
-                conf = box.conf.item()
 
-                if model.names[int(c)] == target_button:
+                if (model.names[int(c)] == target_button):
                     x_min = int(b[0])  
                     y_min = int(b[1])  
                     x_max = int(b[2])  
@@ -37,7 +35,7 @@ class ButtonDetectionUtils():
 
                     return [mid_point_x, mid_point_y]
 
-        return None
+            return None
 
 
     def camera_callback(self, msg, model, target_button, img_pub, pixel_pub):
@@ -50,9 +48,16 @@ class ButtonDetectionUtils():
             self.node.get_logger().warn("Failed to detect target button : %s" % self.target_button)
             return
 
-        img_msg = bridge.cv2_to_imgmsg(img)
-        img_pub.publish(img_msg)
+        return pixel_point[0], pixel_point[1]
 
-        pixel_msg = Int16MultiArray()
-        pixel_msg.data = [pixel_point[0], pixel_point[1]]
-        pixel_pub.publish(pixel_msg)
+
+    def read_yaml(self, file_path):
+        with open(file_path, 'r') as yaml_file:
+            data = yaml.safe_load(yaml_file)
+        
+        return data
+    
+
+    def update_yaml(self, file_path, new_data):
+        with open(file_path, 'w') as yaml_file:
+            yaml.dump(new_data, yaml_file)

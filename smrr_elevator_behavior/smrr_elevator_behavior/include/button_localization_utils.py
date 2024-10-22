@@ -1,22 +1,18 @@
 import numpy as np
 from geometry_msgs.msg import Pose, PoseArray, Point
 from visualization_msgs.msg import Marker
+import yaml
 
 class ButtonLocalizationUtils():
-    def __init__(self, node, pose_pub_, goal_marker_, init_marker_, normal_pub_):
+    def __init__(self, node ):
+        self.node = node
         
-        self.node         = node
-        self.pose_pub_    = pose_pub_
-        self.goal_marker_ = goal_marker_
-        self.init_marker_ = init_marker_
-        self.normal_pub_  = normal_pub_
-
         # Intrinsic camera parameters
-        self.f_x = 537.6983672158217
-        self.f_y = 537.1784833375057
+        self.f_x   = 537.6983672158217
+        self.f_y   = 537.1784833375057
 
-        self.c_x = 640.9944295362419  
-        self.c_y = 362.64041228998025
+        self.c_x   = 640.9944295362419  
+        self.c_y   = 362.64041228998025
 
         # Transformation matrix from base_link to camera_link
         self.base_to_camera = np.array([
@@ -34,11 +30,7 @@ class ButtonLocalizationUtils():
             [0.000, 0.000, 0.000, 1.000]
         ])
 
-    def pose_calculation(self, pixel_x_, pixel_y_, normal, depth_):
-
-        depth    = depth_.data
-        pixel_x  = pixel_x_.data
-        pixel_y  = pixel_y_.data
+    def pose_calculation(self, pixel_x, pixel_y, normal, depth):
         
         X = depth * (pixel_x - self.c_x) / self.f_x
         Y = depth * (pixel_y - self.c_y) / self.f_y
@@ -64,10 +56,10 @@ class ButtonLocalizationUtils():
         pose_array.poses.append(init_pose)
         pose_array.poses.append(target_pose)
         pose_array.poses.append(init_pose)
-        self.pose_pub_.publish(pose_array)
+        # self.pose_pub_.publish(pose_array)
 
-        self.pose_visualizer([init_pose.position.x, init_pose.position.y, init_pose.position.z],
-                             [target_pose.position.x, target_pose.position.y, target_pose.position.z])
+        # self.pose_visualizer([init_pose.position.x, init_pose.position.y, init_pose.position.z],
+        #                      [target_pose.position.x, target_pose.position.y, target_pose.position.z])
 
         return init_pose, target_pose
     
@@ -94,17 +86,15 @@ class ButtonLocalizationUtils():
         marker.pose.position.x  = pose1[0]
         marker.pose.position.y  = pose1[1]
         marker.pose.position.z  = pose1[2]
-        self.init_marker_.publish(marker)
+        # self.init_marker_.publish(marker)
 
         marker.pose.position.x  = pose2[0]
         marker.pose.position.y  = pose2[1]
         marker.pose.position.z  = pose2[2]
-        self.goal_marker_.publish(marker)
+        # self.goal_marker_.publish(marker)
 
     
-    def normal_vector_calculation(self, grad_):
-
-        grad = grad_.data
+    def normal_vector_calculation(self, grad):
 
         normal = np.array([-1, grad, 0])                                          # 3D normal vector
         transformed_normal = np.dot(self.base_to_lidar, np.append(normal, 1))     # transform the normal to the lidar_link frame
@@ -150,4 +140,16 @@ class ButtonLocalizationUtils():
         marker.color.g          = 0.0  # Green
         marker.color.b          = 0.0  # Blue
 
-        self.normal_pub_.publish(marker)
+        # self.normal_pub_.publish(marker)
+
+
+    def read_yaml(self, file_path):
+        with open(file_path, 'r') as yaml_file:
+            data = yaml.safe_load(yaml_file)
+        
+        return data
+    
+
+    def update_yaml(self, file_path, new_data):
+        with open(file_path, 'w') as yaml_file:
+            yaml.dump(new_data, yaml_file)
