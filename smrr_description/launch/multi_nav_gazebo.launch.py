@@ -61,7 +61,8 @@ def generate_launch_description():
     spawn_robot = Node(package="gazebo_ros", executable="spawn_entity.py",
                         arguments=["-entity", "smrr",
                                    "-topic", "robot_description",
-                                   "-x", "-6.0", "-y", "-3.6", "-z" "6.35",   #"-x", "-3.0", "-y", "-0.6", "-z" "6.35",
+                                   "-x", "-6.0", "-y", "-3.6", "-z" "6.35",     # Charging Dock
+                                   #-x", "-3.0", "-y", "-0.6", "-z" "3.35",    # Map Frame
                                   ],
                         output="screen"
                         #"-x", "2.0", "-y", "0.6", "-z" ".35",   # ground floor elevator
