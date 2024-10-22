@@ -12,6 +12,7 @@ from cv_bridge import CvBridge
 import rclpy.parameter
 from sensor_msgs.msg import Image
 from std_msgs.msg import Int16MultiArray
+
 from .include.button_detection_utils import ButtonDetectionUtils
 import numpy as np
 
@@ -34,8 +35,8 @@ class ButtonDetection(Behaviour, Node):
   def setup(self):
     self.logger.debug(f"ButtonEstimation::setup {self.name}")
 
-    self.yaml_path      = "/home/sadeep/mobile_receptionist_ws/src/button_localization/config/elevator_interaction.yaml"
-    yolo_model_path     = "/home/sadeep/mobile_receptionist_ws/src/button_localization/button_localization/yolo_button_detection.pt"
+    self.yaml_path      = "/home/sithija/mobile_receptionist_ws/src/smrr_elevator_behavior/config/elevator_interaction.yaml"
+    yolo_model_path     = "/home/sithija/mobile_receptionist_ws/src/smrr_elevator_behavior/smrr_elevator_behavior/yolo_button_detection.pt"
     self.model          = YOLO(yolo_model_path)
 
     self.declare_parameter("target_button", "up")
@@ -45,8 +46,6 @@ class ButtonDetection(Behaviour, Node):
     self.button_detection_complete = False
 
     self.target_button   = self.get_parameter("target_button").get_parameter_value().string_value
-    self.subcriber_topic = self.get_parameter("subscriber_topic").get_parameter_value().string_value
-
     self.get_logger().info("Target button is set to : %s" % self.target_button)
     
     self.button_detection_utils = ButtonDetectionUtils(self, self.target_button)
@@ -99,7 +98,7 @@ class LineEstimation(Behaviour, Node):
     self.declare_parameter("start_angle", -45)
     self.declare_parameter("end_angle", 0)
 
-    self.yaml_path        = "/home/sadeep/mobile_receptionist_ws/src/button_localization/config/elevator_interaction.yaml"
+    self.yaml_path        = "/home/sithija/mobile_receptionist_ws/src/smrr_elevator_behavior/config/elevator_interaction.yaml"
 
     self.laser_sub_       = self.create_subscription(LaserScan, '/scan', self.lidar_callback, 10)
     self.button_info_pub_ = self.create_publisher(Float32MultiArray, '/button_localization/button_info', 1)
@@ -169,7 +168,7 @@ class ButtonLocalization(Behaviour, Node):
     
     self.button_localization_utils = ButtonLocalizationUtils(self)
 
-    self.yaml_path    = "/home/sadeep/mobile_receptionist_ws/src/button_localization/config/elevator_interaction.yaml"
+    self.yaml_path    = "/home/sithija/mobile_receptionist_ws/src/smrr_elevator_behavior/config/elevator_interaction.yaml"
 
   def initialise(self):
     self.logger.debug(f"ButtonLocalization::initialise {self.name}")
@@ -229,8 +228,20 @@ def make_bt():
           button_localization
       ]
   )
+  for child in root.children:
+    child.setup()  
 
   return root
+
+def main(args=None):
+    rclpy.init(args=args)
+
+    log_tree.level = log_tree.Level.DEBUG
+    tree = make_bt()
+    
+    tree.tick_once()
+
+    rclpy.shutdown()
 
 
 if __name__ == "__main__":

@@ -20,6 +20,7 @@ setup(
     tests_require=['pytest'],
     entry_points={
         'console_scripts': [
+            'elevator_bt     = smrr_elevator_behavior.elevator_behavior:main',
         ],
     },
 )
