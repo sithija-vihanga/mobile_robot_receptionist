@@ -46,6 +46,9 @@
 
     <transmission name="left_wheel_transmission">
         <plugin>transmission_interface/SimpleTransmission</plugin>
+        <joint name="left_wheel_joint">
+          <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
+        </joint>
         <actuator name="left_motor" role="actuator_left"/>
         <joint name="left_wheel_joint" role="joint_left">
            <mechanicalReduction>1.0</mechanicalReduction>
@@ -54,6 +57,9 @@
 
     <transmission name="right_wheel_transmission">
         <plugin>transmission_interface/SimpleTransmission</plugin>
+        <joint name="right_wheel_joint">
+          <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
+        </joint>
         <actuator name="right_motor" role="actuator_right"/>
         <joint name="right_wheel_joint" role="right_left">
            <mechanicalReduction>1.0</mechanicalReduction>
