@@ -58,8 +58,22 @@ def generate_launch_description():
         ]
     )
 
+    action_server = Node(
+        package="smrr_executions",
+        executable="arm_control_server_node",
+        output="screen"
+    )
+
+    action_client = Node(
+        package="smrr_executions",
+        executable="arm_control_client_node",
+        output="screen"
+    )
+
     return LaunchDescription([
         is_sim_arg,
         move_group_node,
-        rviz_node,
+        action_server,
+        action_client
+        #rviz_node,
     ])

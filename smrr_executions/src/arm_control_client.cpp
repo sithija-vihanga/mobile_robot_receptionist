@@ -19,7 +19,7 @@ public :
         {   
             this->declare_parameter<bool>("start_arm_control", false );
 
-            yaml_path_ = "/home/sadeep/mobile_receptionist_ws/src/button_localization/config/elevator_interaction.yaml" ;
+            yaml_path_ = "/home/sithija/mobile_receptionist_ws/src/smrr_elevator_behavior/config/elevator_interaction.yaml" ;
 
             client_  = rclcpp_action::create_client<smrr_interfaces::action::ArmControlServer>(this, "arm_control_server");
             timer_   = create_wall_timer(1s, std::bind(&ArmControlClient::timerCallback, this));
