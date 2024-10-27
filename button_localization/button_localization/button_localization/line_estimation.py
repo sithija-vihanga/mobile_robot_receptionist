@@ -26,7 +26,7 @@ class LineEstimator(Node):
         self.depth_buffer     = np.array([])
         self.buffer_size      = 5
 
-        self.yaml_path        = "/home/sadeep/mobile_receptionist_ws/src/button_localization/config/elevator_interaction.yaml"
+        self.yaml_path      = "/home/sithija/mobile_receptionist_ws/src/smrr_elevator_behavior/config/elevator_interaction.yaml"
 
         self.line_estimation_utils = LineEstimationUtils(self,self.button_info_pub_)
 

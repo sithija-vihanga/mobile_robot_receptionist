@@ -11,7 +11,7 @@ class ButtonLocalization(Node):
 
         self.button_localization_utils = ButtonLocalizationUtils(self)
 
-        self.yaml_path    = "/home/sadeep/mobile_receptionist_ws/src/button_localization/config/elevator_interaction.yaml"
+        self.yaml_path      = "/home/sithija/mobile_receptionist_ws/src/smrr_elevator_behavior/config/elevator_interaction.yaml"
         self.time_        = self.create_timer(0.1, self.check_pose_estimation_param)
         self.data         = self.button_localization_utils.read_yaml(self.yaml_path)
 

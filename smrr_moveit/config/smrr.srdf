@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<robot xmlns:xacro="http://ros.org/wiki/xacro" name="smrr" >
+
+    <group name="arm">
+        <!-- <joint name="base_joint" /> -->
+        <joint name="shoulder_r_joint" />
+        <joint name="bicep_r_joint" />
+        <joint name="elbow_r_joint" />
+        <joint name="wrist_r_joint" />
+        <link name="eef_r_link" />
+    </group>
+
+    <group_state name="home" group="arm">
+        <joint name="shoulder_r_joint" value="0" />
+        <joint name="bicep_r_joint" value="0" />
+        <joint name="elbow_r_joint" value="0" />
+        <joint name="wrist_r_joint" value="0" />
+    </group_state>
+
+    <group name="gripper">
+        <joint name="eef_r_joint" />
+        <link name="eef_r_link" />  
+    </group>
+
+    <end_effector name="end_eff" parent_link="eef_r_link" group="arm" />
+
+    <disable_collisions link1="base_link" link2="shoulder_r_link" reason="Adjacent" />
+    <disable_collisions link1="shoulder_r_link" link2="bicep_r_link" reason="Adjacent" />
+    <disable_collisions link1="bicep_r_link" link2="elbow_r_link" reason="Adjacent" />
+    <disable_collisions link1="elbow_r_link" link2="wrist_r_link" reason="Adjacent" />
+    
+</robot>

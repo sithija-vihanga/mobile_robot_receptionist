@@ -1,5 +1,5 @@
 multinav_status:
-  current_floor: 3
+  current_floor: 2
   desired_floor: 3
   current_floor_opened: /home/sithija/mobile_receptionist_ws/src/smrr_localization/maps/BT_floor_02_open
   current_floor_closed: /home/sithija/mobile_receptionist_ws/src/smrr_localization/maps/BT_floor_02_closed

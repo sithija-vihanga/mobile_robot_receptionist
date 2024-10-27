@@ -38,7 +38,7 @@ class ButtonDetectionUtils():
             return None
 
 
-    def camera_callback(self, msg, model, target_button, img_pub, pixel_pub):
+    def camera_callback(self, msg, model, target_button):
         img      = bridge.imgmsg_to_cv2(msg, "bgr8")
         results  = model(img)
 

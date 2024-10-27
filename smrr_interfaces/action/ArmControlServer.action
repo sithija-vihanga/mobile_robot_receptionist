@@ -1,0 +1,8 @@
+# Goal
+std_msgs/Float64MultiArray target_joints_angles
+---
+# Result
+bool success
+---
+# Feedback
+std_msgs/Float64MultiArray current_joints_angles

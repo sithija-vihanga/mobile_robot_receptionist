@@ -24,9 +24,8 @@ class ButtonDetection(Node):
 
         self.get_logger().info("Target button is set to : %s" % self.target_button)
         self.get_logger().info("Subscriber topic is set to : %s" % self.subcriber_topic)
-
-        self.yaml_path      = "/home/sadeep/mobile_receptionist_ws/src/button_localization/config/elevator_interaction.yaml"
-        yolo_model_path     = "/home/sadeep/mobile_receptionist_ws/src/button_localization/button_localization/yolo_button_detection.pt"
+        self.yaml_path      = "/home/sithija/mobile_receptionist_ws/src/smrr_elevator_behavior/config/elevator_interaction.yaml"
+        yolo_model_path     = "/home/sithija/mobile_receptionist_ws/src/smrr_elevator_behavior/smrr_elevator_behavior/yolo_button_detection.pt"
         self.model          = YOLO(yolo_model_path)
 
         self.img_sub_       = self.create_subscription(Image, "/zed2_left_camera/image_raw",self.camera_callback, 10)
@@ -46,7 +45,7 @@ class ButtonDetection(Node):
             if (len(self.x_pixel_buffer) < self.buffer_size) :
 
                 pixel_x, pixel_y = self.button_detection_utils.camera_callback(
-                    msg, self.model, self.target_button, self.img_pub_, self.pixel_pub_)
+                    msg, self.model, self.target_button)
                 
                 self.x_pixel_buffer = np.append(self.x_pixel_buffer, pixel_x)
                 self.y_pixel_buffer = np.append(self.y_pixel_buffer, pixel_y)

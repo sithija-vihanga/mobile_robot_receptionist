@@ -1,0 +1,21 @@
+trajectory_execution:
+  allowed_execution_duration_scaling: 100.0                          # scale up the allowed execution time, otherwise the execution will fail
+  # trajectory_execution_duration_monitoring: false                  # uncomment this line if you want to disable the monitoring , this will not consider the time taken for execution                
+
+# MoveIt uses this configuration for controller management
+moveit_controller_manager: moveit_simple_controller_manager/MoveItSimpleControllerManager
+
+moveit_simple_controller_manager:
+  controller_names:
+    - arm_controller
+   
+  arm_controller:
+    action_ns: follow_joint_trajectory
+    type: FollowJointTrajectory
+    default: true
+    joints:
+      - shoulder_r_joint
+      - bicep_r_joint
+      - elbow_r_joint
+      - wrist_r_joint
+
