@@ -1,1 +1,0 @@
-/home/sithija/mobile_receptionist_ws/src/smrr_multinav/launch/multinav.launch.py

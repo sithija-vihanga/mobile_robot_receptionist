@@ -24,6 +24,10 @@ include_directories(${YAML_CPP_INCLUDE_DIRS})
 target_link_libraries(${YAML_CPP_LIBRARIES})
 target_link_libraries(pose_to_angle_node ${YAML_CPP_LIBRARIES})
 
+add_executable(move_pose  src/move_pose.cpp)
+ament_target_dependencies(move_pose     rclcpp geometry_msgs moveit_ros_planning_interface )
+
+
 
 add_library(arm_control_server SHARED src/arm_control_server.cpp)
 target_include_directories(arm_control_server PRIVATE
@@ -65,6 +69,7 @@ rclcpp_components_register_node(arm_control_client
 
 INSTALL(TARGETS
 pose_to_angle_node
+move_pose
   DESTINATION lib/${PROJECT_NAME}
 )
 

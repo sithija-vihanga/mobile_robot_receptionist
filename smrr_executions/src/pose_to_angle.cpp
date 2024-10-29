@@ -21,7 +21,7 @@ PosetoAngle::PosetoAngle() : Node("pose_to_angle_node"),
             std::chrono::milliseconds(100), 
             std::bind(&PosetoAngle::timerCallback, this)) ;
 
-    yaml_path_ = "/home/sadeep/mobile_receptionist_ws/src/button_localization/config/elevator_interaction.yaml" ;
+    yaml_path_ = "/home/sithija/mobile_receptionist_ws/src/smrr_elevator_behavior/config/elevator_interaction.yaml" ;
 
     move_group_interface.setPlanningTime(5.0);
     move_group_interface.setPoseReferenceFrame("base_link");
@@ -54,7 +54,6 @@ PosetoAngle::PosetoAngle() : Node("pose_to_angle_node"),
       }
 
       this->set_parameter(rclcpp::Parameter("start_joint_calculations", false));
-      this->set_parameter(rclcpp::Parameter("start_arm_control", true));
       rclcpp::shutdown();
       
     }
@@ -131,8 +130,9 @@ PosetoAngle::PosetoAngle() : Node("pose_to_angle_node"),
         else
         {
             RCLCPP_ERROR(rclcpp::get_logger("pose_to_angle"), "One or more planners failed!");
-            return{false, {}};
             rclcpp::shutdown();
+            return{false, {}};
+            
         }
   };
 
