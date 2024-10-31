@@ -4,6 +4,8 @@ from py_trees.common import Status
 from py_trees.composites import Sequence
 from py_trees import logging as log_tree
 
+import threading
+
 # Button Detection
 from ultralytics import YOLO
 import rclpy
@@ -27,6 +29,8 @@ from .include.button_localization_utils import ButtonLocalizationUtils
 
 bridge = CvBridge()
 
+is_elevator_bt_active = True
+
 class ButtonDetection(Behaviour, Node):
   def __init__(self, name):
     Behaviour.__init__(self, name)
@@ -41,7 +45,6 @@ class ButtonDetection(Behaviour, Node):
 
     self.declare_parameter("target_button", "button-up")
     
-
   def initialise(self):
     self.button_detection_complete = False
     self.img_sub_       = self.create_subscription(Image, "/zed2_left_camera/image_raw",self.visual_callback, 10)
@@ -60,8 +63,10 @@ class ButtonDetection(Behaviour, Node):
     rclpy.spin_once(self)
     self.logger.debug(f"ButtonEstimation::update {self.name}")
     if(self.button_detection_complete):
+      self.logger.debug(f"ButtonEstimation::Complete {self.name}")
       return Status.SUCCESS
     return Status.RUNNING
+
 
   def terminate(self, new_status):
     self.logger.debug(f"ButtonEstimation::terminate {self.name} to {new_status}")
@@ -71,7 +76,7 @@ class ButtonDetection(Behaviour, Node):
     if (len(self.x_pixel_buffer) < self.buffer_size) :
         self.get_logger().info("Collecting samples")
         pixel_x, pixel_y = self.button_detection_utils.camera_callback(
-            msg, self.model, self.target_button, self.img_pub_, self.pixel_pub_)
+            msg, self.model, self.target_button)
         
         self.x_pixel_buffer = np.append(self.x_pixel_buffer, pixel_x)
         self.y_pixel_buffer = np.append(self.y_pixel_buffer, pixel_y)
@@ -128,6 +133,7 @@ class LineEstimation(Behaviour, Node):
     self.logger.debug(f"LineEstimation::update {self.name}")
     if(self.line_estimation_complete):
       return Status.SUCCESS
+    return Status.RUNNING
 
   def terminate(self, new_status):
     self.logger.debug(f"LineEstimation::terminate {self.name} to {new_status}")
@@ -177,11 +183,13 @@ class ButtonLocalization(Behaviour, Node):
   def initialise(self):
     self.logger.debug(f"ButtonLocalization::initialise {self.name}")
     self.data         = self.button_localization_utils.read_yaml(self.yaml_path)
+    self.logger.debug("ButtonLocalization.initialize: Initialization complete.")
 
   def update(self):
-    rclpy.spin_once(self)
+    global is_elevator_bt_active
     self.logger.debug(f"ButtonLocalization::update {self.name}")
     self.estimate_pose()
+    is_elevator_bt_active = False
     return Status.SUCCESS
 
   def terminate(self, new_status):
@@ -243,13 +251,18 @@ def main(args=None):
 
     log_tree.level = log_tree.Level.DEBUG
     tree = make_bt()
-    
-    tree.tick_once()
 
-    rclpy.shutdown()
+
+  
+    try:
+        while rclpy.ok() and is_elevator_bt_active:
+            tree.tick_once()  
+            sleep(0.1)        
+    except KeyboardInterrupt:
+        pass
+    finally:
+        rclpy.shutdown()
 
 
 if __name__ == "__main__":
-  log_tree.level = log_tree.Level.DEBUG
-  tree = make_bt()
-  tree.tick_once()
+    main()
