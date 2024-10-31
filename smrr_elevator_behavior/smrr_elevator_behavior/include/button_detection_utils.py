@@ -43,6 +43,7 @@ class ButtonDetectionUtils():
             self.node.get_logger().warn("Failed to detect target button : %s" % self.target_button)
             return
 
+        self.node.get_logger().debug("Target acquired")
         return pixel_point[0], pixel_point[1]
 
 

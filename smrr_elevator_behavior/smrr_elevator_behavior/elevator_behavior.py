@@ -40,11 +40,11 @@ class ButtonDetection(Behaviour, Node):
     self.model          = YOLO(yolo_model_path)
 
     self.declare_parameter("target_button", "button-up")
-    self.img_sub_       = self.create_subscription(Image, "/zed2_left_camera/image_raw",self.camera_callback, 10)
+    
 
   def initialise(self):
     self.button_detection_complete = False
-
+    self.img_sub_       = self.create_subscription(Image, "/zed2_left_camera/image_raw",self.visual_callback, 10)
     self.target_button   = self.get_parameter("target_button").get_parameter_value().string_value
     self.get_logger().info("Target button is set to : %s" % self.target_button)
     
@@ -57,16 +57,19 @@ class ButtonDetection(Behaviour, Node):
     self.logger.debug(f"ButtonEstimation::initialise {self.name}")
 
   def update(self):
+    rclpy.spin_once(self)
     self.logger.debug(f"ButtonEstimation::update {self.name}")
     if(self.button_detection_complete):
       return Status.SUCCESS
+    return Status.RUNNING
 
   def terminate(self, new_status):
     self.logger.debug(f"ButtonEstimation::terminate {self.name} to {new_status}")
   
-  def camera_callback(self, msg):
+  def visual_callback(self, msg):
+    self.get_logger().info("Camera callback running")
     if (len(self.x_pixel_buffer) < self.buffer_size) :
-
+        self.get_logger().info("Collecting samples")
         pixel_x, pixel_y = self.button_detection_utils.camera_callback(
             msg, self.model, self.target_button, self.img_pub_, self.pixel_pub_)
         
@@ -121,6 +124,7 @@ class LineEstimation(Behaviour, Node):
 
 
   def update(self):
+    rclpy.spin_once(self)
     self.logger.debug(f"LineEstimation::update {self.name}")
     if(self.line_estimation_complete):
       return Status.SUCCESS
@@ -175,6 +179,7 @@ class ButtonLocalization(Behaviour, Node):
     self.data         = self.button_localization_utils.read_yaml(self.yaml_path)
 
   def update(self):
+    rclpy.spin_once(self)
     self.logger.debug(f"ButtonLocalization::update {self.name}")
     self.estimate_pose()
     return Status.SUCCESS
