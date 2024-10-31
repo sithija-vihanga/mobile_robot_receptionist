@@ -39,7 +39,7 @@ class ButtonDetection(Behaviour, Node):
     yolo_model_path     = "/home/sithija/mobile_receptionist_ws/src/smrr_elevator_behavior/smrr_elevator_behavior/yolo_button_detection.pt"
     self.model          = YOLO(yolo_model_path)
 
-    self.declare_parameter("target_button", "up")
+    self.declare_parameter("target_button", "button-up")
     self.img_sub_       = self.create_subscription(Image, "/zed2_left_camera/image_raw",self.camera_callback, 10)
 
   def initialise(self):

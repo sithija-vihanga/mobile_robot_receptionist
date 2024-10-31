@@ -11,7 +11,7 @@ class ButtonDetectionUtils():
         self.target_button = target_button
 
 
-    def detect_target_button(self, results, img, target_button, model):
+    def detect_target_button(self, results, target_button, model):
         for r in results:
             boxes = r.boxes
             for box in boxes:
@@ -24,25 +24,20 @@ class ButtonDetectionUtils():
                     x_max = int(b[2])  
                     y_max = int(b[3])  
 
-                    cv2.rectangle(img, (x_min, y_min), (x_max, y_max), (255, 255, 0), thickness=2)
                     mid_point_x = int((x_min + x_max) / 2)
                     mid_point_y = int((y_min + y_max) / 2)
-
-                    cv2.circle(img, (mid_point_x, mid_point_y), 15, (0, 0, 255), -1)
-
-                    label = target_button
-                    cv2.putText(img, label, (x_min, y_min - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.9, (255, 255, 0), 2)
 
                     return [mid_point_x, mid_point_y]
 
             return None
 
 
-    def camera_callback(self, msg, model, target_button, img_pub, pixel_pub):
+    def camera_callback(self, msg, model, target_button):
         img      = bridge.imgmsg_to_cv2(msg, "bgr8")
-        results  = model(img)
+        conf_val = 0.1
+        results  = model(img, conf = conf_val)
 
-        pixel_point = self.detect_target_button(results, img, target_button, model)
+        pixel_point = self.detect_target_button(results, target_button, model)
 
         if pixel_point is None:
             self.node.get_logger().warn("Failed to detect target button : %s" % self.target_button)

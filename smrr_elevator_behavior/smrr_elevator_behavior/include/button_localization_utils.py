@@ -39,16 +39,17 @@ class ButtonLocalizationUtils():
         point = np.array([X, Y, Z])
         transformed_point = np.dot(self.base_to_camera, np.append(point, 1))     # transform the point to the base_link frame
 
-        offset = 0.2
+        offset = 0.1
         init_pose = Pose()
         init_pose.position.x        = transformed_point[0] + offset * normal[0]   # the initial point the arm is moving to
         init_pose.position.y        = transformed_point[1] + offset * normal[1]
         init_pose.position.z        = transformed_point[2] + offset * normal[2]
 
+        offset_ = 0.0
         target_pose = Pose()
-        target_pose.position.x      = transformed_point[0] + 0.05 * normal[0]     # 5 cm away from the goal position, if the arm hits the wall the robot will fall back in simulation.
-        target_pose.position.y      = transformed_point[1] + 0.05 * normal[1]
-        target_pose.position.z      = transformed_point[2] + 0.05 * normal[2]
+        target_pose.position.x      = transformed_point[0] + offset_ * normal[0]     # offset_ away from the goal position, if the arm hits the wall the robot will fall back in simulation.
+        target_pose.position.y      = transformed_point[1] + offset_ * normal[1]
+        target_pose.position.z      = transformed_point[2] + offset_ * normal[2]
 
         pose_array                  = PoseArray()
         pose_array.header.frame_id  = "base_link"
