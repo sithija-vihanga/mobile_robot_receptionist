@@ -70,10 +70,17 @@ def generate_launch_description():
         output="screen"
     )
 
+    pose_to_angle = Node(
+        package="smrr_executions",
+        executable="pose_to_angle_node",
+        output="screen"
+    )
+
     return LaunchDescription([
         is_sim_arg,
         move_group_node,
         action_server,
-        action_client
+        action_client,
+        pose_to_angle
         #rviz_node,
     ])

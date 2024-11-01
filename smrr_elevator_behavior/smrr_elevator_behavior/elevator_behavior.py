@@ -5,6 +5,7 @@ from py_trees.composites import Sequence
 from py_trees import logging as log_tree
 
 import threading
+from rclpy.parameter import Parameter
 
 # Button Detection
 from ultralytics import YOLO
@@ -156,7 +157,7 @@ class LineEstimation(Behaviour, Node):
             depth_mean  = float(np.mean(self.depth_buffer))
             grad_median = float(np.median(self.gradient_buffer))
 
-            data['elevator_interaction']['depth']    = depth_mean
+            data['elevator_interaction']['depth']    = depth_mean 
             data['elevator_interaction']['gradient'] = grad_median
 
             self.line_estimation_utils.update_yaml(self.yaml_path, data)
@@ -172,9 +173,10 @@ class ButtonLocalization(Behaviour, Node):
   def __init__(self, name):
     Behaviour.__init__(self, name)
     Node.__init__(self, name)
-
+    
   def setup(self):
     self.logger.debug(f"ButtonLocalization::setup {self.name}")
+    self.declare_parameter("start_joint_calculations", False)
     
     self.button_localization_utils = ButtonLocalizationUtils(self)
 
@@ -193,6 +195,7 @@ class ButtonLocalization(Behaviour, Node):
     return Status.SUCCESS
 
   def terminate(self, new_status):
+    self.set_parameters([rclpy.parameter.Parameter("start_joint_calculations", rclpy.Parameter.Type.BOOL, False)])
     self.logger.debug(f"ButtonLocalization::terminate {self.name} to {new_status}")
   
   def estimate_pose(self):
