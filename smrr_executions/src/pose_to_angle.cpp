@@ -97,6 +97,7 @@ PosetoAngle::PosetoAngle() : Node("pose_to_angle_node"),
         data["elevator_interaction"][joint_angles_name]["joint4"] = target_joint_angles[3];
         std::ofstream fout(this->yaml_path_);
         fout << data;
+        RCLCPP_INFO(rclcpp::get_logger("pose_to_angle"), "YAML file updated");
 
         return true;
       }
