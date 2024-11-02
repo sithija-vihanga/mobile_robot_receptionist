@@ -47,10 +47,9 @@ PosetoAngle::PosetoAngle() : Node("pose_to_angle_node"),
     else
     {
       RCLCPP_ERROR(rclcpp::get_logger("pose_to_angle"), "Failed to find target joint angles.");
-
+      response->complete = false;
     }
-
-    respone->complete = true;
+    response->complete = true;
 
   }
 
@@ -94,8 +93,6 @@ PosetoAngle::PosetoAngle() : Node("pose_to_angle_node"),
         std::ofstream fout(this->yaml_path_);
         fout << data;
         RCLCPP_INFO(rclcpp::get_logger("pose_to_angle"), "YAML file updated");
-        this->set_parameter(rclcpp::Parameter("start_joint_calculations", false));
-
         return true;
       }
       else
