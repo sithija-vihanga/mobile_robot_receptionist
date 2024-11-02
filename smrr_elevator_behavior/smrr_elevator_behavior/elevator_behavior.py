@@ -28,6 +28,7 @@ from .include.line_estimation_utils import LineEstimationUtils
 # Button Localization
 from .include.button_localization_utils import ButtonLocalizationUtils
 from smrr_interfaces.srv import Pose
+from smrr_interfaces.srv import ArmControl
 
 bridge = CvBridge()
 
@@ -180,7 +181,8 @@ class ButtonLocalization(Behaviour, Node):
 
     self.yaml_path    = "/home/sithija/mobile_receptionist_ws/src/smrr_elevator_behavior/config/elevator_interaction.yaml"
 
-    self.get_pose_client = self.create_client(Pose, 'get_arm_angles')
+    self.get_pose_client    = self.create_client(Pose, 'get_arm_angles')
+    self.arm_motion_client  = self.create_client(ArmControl, 'start_arm_motion')
 
   def initialise(self):
     self.logger.debug(f"ButtonLocalization::initialise {self.name}")
@@ -191,12 +193,21 @@ class ButtonLocalization(Behaviour, Node):
     self.logger.debug(f"ButtonLocalization::update {self.name}")
     self.estimate_pose()
     is_elevator_bt_active = False
-    self.request = Pose.Request()
-    self.request.get_pose = True
-    self.get_pose_client.call_async(self.request)
+
+    self.pose_request = Pose.Request()
+    self.pose_request.get_pose = True
+    pose_future = self.get_pose_client.call_async(self.pose_request)
     self.logger.debug(f"Pose to angle calc request sent")
 
-    return Status.SUCCESS
+    if(pose_future):
+      self.motion_request = ArmControl.Request()
+      self.motion_request.start = True
+      motion_future = self.arm_motion_client.call_async(self.motion_request)
+      self.logger.debug(f"Arm motion request sent")
+      return Status.SUCCESS
+    
+    else:
+      return Status.RUNNING
 
   def terminate(self, new_status):
     self.logger.debug(f"ButtonLocalization::terminate {self.name} to {new_status}")

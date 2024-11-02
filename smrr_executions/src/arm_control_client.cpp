@@ -38,7 +38,6 @@ private:
     void ServiceCallback(const std::shared_ptr<smrr_interfaces::srv::ArmControl::Request> request,
           std::shared_ptr<smrr_interfaces::srv::ArmControl::Response> response)
     {   
-        
         if (!client_->wait_for_action_server(5s)){
             RCLCPP_ERROR(rclcpp::get_logger("ArmControlClient"), "Action server not available, cancelling the action client...");
             rclcpp::shutdown();
@@ -46,7 +45,6 @@ private:
         }
 
         sendNextGoal();
-        
     }
 
     void sendNextGoal()
@@ -72,7 +70,6 @@ private:
         }
         else{
             RCLCPP_INFO(rclcpp::get_logger("ArmControlClient"), "All goals completed.");
-            rclcpp::shutdown();
             return;
         }
 
