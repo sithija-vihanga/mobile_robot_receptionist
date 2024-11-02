@@ -27,6 +27,7 @@ from .include.line_estimation_utils import LineEstimationUtils
 
 # Button Localization
 from .include.button_localization_utils import ButtonLocalizationUtils
+from smrr_interfaces.srv import Pose
 
 bridge = CvBridge()
 
@@ -167,8 +168,6 @@ class LineEstimation(Behaviour, Node):
             self.line_estimation_complete = True
 
 
-
-
 class ButtonLocalization(Behaviour, Node):
   def __init__(self, name):
     Behaviour.__init__(self, name)
@@ -176,26 +175,30 @@ class ButtonLocalization(Behaviour, Node):
     
   def setup(self):
     self.logger.debug(f"ButtonLocalization::setup {self.name}")
-    self.declare_parameter("start_joint_calculations", False)
     
     self.button_localization_utils = ButtonLocalizationUtils(self)
 
     self.yaml_path    = "/home/sithija/mobile_receptionist_ws/src/smrr_elevator_behavior/config/elevator_interaction.yaml"
 
+    self.get_pose_client = self.create_client(Pose, 'get_arm_angles')
+
   def initialise(self):
     self.logger.debug(f"ButtonLocalization::initialise {self.name}")
     self.data         = self.button_localization_utils.read_yaml(self.yaml_path)
-    self.logger.debug("ButtonLocalization.initialize: Initialization complete.")
 
   def update(self):
     global is_elevator_bt_active
     self.logger.debug(f"ButtonLocalization::update {self.name}")
     self.estimate_pose()
     is_elevator_bt_active = False
+    self.request = Pose.Request()
+    self.request.get_pose = True
+    self.get_pose_client.call_async(self.request)
+    self.logger.debug(f"Pose to angle calc request sent")
+
     return Status.SUCCESS
 
   def terminate(self, new_status):
-    self.set_parameters([rclpy.parameter.Parameter("start_joint_calculations", rclpy.Parameter.Type.BOOL, False)])
     self.logger.debug(f"ButtonLocalization::terminate {self.name} to {new_status}")
   
   def estimate_pose(self):
@@ -255,8 +258,6 @@ def main(args=None):
     log_tree.level = log_tree.Level.DEBUG
     tree = make_bt()
 
-
-  
     try:
         while rclpy.ok() and is_elevator_bt_active:
             tree.tick_once()  

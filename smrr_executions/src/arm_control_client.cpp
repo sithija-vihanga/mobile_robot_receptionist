@@ -3,6 +3,7 @@
 #include <rclcpp_components/register_node_macro.hpp>
 #include <yaml-cpp/yaml.h>
 #include "smrr_interfaces/action/arm_control_server.hpp"
+#include "smrr_interfaces/srv/arm_control.hpp"
 
 #include <memory>
 
@@ -22,7 +23,9 @@ public :
             yaml_path_ = "/home/sithija/mobile_receptionist_ws/src/smrr_elevator_behavior/config/elevator_interaction.yaml" ;
 
             client_  = rclcpp_action::create_client<smrr_interfaces::action::ArmControlServer>(this, "arm_control_server");
-            timer_   = create_wall_timer(1s, std::bind(&ArmControlClient::timerCallback, this));
+            //timer_   = create_wall_timer(1s, std::bind(&ArmControlClient::timerCallback, this));
+            
+            service = this->create_service<smrr_interfaces::srv::ArmControl>("start_arm_motion", std::bind(&ArmControlClient::ServiceCallback, this, std::placeholders::_1, std::placeholders::_2));
         }
 
 private:
@@ -30,24 +33,20 @@ private:
     rclcpp::TimerBase::SharedPtr timer_;
     std::string yaml_path_ ;
     int current_goal_stage_;
+    rclcpp::Service<smrr_interfaces::srv::ArmControl>::SharedPtr service;
 
-    void timerCallback()
+    void ServiceCallback(const std::shared_ptr<smrr_interfaces::srv::ArmControl::Request> request,
+          std::shared_ptr<smrr_interfaces::srv::ArmControl::Response> response)
     {   
-        bool start_arm_control ;
-        this->get_parameter("start_arm_control", start_arm_control);
-
-        if (start_arm_control){
-
-            timer_->cancel();
-
-            if (!client_->wait_for_action_server(5s)){
-                RCLCPP_ERROR(rclcpp::get_logger("ArmControlClient"), "Action server not available, cancelling the action client...");
-                rclcpp::shutdown();
-                return;
-            }
-
-            sendNextGoal();
+        
+        if (!client_->wait_for_action_server(5s)){
+            RCLCPP_ERROR(rclcpp::get_logger("ArmControlClient"), "Action server not available, cancelling the action client...");
+            rclcpp::shutdown();
+            return;
         }
+
+        sendNextGoal();
+        
     }
 
     void sendNextGoal()

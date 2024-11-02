@@ -1,40 +1,40 @@
 elevator_interaction:
-  depth: 0.43
+  depth: 0.41
   end_joint_angles:
-    joint1: 0.32431807044895555
-    joint2: 0.26360730633501817
-    joint3: 1.4382278037773433
-    joint4: 0.039153392184669754
-  gradient: 0.0
+    joint1: 0.24654665360959357
+    joint2: 0.21788989393667108
+    joint3: 1.537125643089728
+    joint4: 0.26676812284825091
+  gradient: -0.01
   home_joint_angles:
     joint1: 0.0
     joint2: 0.0
     joint3: 0.0
     joint4: 0.0
   initial_joint_angles:
-    joint1: 0.32113237910444431
-    joint2: 0.24307935013443138
-    joint3: 1.4447667807737388
-    joint4: 0.23472966974367132
+    joint1: 0.24753432256073385
+    joint2: 0.20315095694383437
+    joint3: 1.5401524690118051
+    joint4: 0.40296982625886041
   initial_pose:
     pitch: 0.0
     roll: 0.0
-    x: 0.413
-    y: -0.285
+    x: 0.393
+    y: -0.275
     yaw: 0.0
-    z: 1.064
+    z: 1.065
   pixel_coordinates:
-    x: 1073
+    x: 1079
     y: 408
   target_joint_angles:
-    joint1: 0.58715830127355362
-    joint2: 0.25898067240385308
-    joint3: 1.088791930142553
-    joint4: -0.0011502974169892493
+    joint1: 0.5078943316213661
+    joint2: 0.25925563327414758
+    joint3: 1.2048860938069577
+    joint4: -0.31162519205550826
   target_pose:
     pitch: 0.0
     roll: 0.0
-    x: 0.49
-    y: -0.285
+    x: 0.47
+    y: -0.274
     yaw: 0.0
-    z: 1.0644
+    z: 1.065

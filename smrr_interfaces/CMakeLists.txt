@@ -14,6 +14,7 @@ rosidl_generate_interfaces(${PROJECT_NAME}
   "msg/Entities.msg"
   "action/ArmControlServer.action"
   "srv/Pose.srv"
+  "srv/ArmControl.srv"
   DEPENDENCIES std_msgs geometry_msgs
  )
 
