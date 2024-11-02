@@ -14,12 +14,9 @@ using std::placeholders::_1;
 PosetoAngle::PosetoAngle() : Node("pose_to_angle_node"),
                   move_group_interface(std::make_shared<rclcpp::Node>("moveit_node"), "arm")
   {
+    service = this->create_service<smrr_interfaces::srv::Pose>("get_arm_angles", std::bind(&PosetoAngle::timerCallback, this, std::placeholders::_1, std::placeholders::_2));
 
-    this->declare_parameter<bool>("start_joint_calculations", false);
-
-    timer_ = this->create_wall_timer(
-            std::chrono::milliseconds(100), 
-            std::bind(&PosetoAngle::timerCallback, this)) ;
+    RCLCPP_INFO(rclcpp::get_logger("rclcpp"), "Pose to Angle service ready");
 
     yaml_path_ = "/home/sithija/mobile_receptionist_ws/src/smrr_elevator_behavior/config/elevator_interaction.yaml" ;
 
@@ -31,33 +28,32 @@ PosetoAngle::PosetoAngle() : Node("pose_to_angle_node"),
   }
   
 
-  void PosetoAngle::timerCallback()
+  void PosetoAngle::timerCallback(const std::shared_ptr<smrr_interfaces::srv::Pose::Request> request,
+          std::shared_ptr<smrr_interfaces::srv::Pose::Response> response)
   {
     bool start_joint_calculations ;
     this->get_parameter("start_joint_calculations", start_joint_calculations);
 
-    if (start_joint_calculations)
+
+    RCLCPP_INFO(rclcpp::get_logger("pose_to_angle"), "Starting to find target joint angles.");
+    bool ok1 = calculate_target_angles("initial_pose", "initial_joint_angles");
+    bool ok2 = calculate_target_angles("target_pose" , "target_joint_angles" );
+    bool ok3 = calculate_target_angles("initial_pose", "end_joint_angles"    );
+
+    if (ok1 && ok2)
     {
-      RCLCPP_INFO(rclcpp::get_logger("pose_to_angle"), "Starting to find target joint angles.");
-      bool ok1 = calculate_target_angles("initial_pose", "initial_joint_angles");
-      bool ok2 = calculate_target_angles("target_pose" , "target_joint_angles" );
-      bool ok3 = calculate_target_angles("initial_pose", "end_joint_angles"    );
-
-      if (ok1 && ok2)
-      {
-        RCLCPP_INFO(rclcpp::get_logger("pose_to_angle"), "Target joint angles are successfully updated.");
-      }
-      else
-      {
-        RCLCPP_ERROR(rclcpp::get_logger("pose_to_angle"), "Failed to find target joint angles.");
-
-      }
-
-      this->set_parameter(rclcpp::Parameter("start_joint_calculations", false));
-      rclcpp::shutdown();
-      
+      RCLCPP_INFO(rclcpp::get_logger("pose_to_angle"), "Target joint angles are successfully updated.");
     }
+    else
+    {
+      RCLCPP_ERROR(rclcpp::get_logger("pose_to_angle"), "Failed to find target joint angles.");
+
+    }
+
+    respone->complete = true;
+
   }
+
 
   bool PosetoAngle::calculate_target_angles(std::string pose, 
                                std::string joint_angles_name)

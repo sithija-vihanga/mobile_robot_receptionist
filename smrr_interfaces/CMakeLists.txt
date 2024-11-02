@@ -13,6 +13,7 @@ find_package(rosidl_default_generators REQUIRED)
 rosidl_generate_interfaces(${PROJECT_NAME}
   "msg/Entities.msg"
   "action/ArmControlServer.action"
+  "srv/Pose.srv"
   DEPENDENCIES std_msgs geometry_msgs
  )
 

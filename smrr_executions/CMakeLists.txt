@@ -15,11 +15,12 @@ find_package(geometry_msgs REQUIRED)
 find_package(moveit_ros_planning_interface REQUIRED)
 find_package(yaml-cpp REQUIRED)
 
+
 include_directories(include)   # include header files
 
 
 add_executable(pose_to_angle_node  src/pose_to_angle.cpp)
-ament_target_dependencies(pose_to_angle_node     rclcpp geometry_msgs moveit_ros_planning_interface yaml-cpp)
+ament_target_dependencies(pose_to_angle_node     smrr_interfaces rclcpp geometry_msgs moveit_ros_planning_interface yaml-cpp)
 include_directories(${YAML_CPP_INCLUDE_DIRS})
 target_link_libraries(${YAML_CPP_LIBRARIES})
 target_link_libraries(pose_to_angle_node ${YAML_CPP_LIBRARIES})
