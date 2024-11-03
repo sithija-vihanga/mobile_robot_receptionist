@@ -30,6 +30,8 @@
 #include "geometry_msgs/msg/twist_stamped.hpp"
 #include <fstream>
 
+#include "smrr_interfaces/srv/arm_control.hpp"
+
 using std::placeholders::_1;
 using namespace std::chrono_literals;
 
@@ -103,6 +105,7 @@ public:
 private:
     rclcpp::Node::SharedPtr node_ptr_;
     rclcpp::Subscription<std_msgs::msg::Bool>::SharedPtr subscription_;
+    rclcpp::Client<smrr_interfaces::srv::ArmControl>::SharedPtr client_;
     
     void wait_event_callback(const std_msgs::msg::Bool & msg);
 };

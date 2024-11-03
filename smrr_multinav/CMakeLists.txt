@@ -16,6 +16,7 @@ find_package(tf2_geometry_msgs REQUIRED)
 find_package(slam_toolbox REQUIRED)
 find_package(Eigen3 REQUIRED)
 find_package(sensor_msgs REQUIRED)
+find_package(smrr_interfaces REQUIRED)
 
 install (
   DIRECTORY config bt_xml launch
@@ -39,6 +40,7 @@ set(TARGET_DEPENDS
     slam_toolbox
     Eigen3
     sensor_msgs
+    smrr_interfaces
 )
 
 include_directories(include/${PROJECT_NAME})

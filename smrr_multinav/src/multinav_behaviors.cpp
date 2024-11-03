@@ -187,6 +187,9 @@ WaitEvent::WaitEvent(const std::string &name, const BT::NodeConfiguration &confi
         subscription_ = node_ptr_->create_subscription<std_msgs::msg::Bool>(
             "wait_event", 10,
             std::bind(&WaitEvent::wait_event_callback, this, std::placeholders::_1));
+        
+        client_ = node_ptr_->create_client<smrr_interfaces::srv::ArmControl>("start_elevator_bt");
+        
         RCLCPP_INFO(node_ptr_->get_logger(), "Wait event initialized");
     }
 
@@ -201,6 +204,13 @@ WaitEvent::WaitEvent(const std::string &name, const BT::NodeConfiguration &confi
         BT::Optional<std::string> type = getInput<std::string>("event");
         const std::string multinav_config = node_ptr_->get_parameter("multinav_config").as_string();
         YAML::Node multinav = YAML::LoadFile(multinav_config);
+
+        auto request_ = std::make_shared<smrr_interfaces::srv::ArmControl::Request>();
+        request_->start = true;
+        
+        auto result = client_->async_send_request(request_);
+
+        RCLCPP_INFO(node_ptr_->get_logger(), "Elevator start cmd sent");
 
         wait_event_flag_ = false; 
         return BT::NodeStatus::RUNNING;
