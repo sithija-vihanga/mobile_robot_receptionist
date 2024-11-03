@@ -4,6 +4,7 @@
 #include <yaml-cpp/yaml.h>
 #include "smrr_interfaces/action/arm_control_server.hpp"
 #include "smrr_interfaces/srv/arm_control.hpp"
+#include "std_msgs/msg/bool.hpp"
 
 #include <memory>
 
@@ -20,20 +21,24 @@ public :
         {   
             this->declare_parameter<bool>("start_arm_control", false );
 
-            yaml_path_ = "/home/sithija/mobile_receptionist_ws/src/smrr_elevator_behavior/config/elevator_interaction.yaml" ;
+            yaml_path_  = "/home/sithija/mobile_receptionist_ws/src/smrr_elevator_behavior/config/elevator_interaction.yaml" ;
 
-            client_  = rclcpp_action::create_client<smrr_interfaces::action::ArmControlServer>(this, "arm_control_server");
-            //timer_   = create_wall_timer(1s, std::bind(&ArmControlClient::timerCallback, this));
+            client_     = rclcpp_action::create_client<smrr_interfaces::action::ArmControlServer>(this, "arm_control_server");
             
-            service = this->create_service<smrr_interfaces::srv::ArmControl>("start_arm_motion", std::bind(&ArmControlClient::ServiceCallback, this, std::placeholders::_1, std::placeholders::_2));
+            publisher_  = this->create_publisher<std_msgs::msg::Bool>("wait_event", 10);
+            
+            service     = this->create_service<smrr_interfaces::srv::ArmControl>("start_arm_motion", std::bind(&ArmControlClient::ServiceCallback, this, std::placeholders::_1, std::placeholders::_2));
         }
 
 private:
     rclcpp_action::Client<smrr_interfaces::action::ArmControlServer>::SharedPtr client_;
     rclcpp::TimerBase::SharedPtr timer_;
+
     std::string yaml_path_ ;
     int current_goal_stage_;
+
     rclcpp::Service<smrr_interfaces::srv::ArmControl>::SharedPtr service;
+    rclcpp::Publisher<std_msgs::msg::Bool>::SharedPtr publisher_;
 
     void ServiceCallback(const std::shared_ptr<smrr_interfaces::srv::ArmControl::Request> request,
           std::shared_ptr<smrr_interfaces::srv::ArmControl::Response> response)
@@ -70,6 +75,11 @@ private:
         }
         else{
             RCLCPP_INFO(rclcpp::get_logger("ArmControlClient"), "All goals completed.");
+            auto message = std_msgs::msg::Bool();
+            message.data = true;
+            publisher_->publish(message);
+            RCLCPP_INFO(rclcpp::get_logger("ArmControlClient"), "Sent multinav resume cmd");
+
             return;
         }
 
