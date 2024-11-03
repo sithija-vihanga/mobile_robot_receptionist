@@ -34,6 +34,38 @@ bridge = CvBridge()
 
 is_elevator_bt_active = True
 
+class WaitCMD(Behaviour, Node):
+  def __init__(self, name):
+    Behaviour.__init__(self, name)
+    Node.__init__(self, name)
+
+  def setup(self):
+    self.logger.debug(f"WaitCMD::setup {self.name}")
+
+    self.start_elevator_bt = self.create_service(ArmControl, 'start_elevator_bt', self.start_bt)
+    
+  def initialise(self):
+    self.start_cmd = False
+    
+    self.logger.debug(f"WaitCMD::initialise {self.name}")
+
+  def update(self):
+    rclpy.spin_once(self)
+    self.logger.debug(f"Waiting for elevator cmds...")
+    if(self.start_cmd):
+        return Status.SUCCESS
+    return Status.RUNNING
+
+
+  def terminate(self, new_status):
+    self.logger.debug(f"WaitCMD::terminate {self.name} to {new_status}")
+  
+  def start_bt(self, request, response):
+        if (request.start):
+           self.start_cmd = True
+           response.accepted = True
+        return response
+
 class ButtonDetection(Behaviour, Node):
   def __init__(self, name):
     Behaviour.__init__(self, name)
@@ -70,7 +102,6 @@ class ButtonDetection(Behaviour, Node):
       return Status.SUCCESS
     return Status.RUNNING
 
-
   def terminate(self, new_status):
     self.logger.debug(f"ButtonEstimation::terminate {self.name} to {new_status}")
   
@@ -98,7 +129,7 @@ class ButtonDetection(Behaviour, Node):
         self.get_logger().info("Starting the line estimation process...")
 
         self.button_detection_complete = True
-
+  
 class LineEstimation(Behaviour, Node):
   def __init__(self, name):
     Behaviour.__init__(self, name)
@@ -156,7 +187,7 @@ class LineEstimation(Behaviour, Node):
         else:
             data  = self.line_estimation_utils.read_yaml(self.yaml_path)
 
-            depth_mean  = float(np.mean(self.depth_buffer))
+            depth_mean  = float(np.mean(self.depth_buffer) - 0.3)
             grad_median = float(np.median(self.gradient_buffer))
 
             data['elevator_interaction']['depth']    = depth_mean 
@@ -247,12 +278,14 @@ class ButtonLocalization(Behaviour, Node):
 def make_bt():
   root = Sequence(name="elevator_interaction", memory=True)
 
+  wait_cmd              = WaitCMD("wait_cmd")
   button_detection      = ButtonDetection("button_detection")
   line_estimation       = LineEstimation("estimate_line")
   button_localization   = ButtonLocalization("button_localization")
 
   root.add_children(
       [
+          wait_cmd,
           button_detection,
           line_estimation,
           button_localization
@@ -270,7 +303,7 @@ def main(args=None):
     tree = make_bt()
 
     try:
-        while rclpy.ok() and is_elevator_bt_active:
+        while rclpy.ok():
             tree.tick_once()  
             sleep(0.1)        
     except KeyboardInterrupt:
