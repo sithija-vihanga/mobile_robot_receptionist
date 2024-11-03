@@ -1,0 +1,51 @@
+name: smrr
+root: ~/
+
+# pre_window: export ROS_DOMAIN_ID=0  
+startup_window: control_pannel
+
+windows:
+  - launch_robot:
+      panes:
+        - multi_floor:
+          - ros2 launch smrr_description multi_nav_gazebo.launch.py 
+        - sfm:
+          - ros2 launch smrr_description gazebo_gpu.launch.py \
+
+
+  - control_pannel:
+      layout: tiled
+      panes:
+        - elevator:
+          - gz topic -p /gazebo/default/elevator -m 'data:0'
+        - events:
+          - ros2 topic pub --once /multinav_goal geometry_msgs/msg/Twist \
+
+  - visualization:
+      panes:
+        - sleep 3
+        - rviz2
+
+  - slam_toolbox:
+      - sleep 3
+      - ros2 launch smrr_localization local_localization.launch.py
+  
+  - nav2_stack:
+      - sleep 4
+      - ros2 launch smrr_multinav navigation_launch.py 
+  
+  - BT:
+    - sleep 10
+    - ros2 launch smrr_multinav multinav.launch.py 
+
+  - arm_control:
+      panes:
+        - start_elevator_BT:
+          - ros2 run smrr_elevator_behavior elevator_bt \
+        - moveit:
+          - ros2 launch smrr_moveit moveit.launch.py 
+
+  
+
+
+
