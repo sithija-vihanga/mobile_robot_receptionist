@@ -19,8 +19,7 @@ public :
     explicit ArmControlClient(const rclcpp::NodeOptions& options) 
         : Node("arm_control_client", options)
         {   
-            this->declare_parameter<bool>("start_arm_control", false );
-
+            
             yaml_path_  = "/home/sithija/mobile_receptionist_ws/src/smrr_elevator_behavior/config/elevator_interaction.yaml" ;
 
             client_     = rclcpp_action::create_client<smrr_interfaces::action::ArmControlServer>(this, "arm_control_server");
@@ -32,10 +31,9 @@ public :
 
 private:
     rclcpp_action::Client<smrr_interfaces::action::ArmControlServer>::SharedPtr client_;
-    rclcpp::TimerBase::SharedPtr timer_;
 
     std::string yaml_path_ ;
-    int current_goal_stage_;
+    int current_goal_stage_ = 0;
 
     rclcpp::Service<smrr_interfaces::srv::ArmControl>::SharedPtr service;
     rclcpp::Publisher<std_msgs::msg::Bool>::SharedPtr publisher_;
@@ -79,7 +77,7 @@ private:
             message.data = true;
             publisher_->publish(message);
             RCLCPP_INFO(rclcpp::get_logger("ArmControlClient"), "Sent multinav resume cmd");
-
+            current_goal_stage_ = 0;
             return;
         }
 
@@ -108,15 +106,12 @@ private:
             break;
         case rclcpp_action::ResultCode::ABORTED:
             RCLCPP_ERROR(rclcpp::get_logger("ArmControlClient"), "Goal was aborted");
-            rclcpp::shutdown();
             return;
         case rclcpp_action::ResultCode::CANCELED:
             RCLCPP_ERROR(rclcpp::get_logger("ArmControlClient"), "Goal was canceled");
-            rclcpp::shutdown();
             return;
         default:
             RCLCPP_ERROR(rclcpp::get_logger("ArmControlClient"), "Unknown result code");
-            rclcpp::shutdown();
             return;
         }
 
