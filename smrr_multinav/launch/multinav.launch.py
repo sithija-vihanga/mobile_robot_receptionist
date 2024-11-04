@@ -13,6 +13,8 @@ def generate_launch_description():
         name="multinav_node",
         parameters=[
             {"multinav_config": os.path.join(get_package_share_directory("smrr_multinav"), "config", "multinav.yaml")},
+            {"elevator_config": "/home/sithija/mobile_receptionist_ws/src/smrr_elevator_behavior/config/elevator_interaction.yaml"},
+            #{"elevator_config": os.path.join(get_package_share_directory("smrr_elevator_behavior"), "config", "elevator_interaction.yaml")},
             {"start_from_dock": True}]
     )
 

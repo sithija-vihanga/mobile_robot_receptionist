@@ -201,9 +201,43 @@ WaitEvent::WaitEvent(const std::string &name, const BT::NodeConfiguration &confi
     BT::NodeStatus WaitEvent::onStart()
     {   
         RCLCPP_INFO(node_ptr_->get_logger(), "Wait event started");
-        BT::Optional<std::string> type = getInput<std::string>("event");
+        type = getInput<std::string>("event");
         const std::string multinav_config = node_ptr_->get_parameter("multinav_config").as_string();
-        YAML::Node multinav = YAML::LoadFile(multinav_config);
+        const std::string elevator_config = node_ptr_->get_parameter("elevator_config").as_string();
+        YAML::Node multinav         = YAML::LoadFile(multinav_config);
+        YAML::Node elevator_params  = YAML::LoadFile(elevator_config);
+
+        if(type.value() == "out")
+        {   
+            int current_floor_ = multinav["multinav_status"]["current_floor"].as<int>();
+            int desired_floor_ = multinav["multinav_status"]["desired_floor"].as<int>();
+            
+            if(desired_floor_>current_floor_)
+            {
+                elevator_params["elevator_interaction"]["target_button"] = "button-up";  
+                RCLCPP_INFO(node_ptr_->get_logger(), "Button updated - UP");
+            }
+            else
+            {
+                elevator_params["elevator_interaction"]["target_button"] = "button-down";
+                RCLCPP_INFO(node_ptr_->get_logger(), "Button updated - DOWN");
+            }
+            std::ofstream fout(elevator_config);
+            fout << elevator_params;
+            fout.close();
+        }
+        if(type.value() == "in")
+        {   
+            int desired_floor_ = multinav["multinav_status"]["desired_floor"].as<int>();
+            
+            elevator_params["elevator_interaction"]["target_button"] = "button-"+ std::to_string(desired_floor_);  
+            RCLCPP_INFO(node_ptr_->get_logger(), "Button updated - button-%s", std::to_string(desired_floor_).c_str());
+
+            std::ofstream fout(elevator_config);
+            fout << elevator_params;
+            fout.close();
+        }
+
 
         auto request_ = std::make_shared<smrr_interfaces::srv::ArmControl::Request>();
         request_->start = true;

@@ -8,6 +8,7 @@ const std::string bt_xml_dir =
 MultiNav::MultiNav(const std::string &node_name) : Node(node_name)
 {   
     this->declare_parameter("multinav_config", "none");
+    this->declare_parameter("elevator_config", "none");
     this->declare_parameter("start_from_dock", false);
     RCLCPP_INFO(get_logger(), "Init Done");
 }

@@ -106,6 +106,7 @@ private:
     rclcpp::Node::SharedPtr node_ptr_;
     rclcpp::Subscription<std_msgs::msg::Bool>::SharedPtr subscription_;
     rclcpp::Client<smrr_interfaces::srv::ArmControl>::SharedPtr client_;
+    BT::Optional<std::string> type;
     
     void wait_event_callback(const std_msgs::msg::Bool & msg);
 };

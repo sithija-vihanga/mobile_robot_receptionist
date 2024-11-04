@@ -15,6 +15,7 @@ from cv_bridge import CvBridge
 import rclpy.parameter
 from sensor_msgs.msg import Image
 from std_msgs.msg import Int16MultiArray
+import yaml
 
 from .include.button_detection_utils import ButtonDetectionUtils
 import numpy as np
@@ -77,13 +78,15 @@ class ButtonDetection(Behaviour, Node):
     self.yaml_path      = "/home/sithija/mobile_receptionist_ws/src/smrr_elevator_behavior/config/elevator_interaction.yaml"
     yolo_model_path     = "/home/sithija/mobile_receptionist_ws/src/smrr_elevator_behavior/smrr_elevator_behavior/yolo_button_detection.pt"
     self.model          = YOLO(yolo_model_path)
-
-    self.declare_parameter("target_button", "button-up")
     
   def initialise(self):
     self.button_detection_complete = False
     self.img_sub_       = self.create_subscription(Image, "/zed2_left_camera/image_raw",self.visual_callback, 10)
-    self.target_button   = self.get_parameter("target_button").get_parameter_value().string_value
+
+    with open(self.yaml_path, 'r') as yaml_file:
+            data = yaml.safe_load(yaml_file)
+
+    self.target_button   = data['elevator_interaction']['target_button']
     self.get_logger().info("Target button is set to : %s" % self.target_button)
     
     self.button_detection_utils = ButtonDetectionUtils(self, self.target_button)
