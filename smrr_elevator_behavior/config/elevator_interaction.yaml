@@ -1,11 +1,11 @@
 elevator_interaction:
-  depth: 0.526
+  depth: 0.196
   end_joint_angles:
     joint1: 0.25105236834543615
     joint2: 0.15785325034537365
     joint3: 1.5155147588083406
     joint4: -0.0447012059543294
-  gradient: -0.02
+  gradient: -0.01
   home_joint_angles:
     joint1: 0.0
     joint2: 0.0
@@ -19,14 +19,14 @@ elevator_interaction:
   initial_pose:
     pitch: 0.0
     roll: 0.0
-    x: 0.509
-    y: -0.15
+    x: 0.179
+    y: 0.024
     yaw: 0.0
-    z: 0.875
+    z: 1.083
   pixel_coordinates:
-    x: 854
-    y: 593
-  target_button: button-1
+    x: 738
+    y: 410
+  target_button: button-3
   target_joint_angles:
     joint1: 0.5046792830977013
     joint2: 0.13678323514914215
@@ -35,7 +35,7 @@ elevator_interaction:
   target_pose:
     pitch: 0.0
     roll: 0.0
-    x: 0.586
-    y: -0.148
+    x: 0.256
+    y: 0.025
     yaw: 0.0
-    z: 0.874
+    z: 1.083
