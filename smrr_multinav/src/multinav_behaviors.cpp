@@ -459,7 +459,7 @@ ElevatorLoading::ElevatorLoading(const std::string &name, const BT::NodeConfigur
         {
             laser_mean = std::accumulate(laser_slice.begin(), laser_slice.end(), 0.0)/laser_slice.size();
             RCLCPP_INFO(node_ptr_->get_logger(),"laser mean: %f",laser_mean);
-            if(laser_mean > 2.3 and laser_mean < 1000.0)
+            if(laser_mean > 2.0 and laser_mean < 1000.0)
             {
                 complete_flag_ = true;
                 timer_.reset();
