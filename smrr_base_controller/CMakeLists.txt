@@ -48,13 +48,18 @@ install(
   DESTINATION include
 )
 
-
-install(TARGETS
-  ARCHIVE DESTINATION lib
-  LIBRARY DESTINATION lib
-  RUNTIME DESTINATION bin
-  DESTINATION lib/${PROJECT_NAME}
+install(
+  DIRECTORY launch
+  DESTINATION share/${PROJECT_NAME}
 )
+
+
+# install(TARGETS
+#   ARCHIVE DESTINATION lib
+#   LIBRARY DESTINATION lib
+#   RUNTIME DESTINATION bin
+#   DESTINATION lib/${PROJECT_NAME}
+# )
 
 ament_export_include_directories(
   include

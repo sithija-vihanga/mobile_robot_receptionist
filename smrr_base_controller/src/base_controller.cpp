@@ -3,10 +3,11 @@
 #include <pluginlib/class_list_macros.hpp>
 
 
-namespace base_controller
+namespace smrr_base_controller
 {
 BaseController::BaseController()
 {
+  RCLCPP_INFO(rclcpp::get_logger("BaseController"), "Constructing");
 }
 
 
@@ -29,6 +30,7 @@ BaseController::~BaseController()
 
 CallbackReturn BaseController::on_init(const hardware_interface::HardwareInfo &hardware_info)
 {
+  RCLCPP_INFO(rclcpp::get_logger("BaseController"), "Basecontroller on start");
   CallbackReturn result = hardware_interface::SystemInterface::on_init(hardware_info);
   if (result != CallbackReturn::SUCCESS)
   {
@@ -45,9 +47,10 @@ CallbackReturn BaseController::on_init(const hardware_interface::HardwareInfo &h
     return CallbackReturn::FAILURE;
   }
 
-  velocity_commands_.reserve(info_.joints.size());
-  position_states_.reserve(info_.joints.size());
-  velocity_states_.reserve(info_.joints.size());
+  velocity_commands_.reserve(2);
+  position_commands_.reserve(4);
+  position_states_.reserve(6);
+  velocity_states_.reserve(2);
   last_run_ = rclcpp::Clock().now();
 
   return CallbackReturn::SUCCESS;
@@ -58,14 +61,26 @@ std::vector<hardware_interface::StateInterface> BaseController::export_state_int
 {
   std::vector<hardware_interface::StateInterface> state_interfaces;
 
-  // Provide only a position Interafce
-  for (size_t i = 0; i < info_.joints.size(); i++)
-  {
-    state_interfaces.emplace_back(hardware_interface::StateInterface(
-        info_.joints[i].name, hardware_interface::HW_IF_POSITION, &position_states_[i]));
-    state_interfaces.emplace_back(hardware_interface::StateInterface(
-        info_.joints[i].name, hardware_interface::HW_IF_VELOCITY, &velocity_states_[i]));
-  }
+ 
+  state_interfaces.emplace_back(hardware_interface::StateInterface(
+      "shoulder_r_joint", hardware_interface::HW_IF_POSITION, &position_states_[0]));
+  state_interfaces.emplace_back(hardware_interface::StateInterface(
+      "bicep_r_joint", hardware_interface::HW_IF_POSITION, &position_states_[1]));
+  state_interfaces.emplace_back(hardware_interface::StateInterface(
+      "elbow_r_joint", hardware_interface::HW_IF_POSITION, &position_states_[2]));
+  state_interfaces.emplace_back(hardware_interface::StateInterface(
+      "wrist_r_joint", hardware_interface::HW_IF_POSITION, &position_states_[3]));
+
+  state_interfaces.emplace_back(hardware_interface::StateInterface(
+      "left_wheel_joint", hardware_interface::HW_IF_POSITION, &position_states_[4]));
+  state_interfaces.emplace_back(hardware_interface::StateInterface(
+      "right_wheel_joint", hardware_interface::HW_IF_POSITION, &position_states_[5]));
+
+  state_interfaces.emplace_back(hardware_interface::StateInterface(
+      "left_wheel_joint", hardware_interface::HW_IF_VELOCITY, &velocity_states_[0]));
+  state_interfaces.emplace_back(hardware_interface::StateInterface(
+      "right_wheel_joint", hardware_interface::HW_IF_VELOCITY, &velocity_states_[1]));
+
 
   return state_interfaces;
 }
@@ -76,11 +91,21 @@ std::vector<hardware_interface::CommandInterface> BaseController::export_command
   std::vector<hardware_interface::CommandInterface> command_interfaces;
 
   // Provide only a velocity Interafce
-  for (size_t i = 0; i < info_.joints.size(); i++)
-  {
-    command_interfaces.emplace_back(hardware_interface::CommandInterface(
-        info_.joints[i].name, hardware_interface::HW_IF_VELOCITY, &velocity_commands_[i]));
-  }
+
+  command_interfaces.emplace_back(hardware_interface::CommandInterface(
+        "shoulder_r_joint", hardware_interface::HW_IF_POSITION, &position_commands_[0]));
+  command_interfaces.emplace_back(hardware_interface::CommandInterface(
+        "bicep_r_joint", hardware_interface::HW_IF_POSITION, &position_commands_[1]));
+  command_interfaces.emplace_back(hardware_interface::CommandInterface(
+        "elbow_r_joint", hardware_interface::HW_IF_POSITION, &position_commands_[3]));
+  command_interfaces.emplace_back(hardware_interface::CommandInterface(
+        "wrist_r_joint", hardware_interface::HW_IF_POSITION, &position_commands_[4]));
+
+  command_interfaces.emplace_back(hardware_interface::CommandInterface(
+        "left_wheel_joint", hardware_interface::HW_IF_VELOCITY, &velocity_commands_[0]));
+  command_interfaces.emplace_back(hardware_interface::CommandInterface(
+        "right_wheel_joint", hardware_interface::HW_IF_VELOCITY, &velocity_commands_[1]));
+  
 
   return command_interfaces;
 }
@@ -92,7 +117,8 @@ CallbackReturn BaseController::on_activate(const rclcpp_lifecycle::State &)
 
   // Reset commands and states
   velocity_commands_ = { 0.0, 0.0};
-  position_states_ = { 0.0, 0.0};
+  position_commands_ = { 0.0, 0.0, 0.0, 0.0};
+  position_states_ = { 0.0, 0.0, 0.0, 0.0, 0.0, 0.0};
   velocity_states_ = { 0.0, 0.0};
 
   try
@@ -212,4 +238,4 @@ hardware_interface::return_type BaseController::write(const rclcpp::Time &,
   return hardware_interface::return_type::OK;
 }
 }  // namespace base_controller
-PLUGINLIB_EXPORT_CLASS(base_controller::BaseController, hardware_interface::SystemInterface)
+PLUGINLIB_EXPORT_CLASS(smrr_base_controller::BaseController, hardware_interface::SystemInterface)

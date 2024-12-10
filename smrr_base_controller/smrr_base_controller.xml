@@ -1,6 +1,6 @@
-<library path="base_controller">
+<library path="smrr_base_controller">
     <class name="smrr_base_controller/BaseController"
-      type="smrr_base_controller::BumperboBaseControllertInterface"
+      type="smrr_base_controller::BaseController"
       base_class_type="hardware_interface::SystemInterface"
     >
       <description>

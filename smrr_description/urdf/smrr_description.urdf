@@ -3,6 +3,7 @@
 <robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="smrr">
 
   <xacro:property name="PI" value="3.14159265359" />
+  <xacro:arg name="is_sim" default="true"/>
 
   <xacro:include filename="$(find smrr_description)/urdf/camera.urdf" />
   <xacro:include filename="$(find smrr_description)/urdf/lidar.urdf" />

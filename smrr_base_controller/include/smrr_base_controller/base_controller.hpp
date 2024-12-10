@@ -11,7 +11,7 @@
 #include <string>
 
 
-namespace base_controller
+namespace smrr_base_controller
 {
 
 using CallbackReturn = rclcpp_lifecycle::node_interfaces::LifecycleNodeInterface::CallbackReturn;
@@ -37,6 +37,7 @@ private:
   LibSerial::SerialPort arduino_;
   std::string port_;
   std::vector<double> velocity_commands_;
+  std::vector<double> position_commands_;
   std::vector<double> position_states_;
   std::vector<double> velocity_states_;
   rclcpp::Time last_run_;
