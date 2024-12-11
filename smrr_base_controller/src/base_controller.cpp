@@ -7,7 +7,6 @@ namespace smrr_base_controller
 {
 BaseController::BaseController()
 {
-  RCLCPP_INFO(rclcpp::get_logger("BaseController"), "Constructing");
 }
 
 
@@ -30,7 +29,6 @@ BaseController::~BaseController()
 
 CallbackReturn BaseController::on_init(const hardware_interface::HardwareInfo &hardware_info)
 {
-  RCLCPP_INFO(rclcpp::get_logger("BaseController"), "Basecontroller on start");
   CallbackReturn result = hardware_interface::SystemInterface::on_init(hardware_info);
   if (result != CallbackReturn::SUCCESS)
   {
@@ -122,9 +120,21 @@ CallbackReturn BaseController::on_activate(const rclcpp_lifecycle::State &)
   velocity_states_ = { 0.0, 0.0};
 
   try
-  {
+  { 
+    bool isConnected = arduino_.IsOpen();
+    RCLCPP_INFO(rclcpp::get_logger("BaseController"), 
+            "Port connection status: %s", isConnected ? "true" : "false");
+    RCLCPP_INFO(rclcpp::get_logger("BaseController"),
+              "Opening port");
     arduino_.Open(port_);
+    isConnected = arduino_.IsOpen();
+    RCLCPP_INFO(rclcpp::get_logger("BaseController"), 
+            "Port connection status: %s", isConnected ? "true" : "false");
+    RCLCPP_INFO(rclcpp::get_logger("BaseController"),
+              "Port opened");
     arduino_.SetBaudRate(LibSerial::BaudRate::BAUD_115200);
+    RCLCPP_INFO(rclcpp::get_logger("BaseController"),
+              "baudrate assigned");
   }
   catch (...)
   {
@@ -164,6 +174,8 @@ CallbackReturn BaseController::on_deactivate(const rclcpp_lifecycle::State &)
 hardware_interface::return_type BaseController::read(const rclcpp::Time &,
                                                           const rclcpp::Duration &)
 {
+  if (arduino_.IsOpen())
+  {
   // Interpret the string
   if(arduino_.IsDataAvailable())
   {
@@ -190,6 +202,9 @@ hardware_interface::return_type BaseController::read(const rclcpp::Time &,
     }
     last_run_ = rclcpp::Clock().now();
   }
+  }
+  RCLCPP_INFO(rclcpp::get_logger("BaseController"), "Reading");
+
   return hardware_interface::return_type::OK;
 }
 
@@ -197,6 +212,7 @@ hardware_interface::return_type BaseController::read(const rclcpp::Time &,
 hardware_interface::return_type BaseController::write(const rclcpp::Time &,
                                                           const rclcpp::Duration &)
 {
+  RCLCPP_INFO(rclcpp::get_logger("BaseController"), "Writing");
   // Implement communication protocol with the Arduino
   std::stringstream message_stream;
   char right_wheel_sign = velocity_commands_.at(0) >= 0 ? 'p' : 'n';
