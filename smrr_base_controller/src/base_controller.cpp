@@ -170,41 +170,40 @@ CallbackReturn BaseController::on_deactivate(const rclcpp_lifecycle::State &)
   return CallbackReturn::SUCCESS;
 }
 
-
 hardware_interface::return_type BaseController::read(const rclcpp::Time &,
                                                           const rclcpp::Duration &)
 {
   if (arduino_.IsOpen())
   {
-  // Interpret the string
-  if(arduino_.IsDataAvailable())
-  {
-    auto dt = (rclcpp::Clock().now() - last_run_).seconds();
-    std::string message;
-    arduino_.ReadLine(message);
-    std::stringstream ss(message);
-    std::string res;
-    int multiplier = 1;
-    while(std::getline(ss, res, ','))
+    RCLCPP_INFO(rclcpp::get_logger("BaseController"), "Reading");
+    // Interpret the string
+    if(arduino_.IsDataAvailable())
     {
-      multiplier = res.at(1) == 'p' ? 1 : -1;
+      auto dt = (rclcpp::Clock().now() - last_run_).seconds();
+      std::string message;
+      arduino_.ReadLine(message);
+      std::stringstream ss(message);
+      std::string res;
+      int multiplier = 1;
+      while(std::getline(ss, res, ','))
+      {
+        multiplier = res.at(1) == 'p' ? 1 : -1;
 
-      if(res.at(0) == 'r')
-      {
-        velocity_states_.at(0) = multiplier * std::stod(res.substr(2, res.size()));
-        position_states_.at(0) += velocity_states_.at(0) * dt;
+        if(res.at(0) == 'r')
+        {
+          velocity_states_.at(0) = multiplier * std::stod(res.substr(2, res.size()));
+          position_states_.at(0) += velocity_states_.at(0) * dt;
+        }
+        else if(res.at(0) == 'l')
+        {
+          velocity_states_.at(1) = multiplier * std::stod(res.substr(2, res.size()));
+          position_states_.at(1) += velocity_states_.at(1) * dt;
+        }
       }
-      else if(res.at(0) == 'l')
-      {
-        velocity_states_.at(1) = multiplier * std::stod(res.substr(2, res.size()));
-        position_states_.at(1) += velocity_states_.at(1) * dt;
-      }
+      last_run_ = rclcpp::Clock().now();
     }
-    last_run_ = rclcpp::Clock().now();
   }
-  }
-  RCLCPP_INFO(rclcpp::get_logger("BaseController"), "Reading");
-
+  
   return hardware_interface::return_type::OK;
 }
 
@@ -212,44 +211,47 @@ hardware_interface::return_type BaseController::read(const rclcpp::Time &,
 hardware_interface::return_type BaseController::write(const rclcpp::Time &,
                                                           const rclcpp::Duration &)
 {
-  RCLCPP_INFO(rclcpp::get_logger("BaseController"), "Writing");
-  // Implement communication protocol with the Arduino
-  std::stringstream message_stream;
-  char right_wheel_sign = velocity_commands_.at(0) >= 0 ? 'p' : 'n';
-  char left_wheel_sign = velocity_commands_.at(1) >= 0 ? 'p' : 'n';
-  std::string compensate_zeros_right = "";
-  std::string compensate_zeros_left = "";
-  if(std::abs(velocity_commands_.at(0)) < 10.0)
+  if (arduino_.IsOpen())
   {
-    compensate_zeros_right = "0";
-  }
-  else
-  {
-    compensate_zeros_right = "";
-  }
-  if(std::abs(velocity_commands_.at(1)) < 10.0)
-  {
-    compensate_zeros_left = "0";
-  }
-  else
-  {
-    compensate_zeros_left = "";
-  }
-  
-  message_stream << std::fixed << std::setprecision(2) << 
-    "r" << right_wheel_sign << compensate_zeros_right << std::abs(velocity_commands_.at(0)) << 
-    ",l" <<  left_wheel_sign << compensate_zeros_left << std::abs(velocity_commands_.at(1)) << ",";
+    RCLCPP_INFO(rclcpp::get_logger("BaseController"), "Writing");
+    // Implement communication protocol with the Arduino
+    std::stringstream message_stream;
+    char right_wheel_sign = velocity_commands_.at(0) >= 0 ? 'p' : 'n';
+    char left_wheel_sign = velocity_commands_.at(1) >= 0 ? 'p' : 'n';
+    std::string compensate_zeros_right = "";
+    std::string compensate_zeros_left = "";
+    if(std::abs(velocity_commands_.at(0)) < 10.0)
+    {
+      compensate_zeros_right = "0";
+    }
+    else
+    {
+      compensate_zeros_right = "";
+    }
+    if(std::abs(velocity_commands_.at(1)) < 10.0)
+    {
+      compensate_zeros_left = "0";
+    }
+    else
+    {
+      compensate_zeros_left = "";
+    }
+    
+    message_stream << std::fixed << std::setprecision(2) << 
+      "r" << right_wheel_sign << compensate_zeros_right << std::abs(velocity_commands_.at(0)) << 
+      ",l" <<  left_wheel_sign << compensate_zeros_left << std::abs(velocity_commands_.at(1)) << ",";
 
-  try
-  {
-    arduino_.Write(message_stream.str());
-  }
-  catch (...)
-  {
-    RCLCPP_ERROR_STREAM(rclcpp::get_logger("BaseController"),
-                        "Something went wrong while sending the message "
-                            << message_stream.str() << " to the port " << port_);
-    return hardware_interface::return_type::ERROR;
+    try
+    {
+      arduino_.Write(message_stream.str());
+    }
+    catch (...)
+    {
+      RCLCPP_ERROR_STREAM(rclcpp::get_logger("BaseController"),
+                          "Something went wrong while sending the message "
+                              << message_stream.str() << " to the port " << port_);
+      return hardware_interface::return_type::ERROR;
+    }
   }
   return hardware_interface::return_type::OK;
 }
