@@ -24,9 +24,9 @@ elevator_interaction:
     yaw: 0.0
     z: 1.088
   pixel_coordinates:
-    x: 965
-    y: 401
-  target_button: button-3
+    x: 874
+    y: 397
+  target_button: button-up
   target_joint_angles:
     joint1: 0.5046792830977013
     joint2: 0.13678323514914215

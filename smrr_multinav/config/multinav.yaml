@@ -12,8 +12,8 @@ elevator_locations:
   location2: [3.55, 0.1, 1.57]
   location3: [2.45, 1.1, -1.57]
   location4:
+    - 1
     - 0
-    - -3
     - 0
 preloaded_maps:
   closedMap1: /home/sithija/mobile_receptionist_ws/src/smrr_localization/maps/BT_floor_01_closed
