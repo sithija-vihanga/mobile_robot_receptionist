@@ -20,6 +20,7 @@ def generate_launch_description():
             "launch",
             "controller.launch.py"
         ),
+        launch_arguments={'is_sim': 'False'}.items()
     )
     
     joystick = IncludeLaunchDescription(

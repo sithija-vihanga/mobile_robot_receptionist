@@ -1,16 +1,25 @@
 from launch import LaunchDescription
 from launch_ros.actions import Node
+from launch.actions import DeclareLaunchArgument
 from launch_ros.parameter_descriptions import ParameterValue
-from launch.substitutions import Command
+from launch.substitutions import Command, LaunchConfiguration
 from ament_index_python import get_package_share_directory
 import os
 
 def generate_launch_description():
 
+    declare_is_sim = DeclareLaunchArgument(
+        'is_sim',
+        default_value='True', 
+        description='Default launch configurations to simulation'
+    )
+
+    is_sim = LaunchConfiguration('is_sim')
+
     robot_description = ParameterValue(
         Command(["xacro ",
                  os.path.join(get_package_share_directory("smrr_description"), "urdf", "smrr_description.urdf")
-                 ]
+                 ," is_sim:=",is_sim]
                  ), 
         value_type=str
     )
@@ -77,6 +86,7 @@ def generate_launch_description():
 
 
     return LaunchDescription([
+        declare_is_sim,
         robot_state_publisher,
         joint_state_broadcaster_spawner,
         arm_controller_spawner,
