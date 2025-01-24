@@ -4,6 +4,8 @@ Mobile Robot Receptionist 2.0 is an advanced semi humanoid robot designed to ass
 
 ---
 
+## Functionality of multi-floor navigation and elevator interactions
+
 ## Features
 
 - **Dynamic Crowd Navigation**: Navigates through crowded spaces using novel navigation algorithm designed as a research work by our team. Crowd navigation is based on ORCA based human trajectory planning and MPC based robot path planning introducing new components like human footprint and prefered walking velocities of human agents to improve human robot interactions.
@@ -18,7 +20,10 @@ Mobile Robot Receptionist 2.0 is an advanced semi humanoid robot designed to ass
 
 ---
 
-## Installation
+## Hardware setup
+![WhatsApp Image 2025-01-01 at 13 29 11 (1)](https://github.com/user-attachments/assets/3f79285c-877b-4bde-973c-abda8a70525b)
+![WhatsApp Image 2025-01-01 at 13 29 11 (1) (1)](https://github.com/user-attachments/assets/707bb390-5681-467c-8d5b-cda8b000b364)
+
 
 ### Prerequisites
 - **Operating System**: Ubuntu 22.04, Ubuntu 20.04
