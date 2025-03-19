@@ -318,8 +318,16 @@ MultiFloorGoal::MultiFloorGoal(const std::string &name, const BT::NodeConfigurat
     {   
         RCLCPP_INFO(node_ptr_->get_logger(), "Multi floor goal running");
         if (goal_recieved_flag_)
-        {
-            return BT::NodeStatus::SUCCESS;
+        {   
+            if(multifloor_goal_)
+            {
+                return BT::NodeStatus::SUCCESS;
+            }
+            else
+            {
+                return BT::NodeStatus::FAILURE;
+            }
+            
         }
 
         return BT::NodeStatus::RUNNING;
@@ -353,8 +361,82 @@ MultiFloorGoal::MultiFloorGoal(const std::string &name, const BT::NodeConfigurat
         fout << multinav;
         fout.close();
 
+        multifloor_goal_ = (current_floor_ == desired_floor_) ? false: true;
+
         goal_recieved_flag_ = true;
 
+
+    }
+
+////////////////////////////////////////////////////////////// BatteryState Checker ///////////////////////////////////////////////////////////
+
+
+BatteryStateChecker::BatteryStateChecker(const std::string &name, const BT::NodeConfiguration &config, rclcpp::Node::SharedPtr node_ptr)
+    : BT::StatefulActionNode(name, config), node_ptr_(node_ptr)
+    {
+        subscription_ = node_ptr_->create_subscription<sensor_msgs::msg::BatteryState>(
+            "battery_state", 10,
+            std::bind(&BatteryStateChecker::battery_state_callback, this, std::placeholders::_1));
+        RCLCPP_INFO(node_ptr_->get_logger(), "Checking battery state");
+    }
+
+    BT::PortsList BatteryStateChecker::providedPorts()
+    {
+        return {BT::InputPort<std::string>("type")};
+    }
+
+    BT::NodeStatus BatteryStateChecker::onStart()
+    {   
+        RCLCPP_INFO(node_ptr_->get_logger(), "Analyzing battery state");
+        BT::Optional<std::string> type = getInput<std::string>("event");
+        multinav_config = node_ptr_->get_parameter("multinav_config").as_string();
+        multinav = YAML::LoadFile(multinav_config);
+        complete_flag_ = false; 
+        return BT::NodeStatus::RUNNING;
+    }
+
+    BT::NodeStatus BatteryStateChecker::onRunning()
+    {   
+        RCLCPP_INFO(node_ptr_->get_logger(), "Running battery check");
+        if (complete_flag_)
+        {
+            if(initiate_self_charging)
+            {
+                return BT::NodeStatus::SUCCESS;
+            }
+            else
+            {
+                return BT::NodeStatus::FAILURE;
+            }
+            
+        }
+
+        return BT::NodeStatus::RUNNING;
+    }
+
+    void BatteryStateChecker::onHalted()
+    {
+        RCLCPP_INFO(node_ptr_->get_logger(), "Battery checking was halted.");
+    }
+
+    void BatteryStateChecker::battery_state_callback(const sensor_msgs::msg::BatteryState & msg)
+    {
+        if (msg.voltage < multinav["self_charging"]["min_battery_voltage"].as<float>())
+        {
+            initiate_self_charging = true;
+            multinav["self_charging"]["is_initiated"] = true; 
+        }
+        else
+        {
+            initiate_self_charging = false;
+            multinav["self_charging"]["is_initiated"] = false;
+        }
+
+        std::ofstream fout(multinav_config);
+        fout << multinav;
+        fout.close();
+
+        complete_flag_ = true;
 
     }
 

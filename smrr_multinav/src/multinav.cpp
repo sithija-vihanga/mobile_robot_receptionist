@@ -63,6 +63,13 @@ void MultiNav::create_behavior_tree()
         return std::make_unique<MultiFloorGoal>(name, config, shared_from_this());
     };
     factory.registerBuilder<MultiFloorGoal>("MultiFloorGoal", multi_floor_goal_builder);
+
+    BT::NodeBuilder battery_state_checker_builder =
+        [=](const std::string &name, const BT::NodeConfiguration &config)
+    {
+        return std::make_unique<BatteryStateChecker>(name, config, shared_from_this());
+    };
+    factory.registerBuilder<BatteryStateChecker>("BatteryStateChecker", battery_state_checker_builder);
     
     tree_ = factory.createTreeFromFile(bt_xml_dir + "/tree.xml");
 }

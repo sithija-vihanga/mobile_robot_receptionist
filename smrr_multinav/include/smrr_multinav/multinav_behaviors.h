@@ -32,6 +32,8 @@
 
 #include "smrr_interfaces/srv/arm_control.hpp"
 
+#include "sensor_msgs/msg/battery_state.hpp"
+
 using std::placeholders::_1;
 using namespace std::chrono_literals;
 
@@ -125,6 +127,7 @@ public:
     void onHalted() override;
 
     bool goal_recieved_flag_;
+    bool multifloor_goal_;
     int current_floor_;
     int desired_floor_;
     YAML::Node multinav;
@@ -136,6 +139,34 @@ private:
     rclcpp::Subscription<geometry_msgs::msg::Twist>::SharedPtr subscription_;
     
     void goal_callback(const geometry_msgs::msg::Twist & msg);
+};
+
+
+class BatteryStateChecker : public BT::StatefulActionNode
+{
+public:
+    BatteryStateChecker(const std::string &name, const BT::NodeConfiguration &config, rclcpp::Node::SharedPtr node_ptr);
+
+    static BT::PortsList providedPorts();
+
+    BT::NodeStatus onStart() override;
+
+    BT::NodeStatus onRunning() override;
+
+    void onHalted() override;
+
+    int current_floor_;
+    int desired_floor_;
+    bool initiate_self_charging;
+    bool complete_flag_;
+    YAML::Node multinav;
+    std::string multinav_config;
+
+private:
+    rclcpp::Node::SharedPtr node_ptr_;
+    rclcpp::Subscription<sensor_msgs::msg::BatteryState>::SharedPtr subscription_;
+    
+    void battery_state_callback(const sensor_msgs::msg::BatteryState & msg);
 };
 
 

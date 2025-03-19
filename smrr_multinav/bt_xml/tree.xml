@@ -1,21 +1,35 @@
 <root main_tree_to_execute = "MainTree">
     <BehaviorTree ID="MainTree">
-        <Sequence name="sequence">
-            <MultiFloorGoal name="get_goal"/>
-            <LoadMapFromSlam name="load_map_02" type="current_floor_closed"/>
-            <GoToPose name="go_to_location2" loc="location2"/>
-            <!--<ElevatorLoading name="Elevator_loading01" type="rotate"/> -->
-            <WaitEvent name="wait_event" event="out"/>
-            <ElevatorLoading name="Elevator_loading02" type="check_door"/>
-            <!-- <ElevatorLoading name="Elevator_loading02" type="wait"/> Just for testing. remove later -->
-            <LoadMapFromSlam name="load_map_02" type="current_floor_opened"/>
-            <GoToPose name="go_to_location3" loc="location3"/>
-            <ElevatorLoading name="Elevator_loading03" type="wait"/>
-            <WaitEvent name="wait_event" event="in"/>
-            <!-- <ElevatorLoading name="Elevator_loading04" type="rotate"/> -->
-            <ElevatorLoading name="Elevator_loading05" type="check_door"/>
-            <LoadMapFromSlam name="load_map_03" type="desired_floor_opened"/>
-            <GoToPose name="go_to_location4" loc="location4"/> 
-        </Sequence>
+        <Fallback name="BatteryCheckFallback">
+            <Sequence name="docking_sequence">
+                <BatteryStateChecker name="BatteryCheck"/>
+                <GoToPose name="go_to_dock_station" loc="location4"/>
+            </Sequence>
+            <Sequence name="navigation_sequence">
+                <Fallback name="MultiFloorGoalFallback">
+                    <Sequence name="multi_floor_navigation">
+                        <MultiFloorGoal name="get_goal"/>
+                        <LoadMapFromSlam name="load_map_02" type="current_floor_closed"/>
+                        <GoToPose name="go_to_location2" loc="location2"/>
+                        <!--<ElevatorLoading name="Elevator_loading01" type="rotate"/> -->
+                        <WaitEvent name="wait_event" event="out"/>
+                        <ElevatorLoading name="Elevator_loading02" type="check_door"/>
+                        <!-- <ElevatorLoading name="Elevator_loading02" type="wait"/> Just for testing. remove later -->
+                        <LoadMapFromSlam name="load_map_02" type="current_floor_opened"/>
+                        <GoToPose name="go_to_location3" loc="location3"/>
+                        <ElevatorLoading name="Elevator_loading03" type="wait"/>
+                        <WaitEvent name="wait_event" event="in"/>
+                        <!-- <ElevatorLoading name="Elevator_loading04" type="rotate"/> -->
+                        <ElevatorLoading name="Elevator_loading05" type="check_door"/>
+                        <LoadMapFromSlam name="load_map_03" type="desired_floor_opened"/>
+                        <GoToPose name="go_to_location4" loc="location4"/> 
+                    </Sequence>
+                    <Sequence name="single_floor_navigation">
+                        <LoadMapFromSlam name="load_current_map" type="current_floor_closed"/>
+                        <GoToPose name="go_to_location4" loc="location4"/>
+                    </Sequence>
+                </Fallback>
+            </Sequence>
+        </Fallback>
     </BehaviorTree>
 </root>
