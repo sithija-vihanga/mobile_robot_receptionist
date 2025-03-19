@@ -455,26 +455,51 @@ ElevatorLoading::ElevatorLoading(const std::string &name, const BT::NodeConfigur
 
             prev_angle = current_angle;
         }
-        else if(action_type.value() == "check_door")
-        {
-            laser_mean = std::accumulate(laser_slice.begin(), laser_slice.end(), 0.0)/laser_slice.size();
-            RCLCPP_INFO(node_ptr_->get_logger(),"laser mean: %f",laser_mean);
-            if(laser_mean > 2.0 and laser_mean < 1000.0)
-            {
-                complete_flag_ = true;
-                timer_.reset();
-                RCLCPP_INFO(node_ptr_->get_logger(),"Door opened");
-            }
-        }
-        else if(action_type.value() == "wait")
-        {
-            std::this_thread::sleep_for(std::chrono::seconds(3));
-            complete_flag_ = true;
-            timer_.reset();
-            RCLCPP_INFO(node_ptr_->get_logger(),"Wait complete");
-        }
-            //RCLCPP_INFO(node_ptr_->get_logger(),"laser mean: %f",laser_mean);
-            // std::cout<< "Laser mean :" <<laser_mean<<std::endl;
+        //else if(action_type.value() == "check_door")
+        //{
+        //   laser_mean = std::accumulate(laser_slice.begin(), laser_slice.end(), 0.0)/laser_slice.size();
+        //    RCLCPP_INFO(node_ptr_->get_logger(),"laser mean: %f",laser_mean);
+        //    if(laser_mean > 2.0 and laser_mean < 1000.0)
+        //    {
+        //        complete_flag_ = true;
+        //        timer_.reset();
+        //        RCLCPP_INFO(node_ptr_->get_logger(),"Door opened");
+        //    }
+        //}
+        //else if(action_type.value() == "wait")
+        //{
+        //    std::this_thread::sleep_for(std::chrono::seconds(3));
+        //    complete_flag_ = true;
+        //    timer_.reset();
+        //    RCLCPP_INFO(node_ptr_->get_logger(),"Wait complete");
+        //}
+        //    //RCLCPP_INFO(node_ptr_->get_logger(),"laser mean: %f",laser_mean);
+        //    // std::cout<< "Laser mean :" <<laser_mean<<std::endl;
+        
+        else if (action_type.value() == "check_door")
+	{
+	    // Remove infinity values
+	    std::vector<double> valid_readings;
+	    std::copy_if(laser_slice.begin(), laser_slice.end(), std::back_inserter(valid_readings),
+		         [](double value) { return std::isfinite(value); });
+
+	    if (!valid_readings.empty())  // Avoid division by zero
+	    {
+		laser_mean = std::accumulate(valid_readings.begin(), valid_readings.end(), 0.0) / valid_readings.size();
+		RCLCPP_INFO(node_ptr_->get_logger(), "Laser mean: %f", laser_mean);
+
+		if (laser_mean > 2.0 && laser_mean < 1000.0)
+		{
+		    complete_flag_ = true;
+		    timer_.reset();
+		    RCLCPP_INFO(node_ptr_->get_logger(), "Door opened");
+		}
+	    }
+	    else
+	    {
+		RCLCPP_WARN(node_ptr_->get_logger(), "No valid laser readings available");
+	    }
+	}
     
     }
     
