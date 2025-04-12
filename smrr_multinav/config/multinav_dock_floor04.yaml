@@ -1,0 +1,27 @@
+multinav_status:
+  current_floor: 3
+  desired_floor: 1
+  current_floor_opened: /SSD/mobile_robot_receptionist_ws/src/smrr_localization/maps/floor0004_open
+  current_floor_closed: /SSD/mobile_robot_receptionist_ws/src/smrr_localization/maps/floor0004_close
+  desired_floor_opened: /SSD/mobile_robot_receptionist_ws/src/smrr_localization/maps/floor0001_open
+dock_station:
+  floor_no: 3
+  location: [-1.38, -3.88, 0.0]
+elevator_locations:
+  location1: [0.0, 0.0, 0.0]
+  location2: [0.2, 0.0, 0.0]
+  location3: [1.8, 0.2, 3.14]
+  location4:
+    - 0
+    - 0
+    - 0
+preloaded_maps:
+  closedMap1: /SSD/mobile_robot_receptionist_ws/src/smrr_localization/maps/floor0001_close
+  openedMap1: /SSD/mobile_robot_receptionist_ws/src/smrr_localization/maps/floor0001_open
+  closedMap2: /SSD/mobile_robot_receptionist_ws/src/smrr_localization/maps/floor02_open
+  openedMap2: /SSD/mobile_robot_receptionist_ws/src/smrr_localization/maps/floor02_open
+  closedMap3: /SSD/mobile_robot_receptionist_ws/src/smrr_localization/maps/floor0004_close
+  openedMap3: /SSD/mobile_robot_receptionist_ws/src/smrr_localization/maps/floor0004_open
+rotate_to_elevator:
+  K_P: 1.0
+  K_D: 0.6
