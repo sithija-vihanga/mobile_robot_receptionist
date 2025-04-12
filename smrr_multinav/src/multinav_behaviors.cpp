@@ -347,7 +347,7 @@ MultiFloorGoal::MultiFloorGoal(const std::string &name, const BT::NodeConfigurat
 
         std::vector<double> goal = {msg.linear.x, msg.linear.y, msg.angular.z};
 
-        multinav["elevator_locations"]["location4"] = goal;  
+        multinav["elevator_locations"]["destination"] = goal;  
 
         std::ofstream fout(multinav_config);
         fout << multinav;
@@ -412,13 +412,13 @@ ElevatorLoading::ElevatorLoading(const std::string &name, const BT::NodeConfigur
 
     void ElevatorLoading::scan_extractor()
     {   
-        if (laser_scan.ranges.size() < 250) {
+        if (laser_scan.ranges.size() < 230) {
             RCLCPP_WARN(node_ptr_->get_logger(), "Not enough laser scan data received.");
             return;
         }
 
-        std::vector<float> laser_slice(laser_scan.ranges.begin() + 149, laser_scan.ranges.begin() + 250);
-        if (laser_slice.size() < 100) { 
+        std::vector<float> laser_slice(laser_scan.ranges.begin() + 96, laser_scan.ranges.begin() + 144);
+        if (laser_slice.size() < 47) { 
             RCLCPP_WARN(node_ptr_->get_logger(), "Laser slice does not contain enough elements.");
             return;
         }
@@ -455,17 +455,43 @@ ElevatorLoading::ElevatorLoading(const std::string &name, const BT::NodeConfigur
 
             prev_angle = current_angle;
         }
-        else if(action_type.value() == "check_door")
-        {
-            laser_mean = std::accumulate(laser_slice.begin(), laser_slice.end(), 0.0)/laser_slice.size();
-            RCLCPP_INFO(node_ptr_->get_logger(),"laser mean: %f",laser_mean);
-            if(laser_mean > 2.0 and laser_mean < 1000.0)
-            {
-                complete_flag_ = true;
-                timer_.reset();
-                RCLCPP_INFO(node_ptr_->get_logger(),"Door opened");
-            }
-        }
+        //else if(action_type.value() == "check_door")
+        //{
+        //    laser_mean = std::accumulate(laser_slice.begin(), laser_slice.end(), 0.0)/laser_slice.size();
+        //    RCLCPP_INFO(node_ptr_->get_logger(),"laser mean: %f",laser_mean);
+        //    if(laser_mean > 2.0 and laser_mean < 1000.0)
+        //    {
+        //        complete_flag_ = true;
+        //        timer_.reset();
+        //        RCLCPP_INFO(node_ptr_->get_logger(),"Door opened");
+        //    }
+        //}
+        
+        else if (action_type.value() == "check_door")
+	{
+	    // Remove infinity values
+	    std::vector<double> valid_readings;
+	    std::copy_if(laser_slice.begin(), laser_slice.end(), std::back_inserter(valid_readings),
+		         [](double value) { return std::isfinite(value); });
+
+	    if (!valid_readings.empty())  // Avoid division by zero
+	    {
+		laser_mean = std::accumulate(valid_readings.begin(), valid_readings.end(), 0.0) / valid_readings.size();
+		RCLCPP_INFO(node_ptr_->get_logger(), "Laser mean: %f", laser_mean);
+
+		if (laser_mean > 1.3 && laser_mean < 1000.0)
+		{
+		    complete_flag_ = true;
+		    timer_.reset();
+		    RCLCPP_INFO(node_ptr_->get_logger(), "Door opened");
+		}
+	    }
+	    else
+	    {
+		RCLCPP_WARN(node_ptr_->get_logger(), "No valid laser readings available");
+	    }
+	}
+    
         else if(action_type.value() == "wait")
         {
             std::this_thread::sleep_for(std::chrono::seconds(3));
@@ -477,4 +503,69 @@ ElevatorLoading::ElevatorLoading(const std::string &name, const BT::NodeConfigur
             // std::cout<< "Laser mean :" <<laser_mean<<std::endl;
     
     }
-    
+
+    ///////////////////////////////////////////////// Dynamic parameters  //////////////////////////////////////////////////////////
+
+    LoadParams::LoadParams(const std::string &name, const BT::NodeConfiguration &config, rclcpp::Node::SharedPtr node_ptr)
+        : BT::StatefulActionNode(name, config), node_ptr_(node_ptr)
+        {   
+            auto parameters_client = std::make_shared<rclcpp::SyncParametersClient>(node_ptr_, "controller_server");
+            while (!parameters_client->wait_for_service(std::chrono::seconds(1))) {
+                RCLCPP_INFO(node_ptr_->get_logger(), "Waiting for controller_server parameter service...");
+            }
+
+            RCLCPP_INFO(node_ptr_->get_logger(), "Dynamic parameter loading initialized");
+        }
+
+        BT::PortsList LoadParams::providedPorts()
+        {
+            return {BT::LoadParams<std::string>("event")};
+        }
+
+        BT::NodeStatus LoadParams::onStart()
+        {   
+            RCLCPP_INFO(node_ptr_->get_logger(), "Loading dynamic params");
+            type = getInput<std::string>("event");
+            const std::string multinav_config = node_ptr_->get_parameter("multinav_config").as_string();
+            const std::string elevator_config = node_ptr_->get_parameter("elevator_config").as_string();
+            YAML::Node multinav         = YAML::LoadFile(multinav_config);
+            YAML::Node elevator_params  = YAML::LoadFile(elevator_config);
+ 
+            float pathAlign_scale_    = multinav["dynamicParams"][type]["pathAlignScale"].as<float>();
+            float pathDist_scale_     = multinav["dynamicParams"][type]["pathDistScale"].as<float>();
+
+            auto result = parameters_client->set_parameters({
+                    rclcpp::Parameter("FollowPath.PathAlign.scale", pathAlign_scale_),
+                    rclcpp::Parameter("FollowPath.PathDist.scale", pathDist_scale),
+
+                    });
+
+            for (const auto &res : result) {
+                if (!res.successful) {
+                    RCLCPP_ERROR(node_ptr_->get_logger(), "Failed to set parameter: %s", res.reason.c_str());
+                } else {
+                    RCLCPP_INFO(node_ptr_->get_logger(), "Parameter set successfully.");
+                }
+            }
+                            
+            wait_event_flag_ = true; 
+            return BT::NodeStatus::RUNNING;
+        }
+
+        BT::NodeStatus LoadParams::onRunning()
+        {   
+            RCLCPP_INFO(node_ptr_->get_logger(), "dynamic params running");
+            if (wait_event_flag_)
+            {
+                return BT::NodeStatus::SUCCESS;
+            }
+
+            return BT::NodeStatus::RUNNING;
+        }
+
+        void LoadParams::onHalted()
+        {
+            RCLCPP_INFO(node_ptr_->get_logger(), "Dynamic parms was halted.");
+        }
+
+        

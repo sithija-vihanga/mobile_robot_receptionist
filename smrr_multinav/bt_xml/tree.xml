@@ -3,18 +3,22 @@
         <Sequence name="sequence">
             <MultiFloorGoal name="get_goal"/>
             <LoadMapFromSlam name="load_map_02" type="current_floor_closed"/>
-            <GoToPose name="go_to_location2" loc="location2"/>
-            <ElevatorLoading name="Elevator_loading01" type="rotate"/>
-            <WaitEvent name="wait_event" event="out"/>
+            <GoToPose name="go_to_elevator_panel" loc="panelOut"/>
+            <ElevatorLoading name="Elevator_loading03" type="wait"/>   <!-- Update as required-->
+            <GoToPose name="go_to_elevator_door_out" loc="doorOut"/>
+            <!-- <ElevatorLoading name="Elevator_loading01" type="rotate"/> -->
+            <!--<WaitEvent name="wait_event" event="out"/>-->
             <ElevatorLoading name="Elevator_loading02" type="check_door"/>
+            <!--<ElevatorLoading name="Elevator_loading02" type="wait"/> --> <!-- remove later -->-->
             <LoadMapFromSlam name="load_map_02" type="current_floor_opened"/>
-            <GoToPose name="go_to_location3" loc="location3"/>
+            <GoToPose name="go_to_elevator_door_in" loc="doorIn"/>
+              <GoToPose name="go_to_elevator_panel" loc="panelIn"/>
             <ElevatorLoading name="Elevator_loading03" type="wait"/>
-            <WaitEvent name="wait_event" event="in"/>
+            <!--<WaitEvent name="wait_event" event="in"/>-->
             <!-- <ElevatorLoading name="Elevator_loading04" type="rotate"/> -->
             <ElevatorLoading name="Elevator_loading05" type="check_door"/>
             <LoadMapFromSlam name="load_map_03" type="desired_floor_opened"/>
-            <GoToPose name="go_to_location4" loc="location4"/> 
+            <GoToPose name="go_to_destination" loc="destination"/> 
         </Sequence>
     </BehaviorTree>
 </root>
