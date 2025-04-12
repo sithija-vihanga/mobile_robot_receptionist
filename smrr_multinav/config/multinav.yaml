@@ -12,8 +12,8 @@ elevator_locations:
   location2: [3.55, 0.1, 1.57]
   location3: [2.45, 1.1, -1.57]
   location4:
-    - -2
-    - 4
+    - 0
+    - 0
     - 0
 preloaded_maps:
   closedMap1: /home/sithija/mobile_receptionist_ws/src/smrr_localization/maps/BT_floor_01_closed
@@ -22,6 +22,8 @@ preloaded_maps:
   openedMap2: /home/sithija/mobile_receptionist_ws/src/smrr_localization/maps/BT_floor_02_open
   closedMap3: /home/sithija/mobile_receptionist_ws/src/smrr_localization/maps/BT_floor_03_closed
   openedMap3: /home/sithija/mobile_receptionist_ws/src/smrr_localization/maps/BT_floor_03_open
+  closedMap4: /home/sithija/mobile_receptionist_ws/src/smrr_localization/maps/BT_floor_03_closed
+  openedMap4: /home/sithija/mobile_receptionist_ws/src/smrr_localization/maps/BT_floor_03_open
 rotate_to_elevator:
   K_P: 1.0
   K_D: 0.6

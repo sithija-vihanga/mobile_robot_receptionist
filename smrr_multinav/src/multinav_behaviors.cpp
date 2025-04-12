@@ -412,13 +412,13 @@ ElevatorLoading::ElevatorLoading(const std::string &name, const BT::NodeConfigur
 
     void ElevatorLoading::scan_extractor()
     {   
-        if (laser_scan.ranges.size() < 250) {
+        if (laser_scan.ranges.size() < 230) {
             RCLCPP_WARN(node_ptr_->get_logger(), "Not enough laser scan data received.");
             return;
         }
 
-        std::vector<float> laser_slice(laser_scan.ranges.begin() + 149, laser_scan.ranges.begin() + 250);
-        if (laser_slice.size() < 100) { 
+        std::vector<float> laser_slice(laser_scan.ranges.begin() + 96, laser_scan.ranges.begin() + 144);
+        if (laser_slice.size() < 47) { 
             RCLCPP_WARN(node_ptr_->get_logger(), "Laser slice does not contain enough elements.");
             return;
         }
@@ -455,17 +455,43 @@ ElevatorLoading::ElevatorLoading(const std::string &name, const BT::NodeConfigur
 
             prev_angle = current_angle;
         }
-        else if(action_type.value() == "check_door")
-        {
-            laser_mean = std::accumulate(laser_slice.begin(), laser_slice.end(), 0.0)/laser_slice.size();
-            RCLCPP_INFO(node_ptr_->get_logger(),"laser mean: %f",laser_mean);
-            if(laser_mean > 2.0 and laser_mean < 1000.0)
-            {
-                complete_flag_ = true;
-                timer_.reset();
-                RCLCPP_INFO(node_ptr_->get_logger(),"Door opened");
-            }
-        }
+        //else if(action_type.value() == "check_door")
+        //{
+        //    laser_mean = std::accumulate(laser_slice.begin(), laser_slice.end(), 0.0)/laser_slice.size();
+        //    RCLCPP_INFO(node_ptr_->get_logger(),"laser mean: %f",laser_mean);
+        //    if(laser_mean > 2.0 and laser_mean < 1000.0)
+        //    {
+        //        complete_flag_ = true;
+        //        timer_.reset();
+        //        RCLCPP_INFO(node_ptr_->get_logger(),"Door opened");
+        //    }
+        //}
+        
+        else if (action_type.value() == "check_door")
+	{
+	    // Remove infinity values
+	    std::vector<double> valid_readings;
+	    std::copy_if(laser_slice.begin(), laser_slice.end(), std::back_inserter(valid_readings),
+		         [](double value) { return std::isfinite(value); });
+
+	    if (!valid_readings.empty())  // Avoid division by zero
+	    {
+		laser_mean = std::accumulate(valid_readings.begin(), valid_readings.end(), 0.0) / valid_readings.size();
+		RCLCPP_INFO(node_ptr_->get_logger(), "Laser mean: %f", laser_mean);
+
+		if (laser_mean > 1.3 && laser_mean < 1000.0)
+		{
+		    complete_flag_ = true;
+		    timer_.reset();
+		    RCLCPP_INFO(node_ptr_->get_logger(), "Door opened");
+		}
+	    }
+	    else
+	    {
+		RCLCPP_WARN(node_ptr_->get_logger(), "No valid laser readings available");
+	    }
+	}
+    
         else if(action_type.value() == "wait")
         {
             std::this_thread::sleep_for(std::chrono::seconds(3));
