@@ -509,15 +509,16 @@ ElevatorLoading::ElevatorLoading(const std::string &name, const BT::NodeConfigur
     LoadParams::LoadParams(const std::string &name, const BT::NodeConfiguration &config, rclcpp::Node::SharedPtr node_ptr)
         : BT::StatefulActionNode(name, config), node_ptr_(node_ptr) ,node_(std::make_shared<rclcpp::Node>("load_params_node"))
         {   
-            controller_server_params_client = std::make_shared<rclcpp::SyncParametersClient>(node_, "controller_server");
-            local_costmap_client            = node_->create_client<lifecycle_msgs::srv::ChangeState>("/local_costmap/local_costmap/change_state");
-           
+            controller_server_params_client = std::make_shared<rclcpp::SyncParametersClient>(node_, "controller_server");   
+            local_costmap_client            = std::make_shared<rclcpp::SyncParametersClient>(node_, "local_costmap/local_costmap");
+    
+
             while (!controller_server_params_client->wait_for_service(std::chrono::seconds(1))) {
                 RCLCPP_INFO(node_->get_logger(), "Waiting for controller_server parameter service...");
             }
 
-            while (!local_costmap_client->wait_for_service(1s)) {
-                RCLCPP_INFO(node_->get_logger(), "Waiting for /local_costmap/change_state service...");
+            while (!local_costmap_client->wait_for_service(std::chrono::seconds(1))) {
+                RCLCPP_INFO(node_->get_logger(), "Waiting for costmap parameter service...");
             }
 
             RCLCPP_INFO(node_->get_logger(), "Dynamic parameter loading initialized");
@@ -541,7 +542,7 @@ ElevatorLoading::ElevatorLoading(const std::string &name, const BT::NodeConfigur
             float pathDist_scale_     = multinav["dynamicParams"][event.value()]["pathDistScale"].as<float>();
             float min_vel_x_          = multinav["dynamicParams"][event.value()]["min_vel_x"].as<float>();
 
-            auto result = controller_server_params_client->set_parameters({
+            auto controller_result = controller_server_params_client->set_parameters({
                     rclcpp::Parameter("FollowPath.PathAlign.scale", pathAlign_scale_),
                     rclcpp::Parameter("FollowPath.PathDist.scale", pathDist_scale_),
                     rclcpp::Parameter("FollowPath.min_vel_x", min_vel_x_),
@@ -549,31 +550,28 @@ ElevatorLoading::ElevatorLoading(const std::string &name, const BT::NodeConfigur
                     });
             RCLCPP_INFO(node_ptr_->get_logger(), "Updated dynamic params");
             
-            for (const auto &res : result) {
+            for (const auto &res : controller_result) {
                 if (!res.successful) {
-                    RCLCPP_ERROR(node_ptr_->get_logger(), "Failed to set parameter: %s", res.reason.c_str());
+                    RCLCPP_ERROR(node_ptr_->get_logger(), "Failed to set dynamic parameter: %s", res.reason.c_str());
                 } 
             }
 
-            auto request = std::make_shared<lifecycle_msgs::srv::ChangeState::Request>();
-            request->transition.id = lifecycle_msgs::msg::Transition::TRANSITION_DEACTIVATE;
+            bool enable_voxel_layer = event.value() == "constrained"? false : true;  // Disable voxel layer in constrained areas
+  
+            auto local_costmap_result = local_costmap_client->set_parameters({
+                rclcpp::Parameter("voxel_layer.enabled", enable_voxel_layer)
+            });
 
-            auto result_future = local_costmap_client->async_send_request(request);
-
-            // Wait for the result
-            if (rclcpp::spin_until_future_complete(node_->get_node_base_interface(), result_future) ==
-                rclcpp::FutureReturnCode::SUCCESS)
-            {
-                if (result_future.get()->success) {
-                    RCLCPP_INFO(node_->get_logger(), "Successfully deactivated /local_costmap.");
-                } else {
-                    RCLCPP_ERROR(node_->get_logger(), "Failed to deactivate /local_costmap.");
+            for (auto& res : local_costmap_result) {
+                if (!res.successful) {
+                RCLCPP_ERROR(node_ptr_->get_logger(), "Failed to set costmap parameter: %s", res.reason.c_str());
                 }
-            } else {
-                RCLCPP_ERROR(node_->get_logger(), "Service call failed.");
             }
-            
 
+            RCLCPP_INFO(node_ptr_->get_logger(), "Voxel layer enabled: %s", enable_voxel_layer ? "true" : "false");
+
+
+         
                             
             wait_event_flag_ = true; 
             return BT::NodeStatus::RUNNING;

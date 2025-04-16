@@ -133,7 +133,7 @@ public:
 private:
     rclcpp::Node::SharedPtr node_ptr_;
     std::shared_ptr<rclcpp::SyncParametersClient> controller_server_params_client;
-    rclcpp::Client<lifecycle_msgs::srv::ChangeState>::SharedPtr local_costmap_client;
+    std::shared_ptr<rclcpp::SyncParametersClient> local_costmap_client;
     BT::Optional<std::string> event;
     rclcpp::Node::SharedPtr node_;
 
