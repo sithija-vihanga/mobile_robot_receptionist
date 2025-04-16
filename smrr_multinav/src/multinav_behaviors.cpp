@@ -507,46 +507,73 @@ ElevatorLoading::ElevatorLoading(const std::string &name, const BT::NodeConfigur
     ///////////////////////////////////////////////// Dynamic parameters  //////////////////////////////////////////////////////////
 
     LoadParams::LoadParams(const std::string &name, const BT::NodeConfiguration &config, rclcpp::Node::SharedPtr node_ptr)
-        : BT::StatefulActionNode(name, config), node_ptr_(node_ptr)
+        : BT::StatefulActionNode(name, config), node_ptr_(node_ptr) ,node_(std::make_shared<rclcpp::Node>("load_params_node"))
         {   
-            auto parameters_client = std::make_shared<rclcpp::SyncParametersClient>(node_ptr_, "controller_server");
-            while (!parameters_client->wait_for_service(std::chrono::seconds(1))) {
-                RCLCPP_INFO(node_ptr_->get_logger(), "Waiting for controller_server parameter service...");
+            controller_server_params_client = std::make_shared<rclcpp::SyncParametersClient>(node_, "controller_server");
+            local_costmap_client            = node_->create_client<lifecycle_msgs::srv::ChangeState>("/local_costmap/local_costmap/change_state");
+           
+            while (!controller_server_params_client->wait_for_service(std::chrono::seconds(1))) {
+                RCLCPP_INFO(node_->get_logger(), "Waiting for controller_server parameter service...");
             }
 
-            RCLCPP_INFO(node_ptr_->get_logger(), "Dynamic parameter loading initialized");
+            while (!local_costmap_client->wait_for_service(1s)) {
+                RCLCPP_INFO(node_->get_logger(), "Waiting for /local_costmap/change_state service...");
+            }
+
+            RCLCPP_INFO(node_->get_logger(), "Dynamic parameter loading initialized");
         }
 
         BT::PortsList LoadParams::providedPorts()
         {
-            return {BT::LoadParams<std::string>("event")};
+            return {BT::InputPort<std::string>("event")};
         }
 
         BT::NodeStatus LoadParams::onStart()
         {   
-            RCLCPP_INFO(node_ptr_->get_logger(), "Loading dynamic params");
-            type = getInput<std::string>("event");
+            event = getInput<std::string>("event");
+            RCLCPP_INFO(node_ptr_->get_logger(), "Event: %s", event.value().c_str());
             const std::string multinav_config = node_ptr_->get_parameter("multinav_config").as_string();
             const std::string elevator_config = node_ptr_->get_parameter("elevator_config").as_string();
             YAML::Node multinav         = YAML::LoadFile(multinav_config);
             YAML::Node elevator_params  = YAML::LoadFile(elevator_config);
- 
-            float pathAlign_scale_    = multinav["dynamicParams"][type]["pathAlignScale"].as<float>();
-            float pathDist_scale_     = multinav["dynamicParams"][type]["pathDistScale"].as<float>();
 
-            auto result = parameters_client->set_parameters({
+            float pathAlign_scale_    = multinav["dynamicParams"][event.value()]["pathAlignScale"].as<float>();
+            float pathDist_scale_     = multinav["dynamicParams"][event.value()]["pathDistScale"].as<float>();
+            float min_vel_x_          = multinav["dynamicParams"][event.value()]["min_vel_x"].as<float>();
+
+            auto result = controller_server_params_client->set_parameters({
                     rclcpp::Parameter("FollowPath.PathAlign.scale", pathAlign_scale_),
-                    rclcpp::Parameter("FollowPath.PathDist.scale", pathDist_scale),
+                    rclcpp::Parameter("FollowPath.PathDist.scale", pathDist_scale_),
+                    rclcpp::Parameter("FollowPath.min_vel_x", min_vel_x_),
 
                     });
-
+            RCLCPP_INFO(node_ptr_->get_logger(), "Updated dynamic params");
+            
             for (const auto &res : result) {
                 if (!res.successful) {
                     RCLCPP_ERROR(node_ptr_->get_logger(), "Failed to set parameter: %s", res.reason.c_str());
-                } else {
-                    RCLCPP_INFO(node_ptr_->get_logger(), "Parameter set successfully.");
-                }
+                } 
             }
+
+            auto request = std::make_shared<lifecycle_msgs::srv::ChangeState::Request>();
+            request->transition.id = lifecycle_msgs::msg::Transition::TRANSITION_DEACTIVATE;
+
+            auto result_future = local_costmap_client->async_send_request(request);
+
+            // Wait for the result
+            if (rclcpp::spin_until_future_complete(node_->get_node_base_interface(), result_future) ==
+                rclcpp::FutureReturnCode::SUCCESS)
+            {
+                if (result_future.get()->success) {
+                    RCLCPP_INFO(node_->get_logger(), "Successfully deactivated /local_costmap.");
+                } else {
+                    RCLCPP_ERROR(node_->get_logger(), "Failed to deactivate /local_costmap.");
+                }
+            } else {
+                RCLCPP_ERROR(node_->get_logger(), "Service call failed.");
+            }
+            
+
                             
             wait_event_flag_ = true; 
             return BT::NodeStatus::RUNNING;

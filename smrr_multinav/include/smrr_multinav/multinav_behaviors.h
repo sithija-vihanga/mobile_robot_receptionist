@@ -32,6 +32,10 @@
 
 #include "smrr_interfaces/srv/arm_control.hpp"
 
+#include <lifecycle_msgs/srv/change_state.hpp>
+#include <lifecycle_msgs/msg/transition.hpp>
+
+
 using std::placeholders::_1;
 using namespace std::chrono_literals;
 
@@ -109,6 +113,30 @@ private:
     BT::Optional<std::string> type;
     
     void wait_event_callback(const std_msgs::msg::Bool & msg);
+};
+
+class LoadParams : public BT::StatefulActionNode
+{
+public:
+    LoadParams(const std::string &name, const BT::NodeConfiguration &config, rclcpp::Node::SharedPtr node_ptr);
+
+    static BT::PortsList providedPorts();
+
+    BT::NodeStatus onStart() override;
+
+    BT::NodeStatus onRunning() override;
+
+    void onHalted() override;
+
+    bool wait_event_flag_;
+
+private:
+    rclcpp::Node::SharedPtr node_ptr_;
+    std::shared_ptr<rclcpp::SyncParametersClient> controller_server_params_client;
+    rclcpp::Client<lifecycle_msgs::srv::ChangeState>::SharedPtr local_costmap_client;
+    BT::Optional<std::string> event;
+    rclcpp::Node::SharedPtr node_;
+
 };
 
 class MultiFloorGoal : public BT::StatefulActionNode

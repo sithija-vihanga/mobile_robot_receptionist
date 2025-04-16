@@ -17,6 +17,9 @@ find_package(slam_toolbox REQUIRED)
 find_package(Eigen3 REQUIRED)
 find_package(sensor_msgs REQUIRED)
 find_package(smrr_interfaces REQUIRED)
+find_package(nav2_util REQUIRED)
+find_package(lifecycle_msgs REQUIRED)
+
 
 install (
   DIRECTORY config bt_xml launch
@@ -41,6 +44,7 @@ set(TARGET_DEPENDS
     Eigen3
     sensor_msgs
     smrr_interfaces
+    lifecycle_msgs
 )
 
 include_directories(include/${PROJECT_NAME})

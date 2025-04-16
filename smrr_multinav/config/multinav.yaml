@@ -1,6 +1,6 @@
 multinav_status:
   current_floor: 2
-  desired_floor: 3
+  desired_floor: 4
   current_floor_opened: /home/sithija/mobile_receptionist_ws/src/smrr_localization/maps/BT_floor_02_open
   current_floor_closed: /home/sithija/mobile_receptionist_ws/src/smrr_localization/maps/BT_floor_02_closed
   desired_floor_opened: /home/sithija/mobile_receptionist_ws/src/smrr_localization/maps/BT_floor_03_open
@@ -8,13 +8,13 @@ dock_station:
   floor_no: 2
   location: [-3.0, -3.0, 0.0]
 elevator_locations:
-  doorOut: [3.05, 0.0, 1.57]
+  doorOut: [3.05, 0.4, 1.57]
   doorIn: [2.95, 1.2, -1.57]
-  panelOut: [3.55, 0.1, 1.57]
+  panelOut: [3.55, 0.3, 1.57]
   panelIn: [2.45, 1.1, -1.57]
   destination:
     - 0
-    - 0
+    - -2
     - 0
 preloaded_maps:
   closedMap1: /home/sithija/mobile_receptionist_ws/src/smrr_localization/maps/BT_floor_01_closed
@@ -32,6 +32,8 @@ dynamicParams:
   constrained:
     pathAlignScale: 50.0
     pathDistScale: 20.0
+    min_vel_x: 0.1
   unconstrained:
     pathAlignScale: 32.0
     pathDistScale: 30.0
+    min_vel_x: 0.06

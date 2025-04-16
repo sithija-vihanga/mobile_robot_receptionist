@@ -50,6 +50,13 @@ void MultiNav::create_behavior_tree()
     };
     factory.registerBuilder<WaitEvent>("WaitEvent", wait_event_builder);
 
+    BT::NodeBuilder load_params_builder =
+        [=](const std::string &name, const BT::NodeConfiguration &config)
+    {
+        return std::make_unique<LoadParams>(name, config, shared_from_this());
+    };
+    factory.registerBuilder<LoadParams>("LoadParams", load_params_builder);
+
     BT::NodeBuilder elevator_loading_builder =
         [=](const std::string &name, const BT::NodeConfiguration &config)
     {
